@@ -1,6 +1,6 @@
-import { eq } from "drizzle-orm";
+import { and, eq, gte, lte, sum, desc } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
-import { InsertUser, users } from "../drizzle/schema";
+import { InsertUser, users, products, stockMovements, financialTransactions, Product, InsertProduct, StockMovement, InsertStockMovement, FinancialTransaction, InsertFinancialTransaction } from "../drizzle/schema";
 import { ENV } from './_core/env';
 
 let _db: ReturnType<typeof drizzle> | null = null;
@@ -89,4 +89,170 @@ export async function getUserByOpenId(openId: string) {
   return result.length > 0 ? result[0] : undefined;
 }
 
-// TODO: add feature queries here as your schema grows.
+// ============================================
+// PRODUCT QUERIES
+// ============================================
+
+export async function createProduct(product: InsertProduct): Promise<Product> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(products).values(product);
+  // Get the last inserted product
+  const created = await db.select().from(products).orderBy(desc(products.createdAt)).limit(1);
+  return created[0]!;
+}
+
+export async function getProducts(): Promise<Product[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.select().from(products).orderBy(desc(products.createdAt));
+}
+
+export async function getProductById(id: number): Promise<Product | undefined> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.select().from(products).where(eq(products.id, id)).limit(1);
+  return result[0];
+}
+
+export async function updateProduct(id: number, updates: Partial<InsertProduct>): Promise<Product> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.update(products).set(updates).where(eq(products.id, id));
+  const updated = await db.select().from(products).where(eq(products.id, id)).limit(1);
+  return updated[0]!;
+}
+
+export async function deleteProduct(id: number): Promise<boolean> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const result = await db.delete(products).where(eq(products.id, id));
+  return (result as any).affectedRows > 0;
+}
+
+export async function getTotalInventoryValue(): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const allProducts = await db.select().from(products);
+  const total = allProducts.reduce((acc, p) => acc + (p.quantity * p.purchasePrice), 0);
+  return total;
+}
+
+export async function getLowStockProducts(threshold: number = 10): Promise<Product[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const allProducts = await db.select().from(products);
+  return allProducts.filter(p => p.quantity <= threshold);
+}
+
+// ============================================
+// STOCK MOVEMENT QUERIES
+// ============================================
+
+export async function createStockMovement(movement: InsertStockMovement): Promise<StockMovement> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(stockMovements).values(movement);
+  // Get the last inserted movement
+  const created = await db.select().from(stockMovements).orderBy(desc(stockMovements.createdAt)).limit(1);
+  return created[0]!;
+}
+
+export async function getStockMovements(productId?: number): Promise<StockMovement[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  if (productId) {
+    return db.select().from(stockMovements).where(eq(stockMovements.productId, productId)).orderBy(desc(stockMovements.date));
+  }
+  
+  return db.select().from(stockMovements).orderBy(desc(stockMovements.date));
+}
+
+export async function getStockMovementsByDateRange(startDate: Date, endDate: Date): Promise<StockMovement[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.select().from(stockMovements).where(
+    and(
+      gte(stockMovements.date, startDate),
+      lte(stockMovements.date, endDate)
+    )
+  ).orderBy(desc(stockMovements.date));
+}
+
+// ============================================
+// FINANCIAL TRANSACTION QUERIES
+// ============================================
+
+export async function createFinancialTransaction(transaction: InsertFinancialTransaction): Promise<FinancialTransaction> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  await db.insert(financialTransactions).values(transaction);
+  // Get the last inserted transaction
+  const created = await db.select().from(financialTransactions).orderBy(desc(financialTransactions.createdAt)).limit(1);
+  return created[0]!;
+}
+
+export async function getFinancialTransactions(): Promise<FinancialTransaction[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.select().from(financialTransactions).orderBy(desc(financialTransactions.date));
+}
+
+export async function getFinancialTransactionsByDateRange(startDate: Date, endDate: Date): Promise<FinancialTransaction[]> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  return db.select().from(financialTransactions).where(
+    and(
+      gte(financialTransactions.date, startDate),
+      lte(financialTransactions.date, endDate)
+    )
+  ).orderBy(desc(financialTransactions.date));
+}
+
+export async function getCurrentBalance(): Promise<number> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const transactions = await db.select().from(financialTransactions);
+  const entrada = transactions.filter(t => t.type === 'entrada').reduce((acc, t) => acc + t.value, 0);
+  const saida = transactions.filter(t => t.type === 'saida').reduce((acc, t) => acc + t.value, 0);
+  
+  return entrada - saida;
+}
+
+export async function getMonthlyBalance(year: number, month: number): Promise<{ entrada: number; saida: number; balance: number }> {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
+  
+  const transactions = await db.select().from(financialTransactions).where(
+    and(
+      gte(financialTransactions.date, startDate),
+      lte(financialTransactions.date, endDate)
+    )
+  );
+  
+  const entrada = transactions.filter(t => t.type === 'entrada').reduce((acc, t) => acc + t.value, 0);
+  const saida = transactions.filter(t => t.type === 'saida').reduce((acc, t) => acc + t.value, 0);
+  
+  return {
+    entrada,
+    saida,
+    balance: entrada - saida,
+  };
+}

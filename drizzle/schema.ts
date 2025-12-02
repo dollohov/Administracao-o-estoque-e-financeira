@@ -25,4 +25,51 @@ export const users = mysqlTable("users", {
 export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 
-// TODO: Add your tables here
+/**
+ * Produto table for inventory management
+ */
+export const products = mysqlTable("products", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 255 }).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  quantity: int("quantity").default(0).notNull(),
+  purchasePrice: int("purchasePrice").notNull(), // in cents
+  salePrice: int("salePrice").notNull(), // in cents
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
+});
+
+export type Product = typeof products.$inferSelect;
+export type InsertProduct = typeof products.$inferInsert;
+
+/**
+ * Stock Movement table for tracking inventory changes
+ */
+export const stockMovements = mysqlTable("stockMovements", {
+  id: int("id").autoincrement().primaryKey(),
+  productId: int("productId").notNull(),
+  type: mysqlEnum("type", ["entrada", "saida"]).notNull(),
+  quantity: int("quantity").notNull(),
+  date: timestamp("date").defaultNow().notNull(),
+  observation: text("observation"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type StockMovement = typeof stockMovements.$inferSelect;
+export type InsertStockMovement = typeof stockMovements.$inferInsert;
+
+/**
+ * Financial Transaction table for cash flow management
+ */
+export const financialTransactions = mysqlTable("financialTransactions", {
+  id: int("id").autoincrement().primaryKey(),
+  type: mysqlEnum("type", ["entrada", "saida"]).notNull(),
+  category: varchar("category", { length: 100 }).notNull(),
+  value: int("value").notNull(), // in cents
+  date: timestamp("date").defaultNow().notNull(),
+  description: text("description"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type FinancialTransaction = typeof financialTransactions.$inferSelect;
+export type InsertFinancialTransaction = typeof financialTransactions.$inferInsert;
