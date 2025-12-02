@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Início - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="jumbotron">
+    <h1 class="display-4">Bem-vindo ao Gestão ERP</h1>
+    <p class="lead">Sistema básico de administração de estoque e financeira em Django com Bootstrap.</p>
+    <hr class="my-4">
+    <p>Use a barra de navegação acima para acessar as funcionalidades de Estoque e Financeiro.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'estoque:lista_produtos' %}" role="button">Ver Estoque</a>
+    <a class="btn btn-success btn-lg" href="{% url 'financeiro:lista_receitas' %}" role="button">Ver Financeiro</a>
+</div>
+{% endblock %}

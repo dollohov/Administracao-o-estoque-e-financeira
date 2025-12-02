@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Financeiro - Receitas{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Lista de Receitas</h1>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>Data</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for receita in receitas %}
+        <tr>
+            <td>{{ receita.descricao }}</td>
+            <td>R$ {{ receita.valor }}</td>
+            <td>{{ receita.data|date:"d/m/Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">Nenhuma receita cadastrada.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
