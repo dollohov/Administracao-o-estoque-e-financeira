@@ -1,14 +1,220 @@
 {% extends 'base.html' %}
 
 {% block title %}Início - Gestão ERP{% endblock %}
+{% block page_title %}Bem-vindo ao Sistema{% endblock %}
 
 {% block content %}
-<div class="jumbotron">
-    <h1 class="display-4">Bem-vindo ao Gestão ERP</h1>
-    <p class="lead">Sistema básico de administração de estoque e financeira em Django com Bootstrap.</p>
-    <hr class="my-4">
-    <p>Use a barra de navegação acima para acessar as funcionalidades de Estoque e Financeiro.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'estoque:lista_produtos' %}" role="button">Ver Estoque</a>
-    <a class="btn btn-success btn-lg" href="{% url 'financeiro:lista_receitas' %}" role="button">Ver Financeiro</a>
+<div class="container-fluid">
+    <!-- Cabeçalho de boas-vindas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                <div class="card-body p-4">
+                    <h2 class="mb-2">
+                        <i class="bi bi-emoji-smile"></i>
+                        Olá, {{ user.get_full_name|default:user.username }}!
+                    </h2>
+                    <p class="mb-0 opacity-75">
+                        Bem-vindo ao Sistema de Gestão ERP. 
+                        {% if is_admin %}
+                            Você tem acesso completo ao sistema como <strong>Administrador</strong>.
+                        {% elif is_gerente %}
+                            Você tem acesso como <strong>Gerente</strong>.
+                        {% elif is_funcionario %}
+                            Você tem acesso como <strong>Funcionário</strong>.
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Cards de acesso rápido -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h4 class="mb-3"><i class="bi bi-grid-3x3-gap"></i> Acesso Rápido</h4>
+        </div>
+        
+        {% if perms.estoque.view_produto %}
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'estoque:dashboard' %}" class="text-decoration-none">
+                <div class="stat-card primary position-relative">
+                    <i class="bi bi-box-seam stat-icon"></i>
+                    <div class="stat-label">Módulo de</div>
+                    <div class="stat-value">Estoque</div>
+                    <small>Gerenciar produtos e movimentações</small>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if perms.financeiro.view_receita %}
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'financeiro:dashboard' %}" class="text-decoration-none">
+                <div class="stat-card success position-relative">
+                    <i class="bi bi-cash-coin stat-icon"></i>
+                    <div class="stat-label">Módulo</div>
+                    <div class="stat-value">Financeiro</div>
+                    <small>Receitas, despesas e capital</small>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if perms.estoque.add_movimentacaoestoque %}
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'estoque:registrar_movimentacao' %}" class="text-decoration-none">
+                <div class="stat-card warning position-relative">
+                    <i class="bi bi-arrow-left-right stat-icon"></i>
+                    <div class="stat-label">Registrar</div>
+                    <div class="stat-value">Movimentação</div>
+                    <small>Entrada ou saída de produtos</small>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+        
+        {% if user.is_staff %}
+        <div class="col-md-6 col-lg-3 mb-3">
+            <a href="{% url 'admin:index' %}" class="text-decoration-none" target="_blank">
+                <div class="stat-card info position-relative">
+                    <i class="bi bi-gear stat-icon"></i>
+                    <div class="stat-label">Painel de</div>
+                    <div class="stat-value">Admin</div>
+                    <small>Configurações do sistema</small>
+                </div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    
+    <!-- Informações e recursos -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-info-circle"></i> Sobre o Sistema
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Sistema de Gestão ERP</h5>
+                    <p class="card-text">
+                        Este sistema oferece controle completo sobre estoque e finanças da sua empresa,
+                        com funcionalidades de:
+                    </p>
+                    <ul>
+                        <li><strong>Gestão de Estoque:</strong> Cadastro de produtos, controle de entradas e saídas</li>
+                        <li><strong>Controle Financeiro:</strong> Receitas, despesas e capital de giro</li>
+                        <li><strong>Relatórios:</strong> Análises detalhadas de desempenho</li>
+                        <li><strong>Rastreamento:</strong> Histórico completo de todas as operações</li>
+                        <li><strong>Segurança:</strong> Sistema de permissões por grupo de usuários</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-shield-check"></i> Suas Permissões
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">O que você pode fazer</h5>
+                    <div class="list-group list-group-flush">
+                        {% if perms.estoque.view_produto %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Visualizar produtos do estoque
+                        </div>
+                        {% endif %}
+                        
+                        {% if perms.estoque.add_produto %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Cadastrar novos produtos
+                        </div>
+                        {% endif %}
+                        
+                        {% if perms.estoque.add_movimentacaoestoque %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Registrar movimentações de estoque
+                        </div>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.view_receita %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Visualizar receitas e despesas
+                        </div>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.add_receita %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Cadastrar receitas e despesas
+                        </div>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.view_capitalgiro %}
+                        <div class="list-group-item">
+                            <i class="bi bi-check-circle text-success"></i>
+                            Visualizar capital de giro
+                        </div>
+                        {% endif %}
+                        
+                        {% if user.is_superuser %}
+                        <div class="list-group-item">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            <strong>Acesso total ao sistema (Superusuário)</strong>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if not perms.estoque.view_produto and not perms.financeiro.view_receita %}
+                    <div class="alert alert-warning mt-3 mb-0">
+                        <i class="bi bi-exclamation-triangle"></i>
+                        Você não possui permissões atribuídas. Entre em contato com o administrador.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dicas rápidas -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-white">
+                    <i class="bi bi-lightbulb"></i> Dicas Rápidas
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="bi bi-1-circle"></i> Navegação</h6>
+                            <p class="small text-muted">
+                                Use o menu lateral para acessar os diferentes módulos do sistema.
+                                Em dispositivos móveis, clique no ícone de menu no topo.
+                            </p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="bi bi-2-circle"></i> Rastreamento</h6>
+                            <p class="small text-muted">
+                                Todas as operações são registradas com seu nome de usuário,
+                                garantindo total rastreabilidade das ações.
+                            </p>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <h6><i class="bi bi-3-circle"></i> Suporte</h6>
+                            <p class="small text-muted">
+                                Em caso de dúvidas ou problemas, entre em contato com o
+                                administrador do sistema.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,173 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Estoque{% endblock %}
+{% block page_title %}Dashboard de Estoque{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cards de estatísticas -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card primary position-relative">
+                <i class="bi bi-box-seam stat-icon"></i>
+                <div class="stat-value">{{ total_produtos }}</div>
+                <div class="stat-label">Produtos Cadastrados</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card {% if produtos_estoque_baixo > 0 %}warning{% else %}success{% endif %} position-relative">
+                <i class="bi bi-exclamation-triangle stat-icon"></i>
+                <div class="stat-value">{{ produtos_estoque_baixo }}</div>
+                <div class="stat-label">Produtos com Estoque Baixo</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card info position-relative">
+                <i class="bi bi-currency-dollar stat-icon"></i>
+                <div class="stat-value">R$ {{ valor_total_estoque|floatformat:2 }}</div>
+                <div class="stat-label">Valor Total do Estoque</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card success position-relative">
+                <i class="bi bi-arrow-left-right stat-icon"></i>
+                <div class="stat-value">{{ movimentacoes_recentes|length }}</div>
+                <div class="stat-label">Movimentações (7 dias)</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ações rápidas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-lightning"></i> Ações Rápidas
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        {% if perms.estoque.add_movimentacaoestoque %}
+                        <a href="{% url 'estoque:registrar_movimentacao' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Nova Movimentação
+                        </a>
+                        {% endif %}
+                        
+                        {% if perms.estoque.add_produto %}
+                        <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-success">
+                            <i class="bi bi-box-seam"></i> Cadastrar Produto
+                        </a>
+                        {% endif %}
+                        
+                        <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-info">
+                            <i class="bi bi-list-ul"></i> Ver Todos os Produtos
+                        </a>
+                        
+                        {% if perms.estoque.view_produto %}
+                        <a href="{% url 'estoque:relatorio' %}" class="btn btn-secondary">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Relatórios
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Produtos com estoque baixo -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <i class="bi bi-exclamation-triangle"></i> Alertas de Estoque
+                </div>
+                <div class="card-body">
+                    {% if produtos_alerta %}
+                    <div class="table-responsive">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th class="text-center">Atual</th>
+                                    <th class="text-center">Mínimo</th>
+                                    <th class="text-center">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in produtos_alerta %}
+                                <tr>
+                                    <td>
+                                        <a href="{% url 'estoque:detalhes_produto' produto.id %}">
+                                            {{ produto.nome }}
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge bg-danger">{{ produto.estoque_atual }}</span>
+                                    </td>
+                                    <td class="text-center">{{ produto.estoque_minimo }}</td>
+                                    <td class="text-center">
+                                        <i class="bi bi-exclamation-circle text-danger"></i>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-check-circle fs-1"></i>
+                        <p class="mb-0">Nenhum produto com estoque baixo</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Movimentações recentes -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-clock-history"></i> Movimentações Recentes
+                </div>
+                <div class="card-body">
+                    {% if movimentacoes_recentes %}
+                    <div class="list-group list-group-flush">
+                        {% for mov in movimentacoes_recentes %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="badge {% if mov.tipo == 'ENTRADA' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {% if mov.tipo == 'ENTRADA' %}
+                                        <i class="bi bi-arrow-down"></i> ENTRADA
+                                        {% else %}
+                                        <i class="bi bi-arrow-up"></i> SAÍDA
+                                        {% endif %}
+                                    </span>
+                                    <strong>{{ mov.produto.nome }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ mov.quantidade }}x unidades • 
+                                        {{ mov.usuario.get_full_name|default:mov.usuario.username }}
+                                    </small>
+                                </div>
+                                <small class="text-muted">
+                                    {{ mov.data_movimentacao|date:"d/m/Y H:i" }}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="text-center text-muted py-4">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mb-0">Nenhuma movimentação recente</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

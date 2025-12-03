@@ -1,32 +1,191 @@
 {% extends 'base.html' %}
 
-{% block title %}Estoque - Produtos{% endblock %}
+{% block title %}Produtos - Estoque{% endblock %}
+{% block page_title %}Lista de Produtos{% endblock %}
 
 {% block content %}
-<h1 class="mb-4">Lista de Produtos</h1>
+<div class="container-fluid">
+    <!-- Barra de ferramentas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <form method="get" class="d-flex gap-2">
+                                <input type="text" 
+                                       name="busca" 
+                                       class="form-control" 
+                                       placeholder="Buscar produto..." 
+                                       value="{{ busca }}">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-search"></i> Buscar
+                                </button>
+                            </form>
+                        </div>
+                        <div class="col-md-6 text-end mt-3 mt-md-0">
+                            {% if perms.estoque.add_produto %}
+                            <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-success">
+                                <i class="bi bi-plus-circle"></i> Novo Produto
+                            </a>
+                            {% endif %}
+                            
+                            <div class="form-check form-switch d-inline-block ms-3">
+                                <input class="form-check-input" 
+                                       type="checkbox" 
+                                       id="mostrarInativos"
+                                       {% if mostrar_inativos %}checked{% endif %}
+                                       onchange="toggleInativos()">
+                                <label class="form-check-label" for="mostrarInativos">
+                                    Mostrar inativos
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Tabela de produtos -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-box-seam"></i> 
+                    Produtos Cadastrados ({{ produtos|length }})
+                </div>
+                <div class="card-body p-0">
+                    {% if produtos %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th class="text-end">Preço Custo</th>
+                                    <th class="text-end">Preço Venda</th>
+                                    <th class="text-center">Estoque</th>
+                                    <th class="text-center">Margem</th>
+                                    <th class="text-center">Status</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in produtos %}
+                                <tr {% if not produto.ativo %}class="table-secondary"{% endif %}>
+                                    <td>
+                                        <strong>{{ produto.nome }}</strong>
+                                        {% if produto.descricao %}
+                                        <br>
+                                        <small class="text-muted">{{ produto.descricao|truncatewords:10 }}</small>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-end">R$ {{ produto.preco_custo|floatformat:2 }}</td>
+                                    <td class="text-end">R$ {{ produto.preco_venda|floatformat:2 }}</td>
+                                    <td class="text-center">
+                                        {% if produto.estoque_baixo %}
+                                        <span class="badge bg-danger">
+                                            {{ produto.estoque_atual }}
+                                            <i class="bi bi-exclamation-triangle"></i>
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-success">{{ produto.estoque_atual }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% with margem=produto.calcular_margem_lucro %}
+                                        <span class="badge {% if margem >= 30 %}bg-success{% elif margem >= 15 %}bg-warning{% else %}bg-danger{% endif %}">
+                                            {{ margem }}%
+                                        </span>
+                                        {% endwith %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if produto.ativo %}
+                                        <span class="badge bg-success">
+                                            <i class="bi bi-check-circle"></i> Ativo
+                                        </span>
+                                        {% else %}
+                                        <span class="badge bg-secondary">
+                                            <i class="bi bi-x-circle"></i> Inativo
+                                        </span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group btn-group-sm">
+                                            <a href="{% url 'estoque:detalhes_produto' produto.id %}" 
+                                               class="btn btn-info"
+                                               title="Ver detalhes">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            {% if perms.estoque.change_produto %}
+                                            <a href="{% url 'admin:estoque_produto_change' produto.id %}" 
+                                               class="btn btn-warning"
+                                               title="Editar">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-5">
+                        <i class="bi bi-inbox fs-1 text-muted"></i>
+                        <p class="text-muted mt-3">
+                            {% if busca %}
+                            Nenhum produto encontrado para "{{ busca }}"
+                            {% else %}
+                            Nenhum produto cadastrado ainda
+                            {% endif %}
+                        </p>
+                        {% if perms.estoque.add_produto %}
+                        <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-primary">
+                            <i class="bi bi-plus-circle"></i> Cadastrar Primeiro Produto
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Legenda -->
+    {% if produtos %}
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <small class="text-muted">
+                        <i class="bi bi-info-circle"></i> <strong>Legenda:</strong>
+                        <span class="badge bg-success ms-2">Estoque OK</span>
+                        <span class="badge bg-danger ms-2">Estoque Baixo</span>
+                        <span class="badge bg-success ms-2">Margem ≥ 30%</span>
+                        <span class="badge bg-warning ms-2">Margem 15-30%</span>
+                        <span class="badge bg-danger ms-2">Margem < 15%</span>
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Nome</th>
-            <th>Preço Custo</th>
-            <th>Preço Venda</th>
-            <th>Estoque Atual</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for produto in produtos %}
-        <tr>
-            <td>{{ produto.nome }}</td>
-            <td>R$ {{ produto.preco_custo }}</td>
-            <td>R$ {{ produto.preco_venda }}</td>
-            <td>{{ produto.estoque_atual }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="4">Nenhum produto cadastrado.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<script>
+function toggleInativos() {
+    const checkbox = document.getElementById('mostrarInativos');
+    const url = new URL(window.location.href);
+    
+    if (checkbox.checked) {
+        url.searchParams.set('inativos', 'true');
+    } else {
+        url.searchParams.delete('inativos');
+    }
+    
+    window.location.href = url.toString();
+}
+</script>
 {% endblock %}

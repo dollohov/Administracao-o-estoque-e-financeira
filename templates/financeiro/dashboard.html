@@ -1,0 +1,284 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard - Financeiro{% endblock %}
+{% block page_title %}Dashboard Financeiro{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Cards de estatísticas -->
+    <div class="row mb-4">
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card info position-relative">
+                <i class="bi bi-wallet2 stat-icon"></i>
+                <div class="stat-value">R$ {{ capital_atual|floatformat:2 }}</div>
+                <div class="stat-label">Capital de Giro Atual</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card success position-relative">
+                <i class="bi bi-arrow-up-circle stat-icon"></i>
+                <div class="stat-value">R$ {{ receitas_mes|floatformat:2 }}</div>
+                <div class="stat-label">Receitas do Mês</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card warning position-relative">
+                <i class="bi bi-arrow-down-circle stat-icon"></i>
+                <div class="stat-value">R$ {{ despesas_mes|floatformat:2 }}</div>
+                <div class="stat-label">Despesas do Mês</div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-3">
+            <div class="stat-card {% if resultado_mes >= 0 %}primary{% else %}danger{% endif %} position-relative">
+                <i class="bi bi-graph-up stat-icon"></i>
+                <div class="stat-value">R$ {{ resultado_mes|floatformat:2 }}</div>
+                <div class="stat-label">
+                    {% if resultado_mes >= 0 %}Lucro{% else %}Prejuízo{% endif %} do Mês
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ações rápidas -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-lightning"></i> Ações Rápidas
+                </div>
+                <div class="card-body">
+                    <div class="btn-group" role="group">
+                        {% if perms.financeiro.add_receita %}
+                        <a href="{% url 'financeiro:cadastrar_receita' %}" class="btn btn-success">
+                            <i class="bi bi-plus-circle"></i> Nova Receita
+                        </a>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.add_despesa %}
+                        <a href="{% url 'financeiro:cadastrar_despesa' %}" class="btn btn-danger">
+                            <i class="bi bi-dash-circle"></i> Nova Despesa
+                        </a>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.view_capitalgiro %}
+                        <a href="{% url 'financeiro:capital_giro' %}" class="btn btn-info">
+                            <i class="bi bi-wallet2"></i> Capital de Giro
+                        </a>
+                        {% endif %}
+                        
+                        {% if perms.financeiro.view_receita %}
+                        <a href="{% url 'financeiro:relatorio' %}" class="btn btn-secondary">
+                            <i class="bi bi-file-earmark-bar-graph"></i> Relatórios
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Indicadores do mês -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-calendar-month"></i> Indicadores de {{ mes_atual }}
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4 text-center mb-3 mb-md-0">
+                            <div class="mb-2">
+                                <i class="bi bi-arrow-up-circle text-success fs-1"></i>
+                            </div>
+                            <h4 class="text-success">R$ {{ receitas_mes|floatformat:2 }}</h4>
+                            <p class="text-muted mb-0">Total de Receitas</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-3 mb-md-0">
+                            <div class="mb-2">
+                                <i class="bi bi-arrow-down-circle text-danger fs-1"></i>
+                            </div>
+                            <h4 class="text-danger">R$ {{ despesas_mes|floatformat:2 }}</h4>
+                            <p class="text-muted mb-0">Total de Despesas</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="mb-2">
+                                <i class="bi bi-{% if resultado_mes >= 0 %}graph-up text-primary{% else %}graph-down text-danger{% endif %} fs-1"></i>
+                            </div>
+                            <h4 class="{% if resultado_mes >= 0 %}text-primary{% else %}text-danger{% endif %}">
+                                R$ {{ resultado_mes|floatformat:2 }}
+                            </h4>
+                            <p class="text-muted mb-0">
+                                {% if resultado_mes >= 0 %}Lucro{% else %}Prejuízo{% endif %} 
+                                ({{ margem_lucro|floatformat:1 }}%)
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- Barra de progresso -->
+                    <div class="mt-4">
+                        {% if receitas_mes > 0 %}
+                        {% widthratio despesas_mes receitas_mes 100 as percentual_despesas %}
+                        <div class="progress" style="height: 30px;">
+                            <div class="progress-bar bg-success" 
+                                 role="progressbar" 
+                                 style="width: 100%"
+                                 aria-valuenow="100" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                Receitas: 100%
+                            </div>
+                        </div>
+                        <div class="progress mt-2" style="height: 30px;">
+                            <div class="progress-bar bg-danger" 
+                                 role="progressbar" 
+                                 style="width: {{ percentual_despesas }}%"
+                                 aria-valuenow="{{ percentual_despesas }}" 
+                                 aria-valuemin="0" 
+                                 aria-valuemax="100">
+                                Despesas: {{ percentual_despesas }}%
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Receitas recentes -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <i class="bi bi-arrow-up-circle"></i> Receitas Recentes
+                </div>
+                <div class="card-body p-0">
+                    {% if receitas_recentes %}
+                    <div class="list-group list-group-flush">
+                        {% for receita in receitas_recentes %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>{{ receita.descricao }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ receita.data|date:"d/m/Y" }} • 
+                                        {{ receita.usuario.get_full_name|default:receita.usuario.username }}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <strong class="text-success">R$ {{ receita.valor|floatformat:2 }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'financeiro:lista_receitas' %}" class="btn btn-sm btn-success">
+                            Ver Todas as Receitas
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mb-0">Nenhuma receita registrada</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Despesas recentes -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <i class="bi bi-arrow-down-circle"></i> Despesas Recentes
+                </div>
+                <div class="card-body p-0">
+                    {% if despesas_recentes %}
+                    <div class="list-group list-group-flush">
+                        {% for despesa in despesas_recentes %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <strong>{{ despesa.descricao }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ despesa.data|date:"d/m/Y" }} • 
+                                        {{ despesa.usuario.get_full_name|default:despesa.usuario.username }}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <strong class="text-danger">R$ {{ despesa.valor|floatformat:2 }}</strong>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'financeiro:lista_despesas' %}" class="btn btn-sm btn-danger">
+                            Ver Todas as Despesas
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mb-0">Nenhuma despesa registrada</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Movimentações de capital -->
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <i class="bi bi-wallet2"></i> Capital de Giro
+                </div>
+                <div class="card-body p-0">
+                    {% if movimentacoes_capital %}
+                    <div class="list-group list-group-flush">
+                        {% for mov in movimentacoes_capital %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <span class="badge {% if mov.tipo_movimentacao == 'ENTRADA' %}bg-success{% else %}bg-danger{% endif %}">
+                                        {{ mov.get_tipo_movimentacao_display }}
+                                    </span>
+                                    <br>
+                                    <small class="text-muted">
+                                        {{ mov.data_movimentacao|date:"d/m/Y H:i" }}
+                                    </small>
+                                </div>
+                                <div class="text-end">
+                                    <strong>R$ {{ mov.valor_novo|floatformat:2 }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        {% if mov.calcular_diferenca >= 0 %}+{% endif %}{{ mov.calcular_diferenca|floatformat:2 }}
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="{% url 'financeiro:capital_giro' %}" class="btn btn-sm btn-info">
+                            Ver Histórico Completo
+                        </a>
+                    </div>
+                    {% else %}
+                    <div class="text-center py-4 text-muted">
+                        <i class="bi bi-inbox fs-1"></i>
+                        <p class="mb-0">Nenhuma movimentação de capital</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
