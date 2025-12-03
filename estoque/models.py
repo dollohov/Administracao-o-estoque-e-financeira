@@ -90,6 +90,7 @@ class Produto(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='produtos_criados',
+        default=1,
         verbose_name="Criado por",
         help_text="Usuário que cadastrou o produto"
     )
@@ -230,6 +231,7 @@ class MovimentacaoEstoque(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='movimentacoes_estoque',
+        default=1,
         verbose_name="Responsável",
         help_text="Usuário que realizou a movimentação"
     )

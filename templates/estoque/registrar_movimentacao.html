@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Movimentação{% endblock %}
+{% block page_title %}Registrar Movimentação de Estoque{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <i class="bi bi-arrow-left-right"></i> Formulário de Movimentação
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Produto -->
+                        <div class="mb-3">
+                            <label for="id_produto" class="form-label">Produto</label>
+                            <select class="form-select" id="id_produto" name="produto" required>
+                                <option value="">Selecione um produto</option>
+                                {% for produto in produtos %}
+                                <option value="{{ produto.id }}">{{ produto.nome }} (Estoque: {{ produto.estoque_atual }})</option>
+                                {% endfor %}
+                            </select>
+                            <div class="form-text">Apenas produtos ativos são listados.</div>
+                        </div>
+                        
+                        <!-- Tipo de Movimentação -->
+                        <div class="mb-3">
+                            <label for="id_tipo" class="form-label">Tipo de Movimentação</label>
+                            <select class="form-select" id="id_tipo" name="tipo" required>
+                                <option value="">Selecione o tipo</option>
+                                <option value="ENTRADA">ENTRADA (Compra, Devolução)</option>
+                                <option value="SAIDA">SAÍDA (Venda, Perda)</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Quantidade -->
+                        <div class="mb-3">
+                            <label for="id_quantidade" class="form-label">Quantidade</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="id_quantidade" 
+                                   name="quantidade" 
+                                   min="1" 
+                                   required>
+                        </div>
+                        
+                        <!-- Valor Unitário -->
+                        <div class="mb-3">
+                            <label for="id_valor_unitario" class="form-label">Valor Unitário (R$)</label>
+                            <input type="number" 
+                                   class="form-control" 
+                                   id="id_valor_unitario" 
+                                   name="valor_unitario" 
+                                   step="0.01" 
+                                   min="0.01" 
+                                   required>
+                            <div class="form-text">Use o preço de custo para ENTRADA e o preço de venda para SAÍDA.</div>
+                        </div>
+                        
+                        <!-- Observação -->
+                        <div class="mb-3">
+                            <label for="id_observacao" class="form-label">Observação (Opcional)</label>
+                            <textarea class="form-control" 
+                                      id="id_observacao" 
+                                      name="observacao" 
+                                      rows="3"></textarea>
+                        </div>
+                        
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a href="{% url 'estoque:dashboard' %}" class="btn btn-secondary">
+                                <i class="bi bi-x-circle"></i> Cancelar
+                            </a>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-check-circle"></i> Registrar Movimentação
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

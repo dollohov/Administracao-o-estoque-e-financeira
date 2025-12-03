@@ -75,6 +75,7 @@ class Receita(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='receitas_registradas',
+        default=1,
         verbose_name="Registrado por",
         help_text="Usuário que registrou a receita"
     )
@@ -157,6 +158,7 @@ class Despesa(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='despesas_registradas',
+        default=1,
         verbose_name="Registrado por",
         help_text="Usuário que registrou a despesa"
     )
@@ -233,6 +235,7 @@ class CapitalGiro(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='movimentacoes_capital',
+        default=1,
         verbose_name="Responsável",
         help_text="Usuário que realizou a movimentação"
     )
