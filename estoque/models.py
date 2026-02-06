@@ -289,3 +289,7 @@ class MovimentacaoEstoque(models.Model):
         
         # Salvar a movimentação
         super().save(*args, **kwargs)
+
+
+# Importar modelos estendidos
+from .models_extended import CategoriaProduto, ProdutoAtributo, ImagemProduto

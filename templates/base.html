@@ -295,6 +295,10 @@
             </a>
             {% endif %}
             
+            <a class="nav-link {% if 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:dashboard' %}">
+                <i class="bi bi-file-earmark-medical"></i> Fiscal
+            </a>
+            
             {% if user.is_staff %}
             <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">
                 <i class="bi bi-gear"></i> Administração

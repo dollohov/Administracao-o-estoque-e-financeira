@@ -62,4 +62,5 @@ urlpatterns = [
     # Módulos do sistema
     path('estoque/', include('estoque.urls')),
     path('financeiro/', include('financeiro.urls')),
+    path('fiscal/', include('fiscal.urls')),
 ]

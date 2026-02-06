@@ -11,6 +11,7 @@ Data: 2025-12-02
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
+from django.db import models
 from django.db.models import Sum, Q
 from django.http import JsonResponse
 from datetime import datetime, timedelta

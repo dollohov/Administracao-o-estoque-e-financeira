@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Detalhes do Fornecedor - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-truck"></i> Fornecedor: {{ fornecedor.razao_social }}
+                </h1>
+                <a href="{% url 'fiscal:lista_fornecedores' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar para Lista
+                </a>
+            </div>
+
+            <div class="row">
+                <!-- Dados Cadastrais -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Dados Cadastrais</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Razão Social</label>
+                                <span class="fw-bold">{{ fornecedor.razao_social }}</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Nome Fantasia</label>
+                                <span>{{ fornecedor.nome_fantasia|default:"-" }}</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">CNPJ</label>
+                                <span class="fw-bold">{{ fornecedor.cnpj }}</span>
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Inscrição Estadual</label>
+                                <span>{{ fornecedor.inscricao_estadual|default:"-" }}</span>
+                            </div>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Endereço</label>
+                                <span>{{ fornecedor.logradouro }}, {{ fornecedor.numero }}</span><br>
+                                <span>{{ fornecedor.bairro }} - {{ fornecedor.cidade }}/{{ fornecedor.estado }}</span><br>
+                                <span>CEP: {{ fornecedor.cep }}</span>
+                            </div>
+                            <hr>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Contato</label>
+                                <i class="bi bi-telephone"></i> {{ fornecedor.telefone|default:"-" }}<br>
+                                <i class="bi bi-envelope"></i> {{ fornecedor.email|default:"-" }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Estatísticas -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">Estatísticas de Compra</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="text-center py-3">
+                                <h2 class="text-primary mb-0">R$ {{ total_compras }}</h2>
+                                <p class="text-muted">Total em Compras</p>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <span>Total de NF-es:</span>
+                                <span class="fw-bold">{{ total_nfes }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histórico de NF-es -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Últimas Notas Fiscais</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Número/Série</th>
+                                            <th>Emissão</th>
+                                            <th>Valor Total</th>
+                                            <th>Status</th>
+                                            <th>Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for nfe in nfes %}
+                                        <tr>
+                                            <td><strong>{{ nfe.numero }}</strong>/{{ nfe.serie }}</td>
+                                            <td>{{ nfe.data_emissao|date:"d/m/Y" }}</td>
+                                            <td>R$ {{ nfe.valor_total }}</td>
+                                            <td>
+                                                {% if nfe.status == 'PROCESSADA' %}
+                                                    <span class="badge bg-success">Processada</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ nfe.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                <a href="{% url 'fiscal:detalhe_nfe' nfe.pk %}" class="btn btn-sm btn-outline-info">
+                                                    <i class="bi bi-eye"></i> Ver
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">
+                                                Nenhuma nota fiscal encontrada para este fornecedor.
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

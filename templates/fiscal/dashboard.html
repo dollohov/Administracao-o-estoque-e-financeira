@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard Fiscal - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-graph-up"></i> Dashboard Fiscal
+                </h1>
+                <div>
+                    <a href="{% url 'fiscal:importar_nfe' %}" class="btn btn-primary">
+                        <i class="bi bi-upload"></i> Importar NF-e
+                    </a>
+                </div>
+            </div>
+
+            <!-- Cards de Resumo -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 bg-primary text-white h-100">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 opacity-75">Total de NF-es</h6>
+                            <h2 class="card-title mb-0">{{ total_nfes }}</h2>
+                            <i class="bi bi-file-earmark-text position-absolute top-50 end-0 translate-middle-y me-3 opacity-25 fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 bg-success text-white h-100">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 opacity-75">Valor Total Importado</h6>
+                            <h2 class="card-title mb-0">R$ {{ valor_total }}</h2>
+                            <i class="bi bi-currency-dollar position-absolute top-50 end-0 translate-middle-y me-3 opacity-25 fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 bg-warning text-dark h-100">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 opacity-75">NF-es Pendentes</h6>
+                            <h2 class="card-title mb-0">{{ nfes_pendentes }}</h2>
+                            <i class="bi bi-clock-history position-absolute top-50 end-0 translate-middle-y me-3 opacity-25 fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card shadow-sm border-0 bg-danger text-white h-100">
+                        <div class="card-body">
+                            <h6 class="card-subtitle mb-2 opacity-75">Erros de Importação</h6>
+                            <h2 class="card-title mb-0">{{ nfes_erro }}</h2>
+                            <i class="bi bi-exclamation-triangle position-absolute top-50 end-0 translate-middle-y me-3 opacity-25 fs-1"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Últimas NF-es -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-0">Últimas NF-es Importadas</h5>
+                            <a href="{% url 'fiscal:lista_nfes' %}" class="btn btn-sm btn-link">Ver Todas</a>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Número</th>
+                                            <th>Fornecedor</th>
+                                            <th>Data</th>
+                                            <th>Valor</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for nfe in ultimas_nfes %}
+                                        <tr>
+                                            <td>{{ nfe.numero }}</td>
+                                            <td>{{ nfe.fornecedor.razao_social|truncatechars:30 }}</td>
+                                            <td>{{ nfe.data_importacao|date:"d/m/Y" }}</td>
+                                            <td>R$ {{ nfe.valor_total }}</td>
+                                            <td>
+                                                {% if nfe.status == 'PROCESSADA' %}
+                                                    <span class="badge bg-success">OK</span>
+                                                {% else %}
+                                                    <span class="badge bg-secondary">{{ nfe.status }}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="5" class="text-center py-4 text-muted">Nenhuma nota importada.</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Top Fornecedores -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Top Fornecedores</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <ul class="list-group list-group-flush">
+                                {% for f in top_fornecedores %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="mb-0">{{ f.razao_social|truncatechars:25 }}</h6>
+                                        <small class="text-muted">{{ f.total_nfes }} notas fiscais</small>
+                                    </div>
+                                    <a href="{% url 'fiscal:detalhe_fornecedor' f.pk %}" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                </li>
+                                {% empty %}
+                                <li class="list-group-item text-center py-4 text-muted">Nenhum fornecedor.</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="card-footer bg-white text-center">
+                            <a href="{% url 'fiscal:lista_fornecedores' %}" class="btn btn-sm btn-link">Ver Todos Fornecedores</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

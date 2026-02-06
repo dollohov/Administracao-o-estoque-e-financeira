@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}NF-es Importadas - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-file-earmark-text"></i> Notas Fiscais Eletrônicas
+                </h1>
+                <a href="{% url 'fiscal:importar_nfe' %}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i> Importar Nova NF-e
+                </a>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="fornecedor" class="form-label">Fornecedor</label>
+                            <select name="fornecedor" id="fornecedor" class="form-select">
+                                <option value="">Todos os Fornecedores</option>
+                                {% for f in fornecedores %}
+                                    <option value="{{ f.id }}" {% if fornecedor_selecionado == f.id|stringformat:"s" %}selected{% endif %}>
+                                        {{ f.razao_social }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="">Todos os Status</option>
+                                <option value="PENDENTE" {% if status_selecionado == "PENDENTE" %}selected{% endif %}>Pendente</option>
+                                <option value="PROCESSADA" {% if status_selecionado == "PROCESSADA" %}selected{% endif %}>Processada</option>
+                                <option value="ERRO" {% if status_selecionado == "ERRO" %}selected{% endif %}>Erro</option>
+                                <option value="CANCELADA" {% if status_selecionado == "CANCELADA" %}selected{% endif %}>Cancelada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-filter"></i> Filtrar
+                            </button>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <a href="{% url 'fiscal:lista_nfes' %}" class="btn btn-outline-secondary w-100">
+                                Limpar
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabela de NF-es -->
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Número/Série</th>
+                                    <th>Fornecedor</th>
+                                    <th>Emissão</th>
+                                    <th>Valor Total</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for nfe in nfes %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ nfe.numero }}</strong>/{{ nfe.serie }}
+                                        <br>
+                                        <small class="text-muted">{{ nfe.chave_acesso|truncatechars:20 }}</small>
+                                    </td>
+                                    <td>{{ nfe.fornecedor.razao_social }}</td>
+                                    <td>{{ nfe.data_emissao|date:"d/m/Y" }}</td>
+                                    <td>R$ {{ nfe.valor_total }}</td>
+                                    <td>
+                                        {% if nfe.status == 'PROCESSADA' %}
+                                            <span class="badge bg-success">Processada</span>
+                                        {% elif nfe.status == 'PENDENTE' %}
+                                            <span class="badge bg-warning text-dark">Pendente</span>
+                                        {% elif nfe.status == 'ERRO' %}
+                                            <span class="badge bg-danger">Erro</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary">{{ nfe.status }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'fiscal:detalhe_nfe' nfe.pk %}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i> Detalhes
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        Nenhuma nota fiscal encontrada.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

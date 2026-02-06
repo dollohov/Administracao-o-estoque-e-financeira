@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Detalhes da NF-e {{ nfe.numero }} - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-file-earmark-text"></i> Detalhes da NF-e #{{ nfe.numero }}
+                </h1>
+                <div>
+                    <a href="{% url 'fiscal:lista_nfes' %}" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Voltar para Lista
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <!-- Informações Gerais -->
+                <div class="col-md-8">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Informações da Nota Fiscal</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Chave de Acesso</label>
+                                    <p class="fw-bold">{{ nfe.chave_acesso }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-muted small">Número / Série</label>
+                                    <p class="fw-bold">{{ nfe.numero }} / {{ nfe.serie }}</p>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="text-muted small">Data de Emissão</label>
+                                    <p class="fw-bold">{{ nfe.data_emissao|date:"d/m/Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Fornecedor</label>
+                                    <p class="fw-bold">
+                                        <a href="{% url 'fiscal:detalhe_fornecedor' nfe.fornecedor.pk %}">
+                                            {{ nfe.fornecedor.razao_social }}
+                                        </a>
+                                    </p>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="text-muted small">Natureza da Operação</label>
+                                    <p class="fw-bold">{{ nfe.natureza_operacao }}</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label class="text-muted small">Observações</label>
+                                    <p>{{ nfe.observacoes|default:"Nenhuma observação." }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Itens da Nota -->
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Itens da Nota Fiscal</h5>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Descrição</th>
+                                            <th>Qtd</th>
+                                            <th>V. Unit.</th>
+                                            <th>V. Total</th>
+                                            <th>Impostos</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for item in itens %}
+                                        <tr>
+                                            <td>{{ item.numero_item }}</td>
+                                            <td>
+                                                {{ item.descricao }}
+                                                <br>
+                                                <small class="text-muted">Cód: {{ item.codigo_produto }} | NCM: {{ item.ncm }}</small>
+                                            </td>
+                                            <td>{{ item.quantidade }}</td>
+                                            <td>R$ {{ item.valor_unitario }}</td>
+                                            <td>R$ {{ item.valor_total }}</td>
+                                            <td>
+                                                <small>
+                                                    ICMS: R$ {{ item.valor_icms }} ({{ item.aliquota_icms }}%)<br>
+                                                    IPI: R$ {{ item.valor_ipi }} ({{ item.aliquota_ipi }}%)
+                                                </small>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Resumo de Valores -->
+                <div class="col-md-4">
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">Resumo de Valores</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Valor dos Produtos:</span>
+                                <span class="fw-bold">R$ {{ nfe.valor_produtos }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Frete:</span>
+                                <span class="fw-bold">R$ {{ nfe.valor_frete }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Desconto:</span>
+                                <span class="fw-bold text-danger">- R$ {{ nfe.valor_desconto }}</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>ICMS Total:</span>
+                                <span class="fw-bold">R$ {{ nfe.valor_icms }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>IPI Total:</span>
+                                <span class="fw-bold">R$ {{ nfe.valor_ipi }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>PIS/COFINS:</span>
+                                <span class="fw-bold">R$ {{ nfe.valor_pis|add:nfe.valor_cofins }}</span>
+                            </div>
+                            <hr>
+                            <div class="d-flex justify-content-between">
+                                <h5 class="mb-0">Valor Total:</h5>
+                                <h5 class="mb-0 text-primary">R$ {{ nfe.valor_total }}</h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-white">
+                            <h5 class="card-title mb-0">Status do Processamento</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Status Atual</label>
+                                {% if nfe.status == 'PROCESSADA' %}
+                                    <span class="badge bg-success fs-6">Processada com Sucesso</span>
+                                {% elif nfe.status == 'PENDENTE' %}
+                                    <span class="badge bg-warning text-dark fs-6">Pendente</span>
+                                {% elif nfe.status == 'ERRO' %}
+                                    <span class="badge bg-danger fs-6">Erro no Processamento</span>
+                                {% endif %}
+                            </div>
+                            <div class="mb-3">
+                                <label class="text-muted small d-block">Importado por</label>
+                                <span>{{ nfe.usuario_importacao.get_full_name|default:nfe.usuario_importacao.username }}</span>
+                            </div>
+                            <div>
+                                <label class="text-muted small d-block">Data da Importação</label>
+                                <span>{{ nfe.data_importacao|date:"d/m/Y H:i" }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

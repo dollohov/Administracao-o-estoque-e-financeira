@@ -1,1 +1,18 @@
+# Django e dependências principais
 Django>=5.2
+python-decouple>=3.8
+
+# Processamento de XML e NF-e
+lxml>=4.9.0
+xmltodict>=0.13.0
+
+# Processamento de imagens
+Pillow>=10.0.0
+
+# Exportação de dados
+openpyxl>=3.1.0
+
+# API REST
+djangorestframework>=3.14.0
+django-cors-headers>=4.0.0
+django-filter>=23.0

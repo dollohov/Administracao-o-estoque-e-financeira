@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Fornecedores - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-truck"></i> Fornecedores
+                </h1>
+            </div>
+
+            <!-- Filtros -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="">Todos</option>
+                                <option value="ativo" {% if status_selecionado == "ativo" %}selected{% endif %}>Ativos</option>
+                                <option value="inativo" {% if status_selecionado == "inativo" %}selected{% endif %}>Inativos</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-outline-primary w-100">
+                                <i class="bi bi-filter"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Tabela de Fornecedores -->
+            <div class="card shadow-sm">
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Razão Social / Nome Fantasia</th>
+                                    <th>CNPJ</th>
+                                    <th>Cidade/UF</th>
+                                    <th>NF-es</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for f in fornecedores %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ f.razao_social }}</strong>
+                                        <br>
+                                        <small class="text-muted">{{ f.nome_fantasia|default:"" }}</small>
+                                    </td>
+                                    <td>{{ f.cnpj }}</td>
+                                    <td>{{ f.cidade }}/{{ f.estado }}</td>
+                                    <td>{{ f.total_nfes }}</td>
+                                    <td>
+                                        {% if f.ativo %}
+                                            <span class="badge bg-success">Ativo</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Inativo</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'fiscal:detalhe_fornecedor' f.pk %}" class="btn btn-sm btn-outline-info">
+                                            <i class="bi bi-eye"></i> Detalhes
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="6" class="text-center py-4 text-muted">
+                                        Nenhum fornecedor encontrado.
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

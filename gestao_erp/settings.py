@@ -62,8 +62,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',    # Gerenciamento de arquivos estáticos
     
     # Aplicações do projeto
-    'estoque',      # Módulo de controle de estoque
-    'financeiro',   # Módulo de controle financeiro
+    'estoque',        # Módulo de controle de estoque
+    'financeiro',     # Módulo de controle financeiro
+    'fiscal',         # Módulo de importação de NF-e e gestão fiscal
+    'fornecedores',   # Módulo de gestão de fornecedores
+    'clientes',       # Módulo de gestão de clientes
+    
+    # Bibliotecas de terceiros
+    'rest_framework',      # Django REST Framework para APIs
+    'django_filters',      # Filtros avançados
+    'corsheaders',         # CORS headers para APIs
 ]
 
 
