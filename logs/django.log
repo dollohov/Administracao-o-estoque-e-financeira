@@ -140,3 +140,4 @@ NameError: name 'models' is not defined
 Watching for file changes with StatReloader
 "GET /estoque/ HTTP/1.1" 200 18152
 "GET /financeiro/ HTTP/1.1" 200 18488
+/home/ubuntu/erp-project/gestao_erp/settings.py changed, reloading.

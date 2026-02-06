@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Produto - {{ produto.nome }}{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2><i class="fas fa-box me-2"></i>{{ produto.nome }}</h2>
+        <div>
+            <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Voltar
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Informações Gerais</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>SKU:</strong> {{ produto.sku|default:"Não informado" }}</p>
+                    <p><strong>Preço de Custo:</strong> R$ {{ produto.preco_custo }}</p>
+                    <p><strong>Preço de Venda:</strong> R$ {{ produto.preco_venda }}</p>
+                    <p><strong>Margem:</strong> {{ margem_lucro|floatformat:2 }}%</p>
+                    <hr>
+                    <p><strong>Estoque Atual:</strong> 
+                        <span class="badge {% if produto.estoque_atual <= produto.estoque_minimo %}bg-danger{% else %}bg-success{% endif %}">
+                            {{ produto.estoque_atual }}
+                        </span>
+                    </p>
+                    <p><strong>Estoque Mínimo:</strong> {{ produto.estoque_minimo }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Descrição</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ produto.descricao|linebreaks|default:"Sem descrição informada." }}</p>
+                </div>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Últimas Movimentações</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Tipo</th>
+                                    <th>Qtd</th>
+                                    <th>Valor Unit.</th>
+                                    <th>Usuário</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for mov in movimentacoes %}
+                                <tr>
+                                    <td>{{ mov.data_movimentacao|date:"d/m/Y H:i" }}</td>
+                                    <td>
+                                        <span class="badge {% if mov.tipo == 'ENTRADA' %}bg-success{% else %}bg-danger{% endif %}">
+                                            {{ mov.tipo }}
+                                        </span>
+                                    </td>
+                                    <td>{{ mov.quantidade }}</td>
+                                    <td>R$ {{ mov.valor_unitario }}</td>
+                                    <td>{{ mov.usuario.username }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="5" class="text-center py-3 text-muted">Nenhuma movimentação registrada.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

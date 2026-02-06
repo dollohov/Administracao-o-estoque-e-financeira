@@ -112,7 +112,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         
         # Diretórios onde o Django procura por templates
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         
         # Permite que cada app tenha seu próprio diretório de templates
         'APP_DIRS': True,
