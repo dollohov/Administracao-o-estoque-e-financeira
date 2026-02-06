@@ -141,3 +141,553 @@ Watching for file changes with StatReloader
 "GET /estoque/ HTTP/1.1" 200 18152
 "GET /financeiro/ HTTP/1.1" 200 18488
 /home/ubuntu/erp-project/gestao_erp/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+"GET / HTTP/1.1" 400 73182
+"GET / HTTP/1.1" 400 69591
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+"GET / HTTP/1.1" 400 73182
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+"GET / HTTP/1.1" 400 69595
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+"GET / HTTP/1.1" 400 73181
+"GET / HTTP/1.1" 400 69546
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/utils/deprecation.py", line 119, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/http/request.py", line 202, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer'. You may need to add '8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer' to ALLOWED_HOSTS.
+"GET / HTTP/1.1" 400 69593
+"GET / HTTP/1.1" 400 73183
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"HEAD / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/ HTTP/1.1" 200 6010
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+Watching for file changes with StatReloader
+"GET /admin HTTP/1.1" 301 0
+"GET /admin HTTP/1.1" 301 0
+"GET /admin/ HTTP/1.1" 302 0
+"GET /admin/ HTTP/1.1" 302 0
+"GET /admin/login/?next=/admin/ HTTP/1.1" 200 4209
+"GET /admin/login/?next=/admin/ HTTP/1.1" 200 4209
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"POST /login/ HTTP/1.1" 302 0
+Forbidden (CSRF token missing.): /
+"POST / HTTP/1.1" 403 2492
+"GET / HTTP/1.1" 200 19284
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Forbidden (CSRF token from POST incorrect.): /login/
+"POST /login/ HTTP/1.1" 403 2504
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+Not Found: /clientes/
+"GET /clientes/ HTTP/1.1" 404 3186
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /clientes/ HTTP/1.1" 302 0
+"GET /clientes/ HTTP/1.1" 302 0
+"GET /login/?next=/clientes/ HTTP/1.1" 200 6020
+"GET /login/?next=/clientes/ HTTP/1.1" 200 6020
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+"GET /clientes/ HTTP/1.1" 200 35
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /clientes/ HTTP/1.1" 302 0
+"GET /clientes/ HTTP/1.1" 302 0
+"GET /login/?next=/clientes/ HTTP/1.1" 200 6020
+"GET /login/?next=/clientes/ HTTP/1.1" 200 6020
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"POST /login/ HTTP/1.1" 302 0
+Forbidden (CSRF token missing.): /
+"POST / HTTP/1.1" 403 2492
+"GET /clientes/ HTTP/1.1" 200 35
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+Internal Server Error: /estoque/relatorio/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/estoque/views.py", line 352, in relatorio_estoque
+    return render(request, 'estoque/relatorio.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: estoque/relatorio.html
+"GET /estoque/relatorio/ HTTP/1.1" 500 87127
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 35
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+"GET /fornecedores/ HTTP/1.1" 200 39
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+Internal Server Error: /estoque/relatorio/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/estoque/views.py", line 352, in relatorio_estoque
+    return render(request, 'estoque/relatorio.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: estoque/relatorio.html
+"GET /estoque/relatorio/ HTTP/1.1" 500 87128
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 35
+"GET /fornecedores/ HTTP/1.1" 200 39
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+Internal Server Error: /estoque/relatorio/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/estoque/views.py", line 352, in relatorio_estoque
+    return render(request, 'estoque/relatorio.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: estoque/relatorio.html
+"GET /estoque/relatorio/ HTTP/1.1" 500 87128
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 35
+"GET /fornecedores/ HTTP/1.1" 200 39
+"GET /estoque/relatorio/ HTTP/1.1" 200 15920
+/home/ubuntu/Administracao-o-estoque-e-financeira/clientes/models.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/clientes/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/clientes/urls.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/fornecedores/models.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/fornecedores/views.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/fornecedores/models.py changed, reloading.
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+"GET /estoque/relatorio/ HTTP/1.1" 200 15920
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+Internal Server Error: /clientes/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/clientes/views.py", line 44, in lista_clientes
+    return render(request, 'clientes/lista_clientes.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: clientes/lista_clientes.html
+"GET /clientes/ HTTP/1.1" 500 87138
+Internal Server Error: /fornecedores/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/fornecedores/views.py", line 44, in lista_fornecedores
+    return render(request, 'fornecedores/lista_fornecedores.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: fornecedores/lista_fornecedores.html
+"GET /fornecedores/ HTTP/1.1" 500 87433
+Internal Server Error: /clientes/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/clientes/views.py", line 44, in lista_clientes
+    return render(request, 'clientes/lista_clientes.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 19, in get_template
+    raise TemplateDoesNotExist(template_name, chain=chain)
+django.template.exceptions.TemplateDoesNotExist: clientes/lista_clientes.html
+"GET /clientes/ HTTP/1.1" 500 87138
+Watching for file changes with StatReloader
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+"GET /estoque/relatorio/ HTTP/1.1" 200 15920
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 13100
+"GET /fornecedores/ HTTP/1.1" 200 13120
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/Administracao-o-estoque-e-financeira/gestao_erp/urls.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /pdv/
+Traceback (most recent call last):
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/contrib/auth/decorators.py", line 59, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/pdv/views.py", line 38, in dashboard_pdv
+    return render(request, 'pdv/dashboard.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 61, in render_to_string
+    template = get_template(template_name, using=using)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader.py", line 15, in get_template
+    return engine.get_template(template_name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/backends/django.py", line 79, in get_template
+    return Template(self.engine.get_template(template_name), self)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/engine.py", line 177, in get_template
+    template, origin = self.find_template(template_name)
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loaders/cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loaders/base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 155, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 197, in compile_nodelist
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 519, in parse
+    raise self.error(token, e)
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 517, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 299, in do_extends
+    nodelist = parser.parse()
+               ^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 519, in parse
+    raise self.error(token, e)
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 517, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/loader_tags.py", line 234, in do_block
+    nodelist = parser.parse(("endblock",))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 519, in parse
+    raise self.error(token, e)
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 517, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/defaulttags.py", line 962, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 490, in parse
+    raise self.error(token, e)
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 488, in parse
+    filter_expression = self.compile_filter(token.contents)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 610, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 706, in __init__
+    filter_func = parser.find_filter(filter_name)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/Administracao-o-estoque-e-financeira/venv/lib/python3.11/site-packages/django/template/base.py", line 616, in find_filter
+    raise TemplateSyntaxError("Invalid filter: '%s'" % filter_name)
+django.template.exceptions.TemplateSyntaxError: Invalid filter: 'div'
+"GET /pdv/ HTTP/1.1" 500 234594
+Watching for file changes with StatReloader
+"GET /pdv/ HTTP/1.1" 200 13503
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+"GET /estoque/relatorio/ HTTP/1.1" 200 15920
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 13100
+"GET /fornecedores/ HTTP/1.1" 200 13120
+"GET /pdv/ HTTP/1.1" 200 13503
+"GET / HTTP/1.1" 200 19284
+"GET /login/ HTTP/1.1" 302 0
+"GET / HTTP/1.1" 200 19284
+"GET /estoque/ HTTP/1.1" 200 18152
+"GET /estoque/produtos/ HTTP/1.1" 200 20628
+"GET /estoque/movimentacao/ HTTP/1.1" 200 15048
+"GET /estoque/relatorio/ HTTP/1.1" 200 15920
+"GET /financeiro/ HTTP/1.1" 200 18488
+"GET /fiscal/ HTTP/1.1" 200 17103
+"GET /clientes/ HTTP/1.1" 200 13100
+"GET /fornecedores/ HTTP/1.1" 200 13120
+"GET /pdv/ HTTP/1.1" 200 13503
+"GET / HTTP/1.1" 302 0
+"GET / HTTP/1.1" 302 0
+"GET /login/?next=/ HTTP/1.1" 200 6011
+"GET /login/?next=/ HTTP/1.1" 200 6011
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"POST /login/ HTTP/1.1" 302 0
+Forbidden (CSRF token missing.): /
+"POST / HTTP/1.1" 403 2492
+Forbidden (CSRF token from POST incorrect.): /login/
+"POST /login/ HTTP/1.1" 403 2504
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader
+"GET /login/ HTTP/1.1" 200 6010
+"GET /login/ HTTP/1.1" 200 6010
+Watching for file changes with StatReloader

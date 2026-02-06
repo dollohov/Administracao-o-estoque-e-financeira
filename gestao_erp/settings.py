@@ -21,6 +21,7 @@ Autor: Manus AI
 Data: 2025-12-02
 """
 
+import os
 from pathlib import Path
 
 # =============================================================================
@@ -45,7 +46,7 @@ DEBUG = True
 
 # Hosts permitidos para acessar a aplicação
 # Em produção, especifique os domínios permitidos, ex: ['meusite.com', 'www.meusite.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer']
 
 
 # =============================================================================
@@ -67,6 +68,7 @@ INSTALLED_APPS = [
     'fiscal',         # Módulo de importação de NF-e e gestão fiscal
     'fornecedores',   # Módulo de gestão de fornecedores
     'clientes',       # Módulo de gestão de clientes
+    'pdv',            # Módulo de Ponto de Venda
     
     # Bibliotecas de terceiros
     'rest_framework',      # Django REST Framework para APIs
@@ -112,7 +114,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         
         # Diretórios onde o Django procura por templates
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [BASE_DIR / 'templates'],
         
         # Permite que cada app tenha seu próprio diretório de templates
         'APP_DIRS': True,
