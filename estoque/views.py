@@ -66,20 +66,33 @@ def dashboard_estoque(request):
 @login_required
 def lista_produtos(request):
     """
-    View para listar todos os produtos cadastrados.
+    View para listar todos os produtos cadastrados com filtros aprimorados.
     """
     # Obter parâmetros de filtro da URL
     busca = request.GET.get('busca', '')
     mostrar_inativos = request.GET.get('inativos', 'false') == 'true'
+    categoria_filtro = request.GET.get('categoria', '')
+    marca_filtro = request.GET.get('marca', '')
     
     # Iniciar query com todos os produtos
     produtos = Produto.objects.all()
     
-    # Aplicar filtro de busca por nome
+    # Aplicar filtro de busca por nome, SKU ou descrição
     if busca:
         produtos = produtos.filter(
-            Q(nome__icontains=busca) | Q(descricao__icontains=busca)
+            Q(nome__icontains=busca) | 
+            Q(descricao__icontains=busca) |
+            Q(sku__icontains=busca) |
+            Q(ean_gtin__icontains=busca)
         )
+    
+    # Aplicar filtro de categoria
+    if categoria_filtro:
+        produtos = produtos.filter(categoria=categoria_filtro)
+        
+    # Aplicar filtro de marca
+    if marca_filtro:
+        produtos = produtos.filter(marca=marca_filtro)
     
     # Aplicar filtro de status
     if not mostrar_inativos:
@@ -90,11 +103,19 @@ def lista_produtos(request):
         'usuario_criacao', 'usuario_modificacao'
     )
     
+    # Obter categorias e marcas únicas para os filtros (apenas de produtos ativos)
+    categorias = Produto.objects.filter(categoria__isnull=False).exclude(categoria='').values_list('categoria', flat=True).distinct().order_by('categoria')
+    marcas = Produto.objects.filter(marca__isnull=False).exclude(marca='').values_list('marca', flat=True).distinct().order_by('marca')
+    
     # Preparar contexto
     context = {
         'produtos': produtos,
         'busca': busca,
         'mostrar_inativos': mostrar_inativos,
+        'categorias': categorias,
+        'marcas': marcas,
+        'categoria_selecionada': categoria_filtro,
+        'marca_selecionada': marca_filtro,
     }
     
     return render(request, 'estoque/lista_produtos.html', context)
