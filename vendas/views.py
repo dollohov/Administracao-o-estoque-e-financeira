@@ -14,7 +14,12 @@ import os
 import urllib.parse
 
 # Para geração de PDF
-from weasyprint import HTML
+try:
+    from weasyprint import HTML
+    WEASYPRINT_DISPONIVEL = True
+except ImportError:
+    WEASYPRINT_DISPONIVEL = False
+    HTML = None
 
 
 @login_required
@@ -149,6 +154,10 @@ def editar_pedido(request, pk):
 @login_required
 @permission_required("vendas.view_pedido", raise_exception=True)
 def gerar_pedido_pdf(request, pk):
+    if not WEASYPRINT_DISPONIVEL:
+        messages.error(request, "WeasyPrint nao esta instalado. Execute: pip install WeasyPrint")
+        return redirect("vendas:detalhe_pedido", pk=pk)
+    
     pedido = get_object_or_404(Pedido.objects.select_related("cliente", "vendedor"), pk=pk)
     itens = pedido.itens.select_related("produto").all()
 
@@ -156,18 +165,19 @@ def gerar_pedido_pdf(request, pk):
     context = {
         "pedido": pedido,
         "itens": itens,
-        "base_url": request.build_absolute_uri("/"), # Para imagens e CSS
-        "logo_path": os.path.join(settings.STATIC_ROOT, "img/logo.png") # Exemplo de logo
+        "base_url": request.build_absolute_uri("/"),
+        "logo_path": os.path.join(settings.STATIC_ROOT, "img/logo.png")
     }
     html_content = html_template.render(context)
 
-    # Instalar weasyprint: pip install WeasyPrint
-    # from weasyprint import HTML
-    pdf_file = HTML(string=html_content, base_url=request.build_absolute_uri("/")).write_pdf()
-
-    response = HttpResponse(pdf_file, content_type="application/pdf")
-    response["Content-Disposition"] = f"attachment; filename=\"pedido_{pedido.pk}.pdf\""
-    return response
+    try:
+        pdf_file = HTML(string=html_content, base_url=request.build_absolute_uri("/")).write_pdf()
+        response = HttpResponse(pdf_file, content_type="application/pdf")
+        response["Content-Disposition"] = f"attachment; filename=\"pedido_{pedido.pk}.pdf\""
+        return response
+    except Exception as e:
+        messages.error(request, f"Erro ao gerar PDF: {str(e)}")
+        return redirect("vendas:detalhe_pedido", pk=pk)
 
 
 @login_required
