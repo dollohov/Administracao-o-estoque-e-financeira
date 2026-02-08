@@ -29,3 +29,6 @@ urlpatterns = [
     # Relatórios
     path('relatorio/', views.relatorio_estoque, name='relatorio'),
 ]
+
+    # Catálogo de Vendedores
+    path('catalogo/', views.catalogo_vendedores, name='catalogo'),

@@ -12,12 +12,14 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
+    <!-- Font Awesome (para ícones adicionais se necessário) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
     <!-- CSS customizado -->
     <style>
-        /* Variáveis de cores personalizadas */
         :root {
             --primary-color: #0d6efd;
             --secondary-color: #6c757d;
@@ -28,13 +30,11 @@
             --sidebar-width: 250px;
         }
         
-        /* Layout principal */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f8f9fa;
         }
         
-        /* Sidebar */
         .sidebar {
             position: fixed;
             top: 0;
@@ -82,14 +82,12 @@
             text-align: center;
         }
         
-        /* Área de conteúdo */
         .main-content {
             margin-left: var(--sidebar-width);
             padding: 20px;
             min-height: 100vh;
         }
         
-        /* Cabeçalho */
         .top-bar {
             background-color: white;
             padding: 15px 30px;
@@ -118,161 +116,23 @@
             font-weight: bold;
         }
         
-        /* Cards */
         .card {
             border: none;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
             margin-bottom: 20px;
-            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        }
-        
-        .card-header {
-            background-color: transparent;
-            border-bottom: 2px solid #f0f0f0;
-            font-weight: 600;
-            padding: 15px 20px;
-        }
-        
-        /* Cards de estatísticas */
-        .stat-card {
-            background: linear-gradient(135deg, var(--card-color-1) 0%, var(--card-color-2) 100%);
-            color: white;
-            padding: 25px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .stat-card.primary {
-            --card-color-1: #667eea;
-            --card-color-2: #764ba2;
-        }
-        
-        .stat-card.success {
-            --card-color-1: #11998e;
-            --card-color-2: #38ef7d;
-        }
-        
-        .stat-card.warning {
-            --card-color-1: #f093fb;
-            --card-color-2: #f5576c;
-        }
-        
-        .stat-card.info {
-            --card-color-1: #4facfe;
-            --card-color-2: #00f2fe;
-        }
-        
-        .stat-card .stat-icon {
-            font-size: 48px;
-            opacity: 0.3;
-            position: absolute;
-            right: 20px;
-            top: 20px;
-        }
-        
-        .stat-card .stat-value {
-            font-size: 32px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .stat-card .stat-label {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-        
-        /* Tabelas */
-        .table {
-            background-color: white;
-        }
-        
-        .table thead th {
-            background-color: #f8f9fa;
-            border-bottom: 2px solid #dee2e6;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: 0.5px;
-        }
-        
-        .table tbody tr {
-            transition: background-color 0.2s;
-        }
-        
-        .table tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-        
-        /* Botões */
-        .btn {
-            border-radius: 8px;
-            padding: 10px 20px;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        /* Badges */
-        .badge {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-weight: 500;
-        }
-        
-        /* Alertas */
-        .alert {
-            border: none;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        /* Formulários */
-        .form-control, .form-select {
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            padding: 10px 15px;
-        }
-        
-        .form-control:focus, .form-select:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
-        }
-        
-        /* Responsividade */
         @media (max-width: 768px) {
-            .sidebar {
-                transform: translateX(-100%);
-                transition: transform 0.3s;
-            }
-            
-            .sidebar.show {
-                transform: translateX(0);
-            }
-            
-            .main-content {
-                margin-left: 0;
-            }
-            
-            .stat-card .stat-icon {
-                font-size: 32px;
-            }
+            .sidebar { transform: translateX(-100%); transition: transform 0.3s; }
+            .sidebar.show { transform: translateX(0); }
+            .main-content { margin-left: 0; }
         }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="logo">
             <i class="bi bi-building"></i> Gestão ERP
@@ -283,32 +143,33 @@
                 <i class="bi bi-house-door"></i> Início
             </a>
             
-            {% if perms.estoque.view_produto %}
-            <a class="nav-link {% if 'estoque' in request.path %}active{% endif %}" href="{% url 'estoque:dashboard' %}">
-                <i class="bi bi-box-seam"></i> Estoque
+            <!-- Módulo de Catálogo (Visível para todos os autenticados) -->
+            <a class="nav-link {% if 'catalogo' in request.path %}active{% endif %}" href="{% url 'estoque:catalogo' %}">
+                <i class="bi bi-journal-richtext"></i> Catálogo
+            </a>
+
+            <!-- Módulo de Estoque (Restrito) -->
+            {% if perms.estoque.add_movimentacaoestoque or user.is_superuser %}
+            <a class="nav-link {% if 'estoque' in request.path and 'catalogo' not in request.path %}active{% endif %}" href="{% url 'estoque:dashboard' %}">
+                <i class="bi bi-box-seam"></i> Gestão Estoque
             </a>
             {% endif %}
             
-            {% if perms.financeiro.view_receita %}
+            <!-- Módulo Financeiro (Restrito) -->
+            {% if perms.financeiro.view_receita or user.is_superuser %}
             <a class="nav-link {% if 'financeiro' in request.path %}active{% endif %}" href="{% url 'financeiro:dashboard' %}">
                 <i class="bi bi-cash-coin"></i> Financeiro
             </a>
             {% endif %}
             
-            <div class="nav-item">
-                <a class="nav-link {% if 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:dashboard' %}">
-                    <i class="bi bi-file-earmark-medical"></i> Fiscal
-                </a>
-                {% if 'fiscal' in request.path %}
-                <div class="ms-4 mb-2">
-                    <a class="nav-link py-1 ps-4 small {% if request.resolver_match.url_name == 'cadastrar_produto' and 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:cadastrar_produto' %}">
-                        <i class="bi bi-plus-circle small"></i> Cadastrar Produto
-                    </a>
-                </div>
-                {% endif %}
-            </div>
+            <!-- Módulo Fiscal (Restrito) -->
+            {% if perms.fiscal.view_produto or user.is_superuser %}
+            <a class="nav-link {% if 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:dashboard' %}">
+                <i class="bi bi-file-earmark-medical"></i> Fiscal
+            </a>
+            {% endif %}
             
-            {% if user.is_staff %}
+            {% if user.is_staff or user.is_superuser %}
             <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">
                 <i class="bi bi-gear"></i> Administração
             </a>
@@ -322,9 +183,7 @@
         </nav>
     </div>
     
-    <!-- Conteúdo principal -->
     <div class="main-content">
-        <!-- Barra superior -->
         <div class="top-bar">
             <div>
                 <button class="btn btn-link d-md-none" id="sidebarToggle">
@@ -342,6 +201,8 @@
                     <small class="text-muted">
                         {% if user.groups.all %}
                             {{ user.groups.first.name }}
+                        {% elif user.is_superuser %}
+                            Administrador Geral
                         {% else %}
                             Usuário
                         {% endif %}
@@ -350,7 +211,6 @@
             </div>
         </div>
         
-        <!-- Mensagens do sistema -->
         {% if messages %}
         <div class="container-fluid px-0">
             {% for message in messages %}
@@ -363,37 +223,22 @@
         </div>
         {% endif %}
         
-        <!-- Conteúdo da página -->
         {% block content %}
         {% endblock %}
     </div>
     
-    <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <!-- Script para toggle da sidebar em mobile -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const sidebarToggle = document.getElementById('sidebarToggle');
             const sidebar = document.getElementById('sidebar');
-            
             if (sidebarToggle) {
                 sidebarToggle.addEventListener('click', function() {
                     sidebar.classList.toggle('show');
                 });
             }
-            
-            // Fechar sidebar ao clicar fora (mobile)
-            document.addEventListener('click', function(event) {
-                if (window.innerWidth <= 768) {
-                    if (!sidebar.contains(event.target) && !sidebarToggle.contains(event.target)) {
-                        sidebar.classList.remove('show');
-                    }
-                }
-            });
         });
     </script>
-    
     {% block extra_js %}{% endblock %}
 </body>
 </html>

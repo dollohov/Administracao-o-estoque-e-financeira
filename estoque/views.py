@@ -402,3 +402,48 @@ def relatorio_estoque(request):
     }
     
     return render(request, 'estoque/relatorio.html', context)
+
+
+@login_required
+def catalogo_vendedores(request):
+    """
+    View do Catálogo de Produtos otimizada para consulta de vendedores.
+    Exibe apenas produtos marcados como 'visivel_catalogo' e 'ativo'.
+    """
+    busca = request.GET.get('busca', '')
+    categoria_filtro = request.GET.get('categoria', '')
+    marca_filtro = request.GET.get('marca', '')
+    
+    # Filtrar apenas produtos ativos e visíveis no catálogo
+    produtos = Produto.objects.filter(ativo=True, visivel_catalogo=True)
+    
+    if busca:
+        produtos = produtos.filter(
+            Q(nome__icontains=busca) | 
+            Q(descricao__icontains=busca) |
+            Q(sku__icontains=busca) |
+            Q(ean_gtin__icontains=busca)
+        )
+    
+    if categoria_filtro:
+        produtos = produtos.filter(categoria=categoria_filtro)
+        
+    if marca_filtro:
+        produtos = produtos.filter(marca=marca_filtro)
+    
+    produtos = produtos.order_by('nome')
+    
+    # Obter categorias e marcas para filtros
+    categorias = Produto.objects.filter(ativo=True, visivel_catalogo=True, categoria__isnull=False).exclude(categoria='').values_list('categoria', flat=True).distinct().order_by('categoria')
+    marcas = Produto.objects.filter(ativo=True, visivel_catalogo=True, marca__isnull=False).exclude(marca='').values_list('marca', flat=True).distinct().order_by('marca')
+    
+    context = {
+        'produtos': produtos,
+        'busca': busca,
+        'categorias': categorias,
+        'marcas': marcas,
+        'categoria_selecionada': categoria_filtro,
+        'marca_selecionada': marca_filtro,
+    }
+    
+    return render(request, 'estoque/catalogo.html', context)
