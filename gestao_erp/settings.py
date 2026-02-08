@@ -62,13 +62,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',       # Framework de mensagens
     'django.contrib.staticfiles',    # Gerenciamento de arquivos estáticos
     
-    # Aplicações do projeto
-    'estoque',        # Módulo de controle de estoque
-    'financeiro',     # Módulo de controle financeiro
-    'fiscal',         # Módulo de importação de NF-e e gestão fiscal
-    'fornecedores',   # Módulo de gestão de fornecedores
-    'clientes',       # Módulo de gestão de clientes
-    'pdv',            # Módulo de Ponto de Venda
+    # Aplicacoes do projeto
+    'estoque',        # Modulo de controle de estoque
+    'financeiro',     # Modulo de controle financeiro
+    'fiscal',         # Modulo de importacao de NF-e e gestao fiscal
+    'fornecedores',   # Modulo de gestao de fornecedores
+    'clientes',       # Modulo de gestao de clientes
+    'pdv',            # Modulo de Ponto de Venda
+    'auditoria',      # Modulo de auditoria e LGPD
     
     # Bibliotecas de terceiros
     'rest_framework',      # Django REST Framework para APIs
