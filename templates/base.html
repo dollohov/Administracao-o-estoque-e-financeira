@@ -48,20 +48,20 @@
             --bg-body: #f3f4f6;
             --bg-card: #ffffff;
             --bg-sidebar: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-            --text-main: #000000; /* Preto Puro para máxima legibilidade */
-            --text-muted: #4b5563;
+            --text-main: #111827; /* Preto Profundo */
+            --text-muted: #374151; /* Cinza Escuro para subtítulos no modo claro */
             --border-color: #d1d5db;
-            --topbar-bg: rgba(255, 255, 255, 0.9);
+            --topbar-bg: #ffffff;
         }
 
         [data-bs-theme="dark"] {
             --bg-body: #0f172a;
             --bg-card: #1e293b;
             --bg-sidebar: #111827;
-            --text-main: #ffffff; /* Branco Puro para máxima legibilidade */
-            --text-muted: #cbd5e1;
+            --text-main: #ffffff; /* Branco Puro */
+            --text-muted: #94a3b8; /* Cinza Claro para subtítulos no modo escuro */
             --border-color: #334155;
-            --topbar-bg: rgba(15, 23, 42, 0.9);
+            --topbar-bg: #1e293b;
             
             --primary-color: #3b82f6;
         }
@@ -165,8 +165,17 @@
             align-items: center;
         }
 
-        .top-bar h4, .top-bar div, .top-bar span, .top-bar i, .top-bar small {
+        .top-bar h4, .top-bar div, .top-bar span, .top-bar i, .top-bar small, .top-bar a {
             color: var(--text-main) !important;
+        }
+        
+        #sidebarToggle i {
+            color: var(--text-main) !important;
+            font-size: 1.5rem;
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
         }
         
         .sidebar {
