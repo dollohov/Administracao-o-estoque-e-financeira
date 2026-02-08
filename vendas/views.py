@@ -157,13 +157,11 @@ def gerar_pedido_pdf(request, pk):
         try:
             from weasyprint import HTML
             WEASYPRINT_DISPONIVEL = True
-        except (ImportError, OSError) as e:
+        except (ImportError, OSError):
             WEASYPRINT_DISPONIVEL = False
-            messages.error(request, f"WeasyPrint nao esta disponivel. Erro: {str(e)}")
-            return redirect("vendas:detalhe_pedido", pk=pk)
     
     if not WEASYPRINT_DISPONIVEL:
-        messages.error(request, "WeasyPrint nao esta disponivel. Verifique a instalacao das dependencias de sistema.")
+        messages.warning(request, "A geração de PDF não está disponível neste dispositivo (comum em celulares/Termux). Por favor, use a visualização em tela ou acesse de um computador.")
         return redirect("vendas:detalhe_pedido", pk=pk)
     
     # Importar aqui para usar a variavel global
