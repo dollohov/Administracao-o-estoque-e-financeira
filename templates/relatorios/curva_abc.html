@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Curva ABC - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-bar-chart"></i> Curva ABC de Produtos
+                </h1>
+                <a href="{% url 'relatorios:dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Curva ABC:</strong> Classificação de produtos conforme sua importância nas vendas.
+                <ul class="mb-0 mt-2">
+                    <li><strong>Classe A (0-80%):</strong> Produtos mais importantes - exigem maior atenção</li>
+                    <li><strong>Classe B (80-95%):</strong> Produtos intermediários</li>
+                    <li><strong>Classe C (95-100%):</strong> Produtos menos importantes</li>
+                </ul>
+            </div>
+
+            <!-- Classe A -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-star-fill"></i> Classe A - Produtos Críticos (0-80%)
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if curva_a %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade Vendida</th>
+                                    <th>Total Vendido</th>
+                                    <th>% Vendas</th>
+                                    <th>% Acumulado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in curva_a %}
+                                <tr>
+                                    <td>{{ produto.produto__nome }}</td>
+                                    <td>{{ produto.quantidade_vendida|floatformat:0 }}</td>
+                                    <td>R$ {{ produto.total_vendido|floatformat:2 }}</td>
+                                    <td>{{ produto.percentual_vendas|floatformat:2 }}%</td>
+                                    <td>{{ produto.acumulado_vendas|floatformat:2 }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">Nenhum produto na Classe A.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Classe B -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-star"></i> Classe B - Produtos Intermediários (80-95%)
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if curva_b %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade Vendida</th>
+                                    <th>Total Vendido</th>
+                                    <th>% Vendas</th>
+                                    <th>% Acumulado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in curva_b %}
+                                <tr>
+                                    <td>{{ produto.produto__nome }}</td>
+                                    <td>{{ produto.quantidade_vendida|floatformat:0 }}</td>
+                                    <td>R$ {{ produto.total_vendido|floatformat:2 }}</td>
+                                    <td>{{ produto.percentual_vendas|floatformat:2 }}%</td>
+                                    <td>{{ produto.acumulado_vendas|floatformat:2 }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">Nenhum produto na Classe B.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Classe C -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-star"></i> Classe C - Produtos de Menor Importância (95-100%)
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if curva_c %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Quantidade Vendida</th>
+                                    <th>Total Vendido</th>
+                                    <th>% Vendas</th>
+                                    <th>% Acumulado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for produto in curva_c %}
+                                <tr>
+                                    <td>{{ produto.produto__nome }}</td>
+                                    <td>{{ produto.quantidade_vendida|floatformat:0 }}</td>
+                                    <td>R$ {{ produto.total_vendido|floatformat:2 }}</td>
+                                    <td>{{ produto.percentual_vendas|floatformat:2 }}%</td>
+                                    <td>{{ produto.acumulado_vendas|floatformat:2 }}%</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">Nenhum produto na Classe C.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

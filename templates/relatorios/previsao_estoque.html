@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Previsão de Estoque - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-exclamation-triangle"></i> Previsão e Sugestão de Estoque
+                </h1>
+                <a href="{% url 'relatorios:dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            <div class="alert alert-warning">
+                <strong>Aviso:</strong> Este relatório mostra produtos com estoque crítico ou que podem ficar sem estoque em breve, baseado no consumo dos últimos 30 dias.
+            </div>
+
+            {% if produtos_criticos %}
+            <div class="card shadow-sm">
+                <div class="card-header bg-danger text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-circle"></i> Produtos Críticos ({{ produtos_criticos|length }})
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Estoque Atual</th>
+                                    <th>Estoque Mínimo</th>
+                                    <th>Vendas (30 dias)</th>
+                                    <th>Consumo Diário</th>
+                                    <th>Dias Restantes</th>
+                                    <th>Sugestão de Compra</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in produtos_criticos %}
+                                <tr class="table-danger">
+                                    <td>
+                                        <strong>{{ item.produto.nome }}</strong>
+                                        <br>
+                                        <small class="text-muted">SKU: {{ item.produto.sku|default:"N/A" }}</small>
+                                    </td>
+                                    <td>{{ item.estoque_atual|floatformat:2 }}</td>
+                                    <td>{{ item.estoque_minimo|floatformat:2 }}</td>
+                                    <td>{{ item.vendas_30_dias|floatformat:2 }}</td>
+                                    <td>{{ item.consumo_diario|floatformat:3 }}/dia</td>
+                                    <td>
+                                        {% if item.dias_restantes == "inf" %}
+                                            <span class="badge bg-secondary">Sem vendas</span>
+                                        {% elif item.dias_restantes <= 7 %}
+                                            <span class="badge bg-danger">{{ item.dias_restantes }} dias</span>
+                                        {% else %}
+                                            <span class="badge bg-warning text-dark">{{ item.dias_restantes }} dias</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <strong>{{ item.sugestao_compra|floatformat:0 }} unidades</strong>
+                                        <br>
+                                        <small class="text-muted">Preço: R$ {{ item.produto.preco_custo|floatformat:2 }} c/u</small>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            {% else %}
+            <div class="alert alert-success text-center py-5">
+                <i class="bi bi-check-circle" style="font-size: 3rem;"></i>
+                <h4 class="mt-3">Estoque em Bom Estado</h4>
+                <p class="text-muted">Nenhum produto com estoque crítico no momento.</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Dashboard de Relatórios - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="h3 mb-4">
+                <i class="bi bi-graph-up"></i> Dashboard de Relatórios
+            </h1>
+        </div>
+    </div>
+
+    <!-- Cards de Resumo -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card bg-primary text-white shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Total de Produtos</h6>
+                    <h2 class="mb-0">{{ total_produtos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-success text-white shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Pedidos Registrados</h6>
+                    <h2 class="mb-0">{{ total_pedidos }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-info text-white shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Vendas Este Mês</h6>
+                    <h2 class="mb-0">R$ {{ total_vendas_mes|floatformat:2 }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card bg-warning text-dark shadow-sm">
+                <div class="card-body">
+                    <h6 class="card-title">Alertas</h6>
+                    <h2 class="mb-0">3</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Seção de Relatórios Rápidos -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-bar-chart"></i> Curva ABC de Produtos
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Análise de produtos mais lucrativos e sua contribuição nas vendas.</p>
+                    <a href="{% url 'relatorios:curva_abc' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Visualizar Relatório
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-exclamation-triangle"></i> Previsão de Estoque
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Alertas de reposição e sugestão de compras baseadas no consumo.</p>
+                    <a href="{% url 'relatorios:previsao_estoque' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Visualizar Relatório
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-person-check"></i> Performance de Vendas
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Análise de desempenho de vendedores e produtos mais vendidos.</p>
+                    <a href="{% url 'relatorios:vendas_performance' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Visualizar Relatório
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-cash-flow"></i> Saúde Financeira
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted">Comparativo de receitas, despesas e lucro líquido do período.</p>
+                    <a href="{% url 'relatorios:financeiro_saude' %}" class="btn btn-primary">
+                        <i class="bi bi-arrow-right"></i> Visualizar Relatório
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

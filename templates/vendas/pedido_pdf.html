@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedido #{{ pedido.pk }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            font-size: 12px;
+        }
+        .container {
+            width: 100%;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .header img {
+            max-width: 150px;
+            margin-bottom: 10px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .info-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .info-table td {
+            padding: 5px 0;
+            vertical-align: top;
+        }
+        .info-table .label {
+            font-weight: bold;
+            width: 120px;
+        }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .items-table th,
+        .items-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .items-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .total-section {
+            margin-top: 30px;
+            text-align: right;
+            font-size: 14px;
+        }
+        .total-section strong {
+            font-size: 18px;
+            color: #007bff;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 10px;
+            color: #777;
+            border-top: 1px solid #eee;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            {% if logo_path %}
+                <img src="file://{{ logo_path }}" alt="Logo da Empresa">
+            {% endif %}
+            <h1>Pedido de Venda #{{ pedido.pk }}</h1>
+            <p>Data: {{ pedido.data_pedido|date:"d/m/Y H:i" }}</p>
+        </div>
+
+        <div class="section-title">Informações do Cliente</div>
+        <table class="info-table">
+            <tr>
+                <td class="label">Nome:</td>
+                <td>{{ pedido.cliente.nome_completo }}</td>
+            </tr>
+            <tr>
+                <td class="label">CPF/CNPJ:</td>
+                <td>{{ pedido.cliente.cpf_cnpj|default:"N/A" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Telefone:</td>
+                <td>{{ pedido.cliente.telefone|default:"N/A" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Email:</td>
+                <td>{{ pedido.cliente.email|default:"N/A" }}</td>
+            </tr>
+            <tr>
+                <td class="label">Endereço:</td>
+                <td>
+                    {% if pedido.cliente.endereco %}
+                        {{ pedido.cliente.endereco }}, {{ pedido.cliente.numero }}
+                        {% if pedido.cliente.complemento %}, {{ pedido.cliente.complemento }}{% endif %}<br>
+                        {{ pedido.cliente.bairro }} - {{ pedido.cliente.cidade }}/{{ pedido.cliente.estado }} - CEP: {{ pedido.cliente.cep }}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                </td>
+            </tr>
+        </table>
+
+        <div class="section-title">Itens do Pedido</div>
+        <table class="items-table">
+            <thead>
+                <tr>
+                    <th>Produto</th>
+                    <th>Qtd</th>
+                    <th>Preço Unit.</th>
+                    <th>Desc. (%)</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in itens %}
+                <tr>
+                    <td>{{ item.produto.nome }}</td>
+                    <td>{{ item.quantidade|floatformat:3 }}</td>
+                    <td>R$ {{ item.preco_unitario|floatformat:2 }}</td>
+                    <td>{{ item.desconto|floatformat:2 }}%</td>
+                    <td>R$ {{ item.calcular_subtotal|floatformat:2 }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center;">Nenhum item neste pedido.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="total-section">
+            <p><strong>Valor Total: R$ {{ pedido.valor_total|floatformat:2 }}</strong></p>
+        </div>
+
+        <div class="section-title">Observações</div>
+        <p>{{ pedido.observacoes|default:"Nenhuma observação." }}</p>
+
+        <div class="footer">
+            <p>Gerado por Gestão ERP - {{ pedido.vendedor.get_full_name|default:pedido.vendedor.username }}</p>
+            <p>Página 1 de 1</p>
+        </div>
+    </div>
+</body>
+</html>

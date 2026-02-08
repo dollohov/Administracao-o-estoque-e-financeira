@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Performance de Vendas - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-person-check"></i> Performance de Vendas
+                </h1>
+                <a href="{% url 'relatorios:dashboard' %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h5 class="card-title mb-0">Vendas por Vendedor (Pedidos Finalizados)</h5>
+                </div>
+                <div class="card-body p-0">
+                    {% if vendas_por_vendedor %}
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Vendedor</th>
+                                    <th>Total de Vendas</th>
+                                    <th>Progresso</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for vendedor in vendas_por_vendedor %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ vendedor.vendedor__username }}</strong>
+                                    </td>
+                                    <td>
+                                        <strong>R$ {{ vendedor.total_vendas|floatformat:2 }}</strong>
+                                    </td>
+                                    <td>
+                                        <div class="progress" style="height: 20px;">
+                                            <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+                                                100%
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p class="text-center text-muted py-4">Nenhum pedido finalizado registrado.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Dicas de Melhoria</h5>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    Acompanhe regularmente o desempenho dos vendedores
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    Identifique padrões de vendas por período
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    Compare desempenho entre vendedores
+                                </li>
+                                <li class="mb-2">
+                                    <i class="bi bi-check-circle text-success"></i>
+                                    Estabeleça metas realistas baseadas em histórico
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm">
+                        <div class="card-header bg-light">
+                            <h5 class="card-title mb-0">Métricas Importantes</h5>
+                        </div>
+                        <div class="card-body">
+                            <p>
+                                <strong>Total de Vendedores:</strong> {{ vendas_por_vendedor|length }}
+                            </p>
+                            <p>
+                                <strong>Período Analisado:</strong> Últimos 30 dias
+                            </p>
+                            <p>
+                                <strong>Status dos Pedidos:</strong> Apenas pedidos finalizados
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

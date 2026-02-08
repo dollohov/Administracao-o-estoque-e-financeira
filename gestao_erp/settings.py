@@ -70,6 +70,9 @@ INSTALLED_APPS = [
     'clientes',       # Modulo de gestao de clientes
     'pdv',            # Modulo de Ponto de Venda
     'auditoria',      # Modulo de auditoria e LGPD
+    'vendas',         # Modulo de vendas e orçamentos
+    'relatorios',     # Modulo de relatórios e dashboards
+    'notificacoes',   # Modulo de notificações e alertas
     
     # Bibliotecas de terceiros
     'rest_framework',      # Django REST Framework para APIs

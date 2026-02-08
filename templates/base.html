@@ -154,6 +154,20 @@
                 <i class="bi bi-box-seam"></i> Gestão Estoque
             </a>
             {% endif %}
+
+            <!-- Módulo de Vendas (Restrito) -->
+            {% if perms.vendas.view_pedido or user.is_superuser %}
+            <a class="nav-link {% if 'vendas' in request.path %}active{% endif %}" href="{% url 'vendas:lista_pedidos' %}">
+                <i class="bi bi-receipt"></i> Vendas
+            </a>
+            {% endif %}
+
+            <!-- Módulo de Relatórios (Restrito) -->
+            {% if perms.relatorios.view_dashboard or user.is_superuser %}
+            <a class="nav-link {% if 'relatorios' in request.path %}active{% endif %}" href="{% url 'relatorios:dashboard' %}">
+                <i class="bi bi-graph-up"></i> Relatórios
+            </a>
+            {% endif %}
             
             <!-- Módulo Financeiro (Restrito) -->
             {% if perms.financeiro.view_receita or user.is_superuser %}

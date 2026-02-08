@@ -68,7 +68,10 @@ urlpatterns = [
     path('fiscal/', include('fiscal.urls')),
     path('clientes/', include('clientes.urls')),
     path('fornecedores/', include('fornecedores.urls')),
-    path('pdv/', include('pdv.urls')),
+    path("pdv/", include("pdv.urls")),
+    path("vendas/", include("vendas.urls")),
+    path("relatorios/", include("relatorios.urls")),
+    path("notificacoes/", include("notificacoes.urls")),
 ]
 from django.conf import settings
 from django.conf.urls.static import static

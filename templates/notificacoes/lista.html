@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Notificações - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-bell"></i> Notificações
+                    {% if total_nao_lidas > 0 %}
+                    <span class="badge bg-danger">{{ total_nao_lidas }}</span>
+                    {% endif %}
+                </h1>
+                {% if total_nao_lidas > 0 %}
+                <form method="post" action="{% url 'notificacoes:marcar_todas_lidas' %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-check-all"></i> Marcar todas como lidas
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+
+            <!-- Filtros -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="get" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Tipo</label>
+                            <select name="tipo" class="form-select">
+                                <option value="">Todos os tipos</option>
+                                <option value="ESTOQUE" {% if request.GET.tipo == 'ESTOQUE' %}selected{% endif %}>Alerta de Estoque</option>
+                                <option value="PEDIDO" {% if request.GET.tipo == 'PEDIDO' %}selected{% endif %}>Novo Pedido</option>
+                                <option value="FINANCEIRO" {% if request.GET.tipo == 'FINANCEIRO' %}selected{% endif %}>Alerta Financeiro</option>
+                                <option value="VENDA" {% if request.GET.tipo == 'VENDA' %}selected{% endif %}>Alerta de Venda</option>
+                                <option value="SISTEMA" {% if request.GET.tipo == 'SISTEMA' %}selected{% endif %}>Notificação do Sistema</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Status</label>
+                            <select name="lidas" class="form-select">
+                                <option value="">Todos</option>
+                                <option value="false" {% if request.GET.lidas == 'false' %}selected{% endif %}>Não lidas</option>
+                                <option value="true" {% if request.GET.lidas == 'true' %}selected{% endif %}>Lidas</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">&nbsp;</label>
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i> Filtrar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Lista de Notificações -->
+            {% if notificacoes %}
+                {% for notificacao in notificacoes %}
+                <div class="card shadow-sm mb-3 {% if not notificacao.lida %}border-left-4 border-primary{% endif %}">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-10">
+                                <h5 class="card-title {% if not notificacao.lida %}fw-bold{% endif %}">
+                                    {% if not notificacao.lida %}
+                                    <i class="bi bi-circle-fill" style="font-size: 0.5rem; color: #0d6efd;"></i>
+                                    {% endif %}
+                                    {{ notificacao.titulo }}
+                                </h5>
+                                <p class="card-text text-muted">{{ notificacao.mensagem }}</p>
+                                <small class="text-muted">
+                                    <i class="bi bi-clock"></i> {{ notificacao.data_criacao|date:"d/m/Y H:i" }}
+                                    {% if notificacao.data_leitura %}
+                                    | Lida em {{ notificacao.data_leitura|date:"d/m/Y H:i" }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <span class="badge bg-{{ notificacao.cor_prioridade }} mb-2">
+                                    {{ notificacao.get_prioridade_display }}
+                                </span>
+                                <br>
+                                <span class="badge bg-info">
+                                    {{ notificacao.get_tipo_display }}
+                                </span>
+                                {% if not notificacao.lida %}
+                                <br>
+                                <form method="post" action="{% url 'notificacoes:marcar_lida' notificacao.pk %}" style="display: inline; margin-top: 10px;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-outline-primary">
+                                        <i class="bi bi-check"></i> Marcar como lida
+                                    </button>
+                                </form>
+                                {% endif %}
+                                {% if notificacao.url_acao %}
+                                <br>
+                                <a href="{{ notificacao.url_acao }}" class="btn btn-sm btn-primary" style="margin-top: 5px;">
+                                    <i class="bi bi-arrow-right"></i> Ir para
+                                </a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info text-center py-5">
+                    <i class="bi bi-inbox" style="font-size: 3rem;"></i>
+                    <h4 class="mt-3">Nenhuma notificação</h4>
+                    <p class="text-muted">Você está em dia com todas as notificações.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+    .border-left-4 {
+        border-left: 4px solid !important;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,258 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ page_title }} - Gestão ERP{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">
+                    <i class="bi bi-pencil"></i> {{ page_title }}
+                </h1>
+                <a href="{% url 'vendas:detalhe_pedido' pedido.pk %}" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i> Voltar para o Pedido
+                </a>
+            </div>
+
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form method="post" id="form-pedido">
+                        {% csrf_token %}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <label for="cliente" class="form-label">Cliente <span class="text-danger">*</span></label>
+                                <select class="form-select" id="cliente" name="cliente" required>
+                                    <option value="">Selecione um cliente</option>
+                                    {% for cliente in clientes %}
+                                        <option value="{{ cliente.pk }}" {% if pedido.cliente.pk == cliente.pk %}selected{% endif %}>{{ cliente.nome_completo }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="status" class="form-label">Status do Pedido <span class="text-danger">*</span></label>
+                                <select class="form-select" id="status" name="status" required>
+                                    {% for status_value, status_label in STATUS_PEDIDO %}
+                                        <option value="{{ status_value }}" {% if pedido.status == status_value %}selected{% endif %}>{{ status_label }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="observacoes" class="form-label">Observações</label>
+                                <textarea class="form-control" id="observacoes" name="observacoes" rows="2">{{ pedido.observacoes|default:'' }}</textarea>
+                            </div>
+                        </div>
+
+                        <hr>
+
+                        <h5>Itens do Pedido</h5>
+                        <div id="itens-pedido" class="mb-3">
+                            {% for item in itens_pedido %}
+                                <div class="card mb-2 item-pedido" id="item-{{ forloop.counter }}">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4">
+                                                <strong>{{ item.produto.nome }}</strong>
+                                                <input type="hidden" name="produto_{{ item.produto.pk }}" value="{{ item.produto.pk }}">
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Preço Unit.</label>
+                                                <input type="number" step="0.01" min="0" class="form-control preco-unitario" name="preco_{{ item.produto.pk }}" value="{{ item.preco_unitario|floatformat:2 }}" required>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Qtd</label>
+                                                <input type="number" step="1" min="1" max="{{ item.produto.estoque_atual }}" class="form-control quantidade" name="quantidade_{{ item.produto.pk }}" value="{{ item.quantidade|floatformat:0 }}" required>
+                                                <small class="text-muted">Estoque: {{ item.produto.estoque_atual }}</small>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <label class="form-label">Desc. (%)</label>
+                                                <input type="number" step="0.01" min="0" max="100" class="form-control desconto" name="desconto_{{ item.produto.pk }}" value="{{ item.desconto|floatformat:2 }}">
+                                            </div>
+                                            <div class="col-md-2 text-end">
+                                                <button type="button" class="btn btn-danger btn-sm remover-item" data-item-id="item-{{ forloop.counter }}" data-produto-id="{{ item.produto.pk }}">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% empty %}
+                                <div class="alert alert-info text-center" id="no-items-message">
+                                    Nenhum item adicionado ao pedido. Use o botão abaixo para adicionar produtos.
+                                </div>
+                            {% endfor %}
+                        </div>
+
+                        <button type="button" class="btn btn-success mb-4" data-bs-toggle="modal" data-bs-target="#modalAdicionarProduto">
+                            <i class="bi bi-plus-circle"></i> Adicionar Produto
+                        </button>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-save"></i> Salvar Alterações
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Adicionar Produto (mesmo do criar_pedido.html) -->
+<div class="modal fade" id="modalAdicionarProduto" tabindex="-1" aria-labelledby="modalAdicionarProdutoLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalAdicionarProdutoLabel">Adicionar Produto ao Pedido</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="searchProduto" class="form-label">Buscar Produto</label>
+                    <input type="text" class="form-control" id="searchProduto" placeholder="Nome, SKU ou EAN">
+                </div>
+                <div class="list-group" id="lista-produtos-modal">
+                    {% for produto in produtos %}
+                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" 
+                           data-id="{{ produto.pk }}" 
+                           data-nome="{{ produto.nome }}" 
+                           data-preco="{{ produto.preco_venda|floatformat:2 }}"
+                           data-estoque="{{ produto.estoque_atual }}">
+                            <div>
+                                <strong>{{ produto.nome }}</strong>
+                                <small class="text-muted d-block">SKU: {{ produto.sku|default:"N/A" }} | Estoque: {{ produto.estoque_atual }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">R$ {{ produto.preco_venda|floatformat:2 }}</span>
+                        </a>
+                    {% empty %}
+                        <p class="text-center text-muted">Nenhum produto disponível.</p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    let produtosSelecionados = {}; // Armazena produtos já adicionados para evitar duplicidade
+    let itemCounter = {{ itens_pedido|length }}; // Contador para IDs únicos dos itens, começa com os itens existentes
+
+    // Preencher produtosSelecionados com os itens já no pedido
+    {% for item in itens_pedido %}
+        produtosSelecionados["{{ item.produto.pk }}"] = true;
+    {% endfor %}
+
+    document.addEventListener("DOMContentLoaded", function() {
+        const modalAdicionarProduto = document.getElementById("modalAdicionarProduto");
+        const searchProduto = document.getElementById("searchProduto");
+        const listaProdutosModal = document.getElementById("lista-produtos-modal");
+        const itensPedidoContainer = document.getElementById("itens-pedido");
+        const noItemsMessage = document.getElementById("no-items-message");
+
+        function updateNoItemsMessage() {
+            if (Object.keys(produtosSelecionados).length === 0) {
+                noItemsMessage.style.display = "block";
+            } else {
+                noItemsMessage.style.display = "none";
+            }
+        }
+
+        function adicionarProdutoAoPedido(produtoId, nome, preco, estoque) {
+            if (produtosSelecionados[produtoId]) {
+                alert("Este produto já foi adicionado ao pedido.");
+                return;
+            }
+
+            itemCounter++;
+            const itemId = `item-${itemCounter}`;
+
+            const itemHtml = `
+                <div class="card mb-2 item-pedido" id="${itemId}">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <strong>${nome}</strong>
+                                <input type="hidden" name="produto_${produtoId}" value="${produtoId}">
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Preço Unit.</label>
+                                <input type="number" step="0.01" min="0" class="form-control preco-unitario" name="preco_${produtoId}" value="${preco}" required>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Qtd</label>
+                                <input type="number" step="1" min="1" max="${estoque}" class="form-control quantidade" name="quantidade_${produtoId}" value="1" required>
+                                <small class="text-muted">Estoque: ${estoque}</small>
+                            </div>
+                            <div class="col-md-2">
+                                <label class="form-label">Desc. (%)</label>
+                                <input type="number" step="0.01" min="0" max="100" class="form-control desconto" name="desconto_${produtoId}" value="0">
+                            </div>
+                            <div class="col-md-2 text-end">
+                                <button type="button" class="btn btn-danger btn-sm remover-item" data-item-id="${itemId}" data-produto-id="${produtoId}">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            itensPedidoContainer.insertAdjacentHTML("beforeend", itemHtml);
+            produtosSelecionados[produtoId] = true;
+            updateNoItemsMessage();
+        }
+
+        listaProdutosModal.addEventListener("click", function(event) {
+            const target = event.target.closest(".list-group-item");
+            if (target) {
+                const produtoId = target.dataset.id;
+                const nome = target.dataset.nome;
+                const preco = target.dataset.preco;
+                const estoque = target.dataset.estoque;
+                adicionarProdutoAoPedido(produtoId, nome, preco, estoque);
+                bootstrap.Modal.getInstance(modalAdicionarProduto).hide();
+            }
+        });
+
+        itensPedidoContainer.addEventListener("click", function(event) {
+            const target = event.target.closest(".remover-item");
+            if (target) {
+                const itemId = target.dataset.itemId;
+                const produtoId = target.dataset.produtoId;
+                document.getElementById(itemId).remove();
+                delete produtosSelecionados[produtoId];
+                updateNoItemsMessage();
+            }
+        });
+
+        searchProduto.addEventListener("keyup", function() {
+            const searchTerm = searchProduto.value.toLowerCase();
+            listaProdutosModal.querySelectorAll(".list-group-item").forEach(item => {
+                const nome = item.dataset.nome.toLowerCase();
+                const id = item.dataset.id.toLowerCase();
+                if (nome.includes(searchTerm) || id.includes(searchTerm)) {
+                    item.style.display = "flex";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        });
+
+        updateNoItemsMessage();
+    });
+</script>
+{% endblock %}
