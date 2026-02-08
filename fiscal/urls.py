@@ -22,4 +22,7 @@ urlpatterns = [
     # Fornecedores
     path('fornecedores/', views.lista_fornecedores, name='lista_fornecedores'),
     path('fornecedores/<int:pk>/', views.detalhe_fornecedor, name='detalhe_fornecedor'),
+    
+    # Produtos (Replicado do Estoque)
+    path('produtos/novo/', views.cadastrar_produto_fiscal, name='cadastrar_produto'),
 ]

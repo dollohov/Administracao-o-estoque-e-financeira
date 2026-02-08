@@ -175,3 +175,42 @@ def detalhe_fornecedor(request, pk):
     }
     
     return render(request, 'fiscal/detalhe_fornecedor.html', context)
+
+@login_required
+@permission_required('estoque.add_produto', raise_exception=True)
+def cadastrar_produto_fiscal(request):
+    """
+    View para cadastrar um novo produto a partir do módulo fiscal.
+    """
+    from estoque.models import Produto
+    
+    if request.method == 'POST':
+        try:
+            # Criar novo produto com dados do formulário
+            produto = Produto(
+                nome=request.POST.get('nome'),
+                descricao=request.POST.get('descricao', ''),
+                preco_custo=request.POST.get('preco_custo'),
+                preco_venda=request.POST.get('preco_venda'),
+                estoque_atual=request.POST.get('estoque_inicial', 0),
+                estoque_minimo=request.POST.get('estoque_minimo', 10),
+                usuario_criacao=request.user
+            )
+            produto.save()
+            
+            # Mensagem de sucesso
+            messages.success(
+                request,
+                f'Produto "{produto.nome}" cadastrado com sucesso via módulo Fiscal!'
+            )
+            
+            return redirect('fiscal:dashboard')
+            
+        except Exception as e:
+            # Mensagem de erro
+            messages.error(
+                request,
+                f'Erro ao cadastrar produto: {str(e)}'
+            )
+    
+    return render(request, 'fiscal/cadastrar_produto.html')

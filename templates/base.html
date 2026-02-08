@@ -295,9 +295,18 @@
             </a>
             {% endif %}
             
-            <a class="nav-link {% if 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:dashboard' %}">
-                <i class="bi bi-file-earmark-medical"></i> Fiscal
-            </a>
+            <div class="nav-item">
+                <a class="nav-link {% if 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:dashboard' %}">
+                    <i class="bi bi-file-earmark-medical"></i> Fiscal
+                </a>
+                {% if 'fiscal' in request.path %}
+                <div class="ms-4 mb-2">
+                    <a class="nav-link py-1 ps-4 small {% if request.resolver_match.url_name == 'cadastrar_produto' and 'fiscal' in request.path %}active{% endif %}" href="{% url 'fiscal:cadastrar_produto' %}">
+                        <i class="bi bi-plus-circle small"></i> Cadastrar Produto
+                    </a>
+                </div>
+                {% endif %}
+            </div>
             
             {% if user.is_staff %}
             <a class="nav-link" href="{% url 'admin:index' %}" target="_blank">
