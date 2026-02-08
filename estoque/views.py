@@ -15,6 +15,7 @@ from django.db import models
 from django.db.models import Sum, Q
 from django.http import JsonResponse
 from datetime import datetime, timedelta
+from decimal import Decimal, InvalidOperation
 from .models import Produto, MovimentacaoEstoque
 from financeiro.models import CapitalGiro
 from fornecedores.models import Fornecedor
@@ -24,18 +25,6 @@ from fornecedores.models import Fornecedor
 def dashboard_estoque(request):
     """
     View principal do dashboard de estoque.
-    
-    Exibe informações resumidas sobre o estoque, incluindo:
-    - Total de produtos cadastrados
-    - Produtos com estoque baixo
-    - Movimentações recentes
-    - Valor total do estoque
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        
-    Returns:
-        HttpResponse: Renderiza o template do dashboard
     """
     # Obter todos os produtos ativos
     produtos = Produto.objects.filter(ativo=True)
@@ -78,14 +67,6 @@ def dashboard_estoque(request):
 def lista_produtos(request):
     """
     View para listar todos os produtos cadastrados.
-    
-    Permite filtrar produtos por nome e status (ativo/inativo).
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        
-    Returns:
-        HttpResponse: Renderiza o template com a lista de produtos
     """
     # Obter parâmetros de filtro da URL
     busca = request.GET.get('busca', '')
@@ -124,18 +105,6 @@ def lista_produtos(request):
 def detalhes_produto(request, produto_id):
     """
     View para exibir detalhes de um produto específico.
-    
-    Mostra informações completas do produto, incluindo:
-    - Dados cadastrais
-    - Histórico de movimentações
-    - Cálculos de margem de lucro
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        produto_id (int): ID do produto a ser exibido
-        
-    Returns:
-        HttpResponse: Renderiza o template com detalhes do produto
     """
     # Obter o produto ou retornar 404
     produto = get_object_or_404(
@@ -168,38 +137,50 @@ def detalhes_produto(request, produto_id):
     return render(request, 'estoque/detalhes_produto.html', context)
 
 
+def parse_decimal(value, default=Decimal('0.00')):
+    """Auxiliar para converter string em Decimal com segurança."""
+    if not value or value.strip() == '':
+        return default
+    try:
+        # Substituir vírgula por ponto se necessário
+        value = value.replace(',', '.')
+        return Decimal(value)
+    except (InvalidOperation, ValueError):
+        return default
+
+
 def get_produto_data_from_post(request):
-    """Auxiliar para extrair dados do produto do POST."""
+    """Auxiliar para extrair e validar dados do produto do POST."""
     data = {
         'nome': request.POST.get('nome'),
         'descricao': request.POST.get('descricao', ''),
         'marca': request.POST.get('marca', ''),
         'categoria': request.POST.get('categoria', ''),
         'subcategoria': request.POST.get('subcategoria', ''),
-        'sku': request.POST.get('sku', ''),
-        'ncm': request.POST.get('ncm', ''),
-        'cest': request.POST.get('cest', ''),
-        'ean_gtin': request.POST.get('ean_gtin', ''),
-        'preco_custo': request.POST.get('preco_custo'),
-        'preco_venda': request.POST.get('preco_venda'),
-        'estoque_minimo': request.POST.get('estoque_minimo', 10),
-        'estoque_maximo': request.POST.get('estoque_maximo', 100),
-        'peso_kg': request.POST.get('peso_kg') or None,
-        'altura_cm': request.POST.get('altura_cm') or None,
-        'largura_cm': request.POST.get('largura_cm') or None,
-        'profundidade_cm': request.POST.get('profundidade_cm') or None,
+        'sku': request.POST.get('sku', '') or None,
+        'ncm': request.POST.get('ncm', '') or None,
+        'cest': request.POST.get('cest', '') or None,
+        'ean_gtin': request.POST.get('ean_gtin', '') or None,
+        'preco_custo': parse_decimal(request.POST.get('preco_custo')),
+        'preco_venda': parse_decimal(request.POST.get('preco_venda')),
+        'estoque_minimo': int(request.POST.get('estoque_minimo') or 10),
+        'estoque_maximo': int(request.POST.get('estoque_maximo') or 100),
+        'peso_kg': parse_decimal(request.POST.get('peso_kg'), None),
+        'altura_cm': parse_decimal(request.POST.get('altura_cm'), None),
+        'largura_cm': parse_decimal(request.POST.get('largura_cm'), None),
+        'profundidade_cm': parse_decimal(request.POST.get('profundidade_cm'), None),
         'localizacao_estoque': request.POST.get('localizacao_estoque', ''),
-        'icms_aliquota': request.POST.get('icms_aliquota', 0),
-        'ipi_aliquota': request.POST.get('ipi_aliquota', 0),
-        'pis_aliquota': request.POST.get('pis_aliquota', 0),
-        'cofins_aliquota': request.POST.get('cofins_aliquota', 0),
+        'icms_aliquota': parse_decimal(request.POST.get('icms_aliquota')),
+        'ipi_aliquota': parse_decimal(request.POST.get('ipi_aliquota')),
+        'pis_aliquota': parse_decimal(request.POST.get('pis_aliquota')),
+        'cofins_aliquota': parse_decimal(request.POST.get('cofins_aliquota')),
         'visivel_catalogo': request.POST.get('visivel_catalogo') == 'on',
         'ativo': request.POST.get('ativo') == 'on',
     }
     
     # Tratar fornecedor
     fornecedor_id = request.POST.get('fornecedor')
-    if fornecedor_id:
+    if fornecedor_id and fornecedor_id.isdigit():
         data['fornecedor'] = get_object_or_404(Fornecedor, pk=fornecedor_id)
     else:
         data['fornecedor'] = None
@@ -220,7 +201,7 @@ def cadastrar_produto(request):
     if request.method == 'POST':
         try:
             data = get_produto_data_from_post(request)
-            data['estoque_atual'] = request.POST.get('estoque_inicial', 0)
+            data['estoque_atual'] = int(request.POST.get('estoque_inicial') or 0)
             data['usuario_criacao'] = request.user
             
             produto = Produto(**data)
@@ -275,15 +256,6 @@ def editar_produto(request, produto_id):
 def registrar_movimentacao(request):
     """
     View para registrar uma movimentação de estoque.
-    
-    Permite registrar entradas e saídas de produtos, atualizando
-    automaticamente o estoque e o capital de giro.
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        
-    Returns:
-        HttpResponse: Renderiza formulário ou redireciona após salvar
     """
     if request.method == 'POST':
         try:
@@ -312,21 +284,18 @@ def registrar_movimentacao(request):
             valor_total = movimentacao.calcular_valor_total()
             
             if tipo == 'ENTRADA':
-                # Entrada de estoque = saída de capital (compra)
                 CapitalGiro.retirar_capital(
                     valor=valor_total,
                     descricao=f'Compra de {quantidade}x {produto.nome}',
                     usuario=request.user
                 )
             elif tipo == 'SAIDA':
-                # Saída de estoque = entrada de capital (venda)
                 CapitalGiro.adicionar_capital(
                     valor=valor_total,
                     descricao=f'Venda de {quantidade}x {produto.nome}',
                     usuario=request.user
                 )
             
-            # Mensagem de sucesso
             messages.success(
                 request,
                 f'Movimentação registrada com sucesso! '
@@ -336,10 +305,8 @@ def registrar_movimentacao(request):
             return redirect('estoque:dashboard')
             
         except ValueError as e:
-            # Erro de validação (ex: estoque insuficiente)
             messages.error(request, str(e))
         except Exception as e:
-            # Outros erros
             messages.error(
                 request,
                 f'Erro ao registrar movimentação: {str(e)}'
@@ -359,19 +326,7 @@ def registrar_movimentacao(request):
 def relatorio_estoque(request):
     """
     View para gerar relatório completo de estoque.
-    
-    Exibe análises detalhadas sobre o estoque, incluindo:
-    - Produtos mais vendidos
-    - Produtos com menor giro
-    - Análise de lucratividade
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        
-    Returns:
-        HttpResponse: Renderiza o template do relatório
     """
-    # Verificar permissão
     if not request.user.has_perm('estoque.view_produto'):
         messages.error(request, 'Você não tem permissão para acessar relatórios.')
         return redirect('estoque:dashboard')
