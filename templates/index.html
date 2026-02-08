@@ -6,20 +6,53 @@
 {% block extra_css %}
 <style>
     .btn-tour {
-        background: white;
-        color: var(--primary-color);
-        border: none;
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
         border-radius: 50px;
         padding: 8px 20px;
         font-weight: 600;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        transition: all 0.3s;
+        backdrop-filter: blur(4px);
+        transition: var(--transition);
     }
     .btn-tour:hover {
+        background: white;
+        color: var(--primary-color);
         transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        background: #f8f9fa;
     }
+    .stat-card {
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        background: var(--bg-card);
+        padding: 24px;
+        transition: var(--transition);
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        border-color: var(--primary-color);
+    }
+    .stat-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 8px;
+    }
+    .stat-card.primary .stat-icon-box { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+    .stat-card.success .stat-icon-box { background: rgba(22, 163, 74, 0.1); color: #16a34a; }
+    .stat-card.warning .stat-icon-box { background: rgba(202, 138, 4, 0.1); color: #ca8a04; }
+    .stat-card.danger .stat-icon-box { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+    
+    .stat-label { color: var(--text-muted); font-size: 0.875rem; font-weight: 500; }
+    .stat-value { color: var(--text-main); font-size: 1.25rem; font-weight: 700; }
+    .stat-card small { color: var(--text-muted); font-size: 0.75rem; }
 </style>
 {% endblock %}
 
@@ -65,8 +98,10 @@
         {% if perms.estoque.view_produto %}
         <div class="col-md-6 col-lg-3 mb-3">
             <a href="{% url 'estoque:dashboard' %}" class="text-decoration-none">
-                <div class="stat-card primary position-relative">
-                    <i class="bi bi-box-seam stat-icon"></i>
+                <div class="stat-card primary">
+                    <div class="stat-icon-box">
+                        <i class="bi bi-box-seam"></i>
+                    </div>
                     <div class="stat-label">Módulo de</div>
                     <div class="stat-value">Estoque</div>
                     <small>Gerenciar produtos e movimentações</small>
@@ -78,8 +113,10 @@
         {% if perms.financeiro.view_receita %}
         <div class="col-md-6 col-lg-3 mb-3">
             <a href="{% url 'financeiro:dashboard' %}" class="text-decoration-none">
-                <div class="stat-card success position-relative">
-                    <i class="bi bi-cash-coin stat-icon"></i>
+                <div class="stat-card success">
+                    <div class="stat-icon-box">
+                        <i class="bi bi-cash-coin"></i>
+                    </div>
                     <div class="stat-label">Módulo</div>
                     <div class="stat-value">Financeiro</div>
                     <small>Receitas, despesas e capital</small>
@@ -91,8 +128,10 @@
         {% if perms.estoque.add_movimentacaoestoque %}
         <div class="col-md-6 col-lg-3 mb-3">
             <a href="{% url 'estoque:registrar_movimentacao' %}" class="text-decoration-none">
-                <div class="stat-card warning position-relative">
-                    <i class="bi bi-arrow-left-right stat-icon"></i>
+                <div class="stat-card warning">
+                    <div class="stat-icon-box">
+                        <i class="bi bi-arrow-left-right"></i>
+                    </div>
                     <div class="stat-label">Registrar</div>
                     <div class="stat-value">Movimentação</div>
                     <small>Entrada ou saída de produtos</small>

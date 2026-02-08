@@ -29,21 +29,123 @@
     <!-- Chart.js para gráficos -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
     <!-- CSS customizado -->
     <style>
         :root {
-            --primary-color: #0d6efd;
-            --secondary-color: #6c757d;
-            --success-color: #198754;
-            --danger-color: #dc3545;
-            --warning-color: #ffc107;
-            --info-color: #0dcaf0;
-            --sidebar-width: 250px;
+            /* Cores Base */
+            --primary-color: #2563eb;
+            --primary-hover: #1d4ed8;
+            --sidebar-width: 260px;
+            --border-radius: 12px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Tema Claro (Default) */
+            --bg-body: #f3f4f6;
+            --bg-card: #ffffff;
+            --bg-sidebar: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            --text-main: #111827;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --topbar-bg: rgba(255, 255, 255, 0.8);
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-body: #0f172a;
+            --bg-card: #1e293b;
+            --bg-sidebar: #1e293b;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+            --topbar-bg: rgba(30, 41, 59, 0.8);
+            
+            --primary-color: #3b82f6;
         }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            transition: var(--transition);
+            overflow: hidden;
+        }
+        
+        .card:hover {
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        .table {
+            color: var(--text-main);
+            border-color: var(--border-color);
+        }
+
+        .table thead th {
+            background-color: var(--bg-body);
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 16px;
+        }
+
+        .table tbody td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            border-radius: 8px;
+            padding: 8px 16px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-hover);
+            border-color: var(--primary-hover);
+            transform: translateY(-1px);
+        }
+
+        .form-control, .form-select {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            border-radius: 8px;
+            padding: 10px 14px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background-color: var(--bg-card);
+            color: var(--text-main);
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .top-bar {
+            background-color: var(--topbar-bg);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 30px;
+            margin: -20px -20px 20px -20px;
+            position: sticky;
+            top: 0;
+            z-index: 900;
         }
         
         .sidebar {
@@ -52,44 +154,50 @@
             left: 0;
             height: 100vh;
             width: var(--sidebar-width);
-            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-            padding-top: 20px;
+            background: var(--bg-sidebar);
+            padding: 24px 16px;
             z-index: 1000;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+            border-right: 1px solid var(--border-color);
+            transition: var(--transition);
         }
         
         .sidebar .logo {
-            text-align: center;
-            padding: 20px;
+            padding: 0 12px 32px;
             color: white;
-            font-size: 24px;
-            font-weight: bold;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            margin-bottom: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
         }
         
         .sidebar .nav-link {
-            color: rgba(255,255,255,0.8);
-            padding: 12px 20px;
-            margin: 5px 15px;
+            color: rgba(255,255,255,0.7);
+            padding: 10px 12px;
+            margin-bottom: 4px;
             border-radius: 8px;
-            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+            transition: var(--transition);
         }
         
         .sidebar .nav-link:hover {
             background-color: rgba(255,255,255,0.1);
             color: white;
-            transform: translateX(5px);
         }
         
         .sidebar .nav-link.active {
-            background-color: rgba(255,255,255,0.2);
+            background-color: var(--primary-color);
             color: white;
+            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.2);
         }
         
         .sidebar .nav-link i {
-            margin-right: 10px;
-            width: 20px;
+            margin-right: 12px;
+            font-size: 1.25rem;
+            width: 24px;
             text-align: center;
         }
         
@@ -226,6 +334,12 @@
             </div>
             
             <div class="user-info">
+                <!-- Seletor de Tema -->
+                <button class="btn btn-link text-muted p-2 me-2" id="themeToggle" title="Alternar Tema">
+                    <i class="bi bi-sun-fill d-none" id="theme-icon-light"></i>
+                    <i class="bi bi-moon-stars-fill" id="theme-icon-dark"></i>
+                </button>
+
                 <div class="user-avatar">
                     {{ user.first_name.0|default:user.username.0|upper }}
                 </div>
@@ -277,6 +391,33 @@
                     sidebar.classList.toggle('show');
                 });
             }
+
+            // Lógica de Tema Escuro
+            const themeToggle = document.getElementById('themeToggle');
+            const htmlElement = document.documentElement;
+            const iconLight = document.getElementById('theme-icon-light');
+            const iconDark = document.getElementById('theme-icon-dark');
+
+            function setTheme(theme) {
+                htmlElement.setAttribute('data-bs-theme', theme);
+                localStorage.setItem('theme', theme);
+                if (theme === 'dark') {
+                    iconLight.classList.remove('d-none');
+                    iconDark.classList.add('d-none');
+                } else {
+                    iconLight.classList.add('d-none');
+                    iconDark.classList.remove('d-none');
+                }
+            }
+
+            // Carregar tema salvo
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            setTheme(savedTheme);
+
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = htmlElement.getAttribute('data-bs-theme');
+                setTheme(currentTheme === 'dark' ? 'light' : 'dark');
+            });
 
             // Função para iniciar o Tour Guiado
             window.startTour = function() {
