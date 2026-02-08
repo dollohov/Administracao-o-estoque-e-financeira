@@ -59,6 +59,9 @@ urlpatterns = [
         next_page='login'
     ), name='logout'),
     
+    # API REST
+    path('api/estoque/', include('estoque.api_urls')),
+    
     # Módulos do sistema
     path('estoque/', include('estoque.urls')),
     path('financeiro/', include('financeiro.urls')),
