@@ -9,7 +9,7 @@ Data: 2025-12-02
 """
 
 from django.contrib import admin
-from .models import Receita, Despesa, CapitalGiro, IndicadorFinanceiro
+from .models import Receita, Despesa, CapitalGiro, IndicadorFinanceiro, ContaPagar, ContaReceber, FluxoCaixaProjetado
 
 
 @admin.register(Receita)
@@ -306,3 +306,100 @@ class IndicadorFinanceiroAdmin(admin.ModelAdmin):
             bool: True apenas se for superusuário
         """
         return request.user.is_superuser
+
+
+
+@admin.register(ContaPagar)
+class ContaPagarAdmin(admin.ModelAdmin):
+    """
+    Configuração administrativa para o modelo ContaPagar.
+    """
+    
+    list_display = ['fornecedor', 'descricao', 'valor', 'data_vencimento', 'status', 'dias_para_vencer']
+    list_filter = ['status', 'data_vencimento', 'fornecedor']
+    search_fields = ['descricao', 'fornecedor__razao_social']
+    readonly_fields = ['data_criacao', 'usuario_criacao']
+    
+    fieldsets = (
+        ('Informações da Conta', {
+            'fields': ('fornecedor', 'descricao', 'valor', 'data_vencimento')
+        }),
+        ('Pagamento', {
+            'fields': ('status', 'data_pagamento')
+        }),
+        ('Rastreamento', {
+            'fields': ('usuario_criacao', 'data_criacao'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['data_vencimento']
+    list_per_page = 50
+    
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.usuario_criacao = request.user
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(ContaReceber)
+class ContaReceberAdmin(admin.ModelAdmin):
+    """
+    Configuração administrativa para o modelo ContaReceber.
+    """
+    
+    list_display = ['cliente', 'descricao', 'valor', 'data_vencimento', 'status', 'dias_para_vencer']
+    list_filter = ['status', 'data_vencimento', 'cliente']
+    search_fields = ['descricao', 'cliente__nome_completo']
+    readonly_fields = ['data_criacao', 'usuario_criacao']
+    
+    fieldsets = (
+        ('Informações da Conta', {
+            'fields': ('cliente', 'descricao', 'valor', 'data_vencimento')
+        }),
+        ('Recebimento', {
+            'fields': ('status', 'data_recebimento')
+        }),
+        ('Rastreamento', {
+            'fields': ('usuario_criacao', 'data_criacao'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['data_vencimento']
+    list_per_page = 50
+    
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.usuario_criacao = request.user
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(FluxoCaixaProjetado)
+class FluxoCaixaProjetadoAdmin(admin.ModelAdmin):
+    """
+    Configuração administrativa para o modelo FluxoCaixaProjetado.
+    """
+    
+    list_display = ['__str__', 'receitas_projetadas', 'despesas_projetadas', 'saldo_projetado', 'saldo_real', 'variacao']
+    list_filter = ['ano', 'mes']
+    readonly_fields = ['data_criacao', 'data_atualizacao']
+    
+    fieldsets = (
+        ('Período', {
+            'fields': ('mes', 'ano')
+        }),
+        ('Projeção', {
+            'fields': ('receitas_projetadas', 'despesas_projetadas')
+        }),
+        ('Realizado', {
+            'fields': ('receitas_reais', 'despesas_reais')
+        }),
+        ('Rastreamento', {
+            'fields': ('data_criacao', 'data_atualizacao'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    ordering = ['-ano', '-mes']
+    list_per_page = 24  # Dois anos de dados
