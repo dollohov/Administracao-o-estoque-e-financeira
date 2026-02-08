@@ -22,8 +22,11 @@
                         <h5 class="border-bottom pb-2 mb-3 text-primary"><i class="fas fa-info-circle me-2"></i>Informações Básicas</h5>
                         <div class="row">
                             <div class="col-md-12 mb-3">
-                                <label for="nome" class="form-label">Nome do Produto</label>
-                                <input type="text" class="form-control" id="nome" name="nome" value="{{ produto.nome|default:'' }}" required>
+                                <label for="nome" class="form-label">
+                                    Nome do Produto
+                                    <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="Nome comercial como aparecerá no catálogo e notas fiscais."></i>
+                                </label>
+                                <input type="text" class="form-control" id="nome" name="nome" value="{{ produto.nome|default:'' }}" placeholder="Ex: Camiseta Algodão Premium Azul" required>
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="descricao" class="form-label">Descrição</label>
@@ -47,12 +50,18 @@
                         <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-barcode me-2"></i>Identificação e Códigos</h5>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="sku" class="form-label">SKU (Código Interno)</label>
-                                <input type="text" class="form-control" id="sku" name="sku" value="{{ produto.sku|default:'' }}">
+                                <label for="sku" class="form-label">
+                                    SKU (Código Interno)
+                                    <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="Código único da sua empresa para este produto. Ajuda na organização do estoque."></i>
+                                </label>
+                                <input type="text" class="form-control" id="sku" name="sku" value="{{ produto.sku|default:'' }}" placeholder="Ex: CAM-AZ-G">
                             </div>
                             <div class="col-md-3 mb-3">
-                                <label for="ncm" class="form-label">NCM</label>
-                                <input type="text" class="form-control" id="ncm" name="ncm" value="{{ produto.ncm|default:'' }}" maxlength="10">
+                                <label for="ncm" class="form-label">
+                                    NCM
+                                    <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="Nomenclatura Comum do Mercosul (8 dígitos). Essencial para emissão de notas fiscais."></i>
+                                </label>
+                                <input type="text" class="form-control" id="ncm" name="ncm" value="{{ produto.ncm|default:'' }}" maxlength="10" placeholder="0000.00.00">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="cest" class="form-label">CEST</label>
@@ -68,7 +77,10 @@
                         <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-dollar-sign me-2"></i>Precificação e Controle de Estoque</h5>
                         <div class="row">
                             <div class="col-md-3 mb-3">
-                                <label for="preco_custo" class="form-label">Preço de Custo (R$)</label>
+                                <label for="preco_custo" class="form-label">
+                                    Preço de Custo (R$)
+                                    <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="Quanto você pagou pelo produto. Usado para calcular seu lucro real."></i>
+                                </label>
                                 <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="{{ produto.preco_custo|stringformat:'.2f'|default:'' }}" required>
                             </div>
                             <div class="col-md-3 mb-3">

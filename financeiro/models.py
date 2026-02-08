@@ -43,7 +43,7 @@ class Receita(models.Model):
     descricao = models.CharField(
         max_length=200,
         verbose_name="Descrição",
-        help_text="Descrição detalhada da receita"
+        help_text="Ex: Venda de 10 camisetas, Pagamento serviço X, etc."
     )
     
     # Valor da receita
@@ -67,7 +67,7 @@ class Receita(models.Model):
         choices=CATEGORIAS,
         default='VENDA',
         verbose_name="Categoria",
-        help_text="Categoria da receita"
+        help_text="Classificação para relatórios financeiros e gráficos."
     )
     
     # Rastreamento de usuário
@@ -126,7 +126,7 @@ class Despesa(models.Model):
     descricao = models.CharField(
         max_length=200,
         verbose_name="Descrição",
-        help_text="Descrição detalhada da despesa"
+        help_text="Ex: Pagamento Aluguel Jan/2026, Compra de insumos, etc."
     )
     
     # Valor da despesa

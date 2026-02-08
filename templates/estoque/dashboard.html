@@ -11,7 +11,10 @@
             <div class="stat-card primary position-relative">
                 <i class="bi bi-box-seam stat-icon"></i>
                 <div class="stat-value">{{ total_produtos }}</div>
-                <div class="stat-label">Produtos Cadastrados</div>
+                <div class="stat-label">
+                    Produtos Cadastrados
+                    <i class="bi bi-question-circle text-white opacity-75 ms-1" data-bs-toggle="tooltip" title="Total de itens diferentes registrados no seu catálogo."></i>
+                </div>
             </div>
         </div>
         
@@ -19,7 +22,10 @@
             <div class="stat-card {% if produtos_estoque_baixo > 0 %}warning{% else %}success{% endif %} position-relative">
                 <i class="bi bi-exclamation-triangle stat-icon"></i>
                 <div class="stat-value">{{ produtos_estoque_baixo }}</div>
-                <div class="stat-label">Produtos com Estoque Baixo</div>
+                <div class="stat-label">
+                    Produtos com Estoque Baixo
+                    <i class="bi bi-question-circle text-white opacity-75 ms-1" data-bs-toggle="tooltip" title="Itens que atingiram ou estão abaixo da quantidade mínima de segurança definida."></i>
+                </div>
             </div>
         </div>
         
@@ -27,7 +33,10 @@
             <div class="stat-card info position-relative">
                 <i class="bi bi-currency-dollar stat-icon"></i>
                 <div class="stat-value">R$ {{ valor_total_estoque|floatformat:2 }}</div>
-                <div class="stat-label">Valor Total do Estoque</div>
+                <div class="stat-label">
+                    Valor Total do Estoque
+                    <i class="bi bi-question-circle text-white opacity-75 ms-1" data-bs-toggle="tooltip" title="Soma do valor de custo de todos os produtos atualmente em estoque."></i>
+                </div>
             </div>
         </div>
         
