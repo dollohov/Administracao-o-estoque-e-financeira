@@ -5,7 +5,7 @@
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-10">
             <div class="card shadow">
                 <div class="card-header {% if is_edit %}bg-warning text-dark{% else %}bg-primary text-white{% endif %}">
                     <h4 class="mb-0">
@@ -14,43 +14,170 @@
                     </h4>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="nome" class="form-label">Nome do Produto</label>
-                            <input type="text" class="form-control" id="nome" name="nome" value="{{ produto.nome|default:'' }}" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="descricao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ produto.descricao|default:'' }}</textarea>
-                        </div>
+                        
+                        <!-- Seção 1: Informações Básicas -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary"><i class="fas fa-info-circle me-2"></i>Informações Básicas</h5>
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-12 mb-3">
+                                <label for="nome" class="form-label">Nome do Produto</label>
+                                <input type="text" class="form-control" id="nome" name="nome" value="{{ produto.nome|default:'' }}" required>
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="descricao" class="form-label">Descrição</label>
+                                <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ produto.descricao|default:'' }}</textarea>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="marca" class="form-label">Marca</label>
+                                <input type="text" class="form-control" id="marca" name="marca" value="{{ produto.marca|default:'' }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="categoria" class="form-label">Categoria</label>
+                                <input type="text" class="form-control" id="categoria" name="categoria" value="{{ produto.categoria|default:'' }}">
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="subcategoria" class="form-label">Subcategoria</label>
+                                <input type="text" class="form-control" id="subcategoria" name="subcategoria" value="{{ produto.subcategoria|default:'' }}">
+                            </div>
+                        </div>
+
+                        <!-- Seção 2: Identificação e Códigos -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-barcode me-2"></i>Identificação e Códigos</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="sku" class="form-label">SKU (Código Interno)</label>
+                                <input type="text" class="form-control" id="sku" name="sku" value="{{ produto.sku|default:'' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ncm" class="form-label">NCM</label>
+                                <input type="text" class="form-control" id="ncm" name="ncm" value="{{ produto.ncm|default:'' }}" maxlength="10">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cest" class="form-label">CEST</label>
+                                <input type="text" class="form-control" id="cest" name="cest" value="{{ produto.cest|default:'' }}" maxlength="7">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ean_gtin" class="form-label">EAN/GTIN</label>
+                                <input type="text" class="form-control" id="ean_gtin" name="ean_gtin" value="{{ produto.ean_gtin|default:'' }}" maxlength="14">
+                            </div>
+                        </div>
+
+                        <!-- Seção 3: Precificação e Estoque -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-dollar-sign me-2"></i>Precificação e Controle de Estoque</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
                                 <label for="preco_custo" class="form-label">Preço de Custo (R$)</label>
                                 <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="{{ produto.preco_custo|stringformat:'.2f'|default:'' }}" required>
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-3 mb-3">
                                 <label for="preco_venda" class="form-label">Preço de Venda (R$)</label>
                                 <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" value="{{ produto.preco_venda|stringformat:'.2f'|default:'' }}" required>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-2 mb-3">
                                 <label for="estoque_inicial" class="form-label">{% if is_edit %}Estoque Atual{% else %}Estoque Inicial{% endif %}</label>
                                 <input type="number" class="form-control" id="estoque_inicial" name="estoque_inicial" value="{{ produto.estoque_atual|default:'0' }}" {% if is_edit %}readonly{% endif %}>
-                                {% if is_edit %}
-                                <small class="text-muted">Para alterar o estoque, utilize o módulo de Movimentações.</small>
-                                {% endif %}
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-md-2 mb-3">
                                 <label for="estoque_minimo" class="form-label">Estoque Mínimo</label>
                                 <input type="number" class="form-control" id="estoque_minimo" name="estoque_minimo" value="{{ produto.estoque_minimo|default:'10' }}">
                             </div>
+                            <div class="col-md-2 mb-3">
+                                <label for="estoque_maximo" class="form-label">Estoque Máximo</label>
+                                <input type="number" class="form-control" id="estoque_maximo" name="estoque_maximo" value="{{ produto.estoque_maximo|default:'100' }}">
+                            </div>
                         </div>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-secondary me-md-2">Cancelar</a>
+
+                        <!-- Seção 4: Dimensões e Logística -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-truck me-2"></i>Dimensões e Logística</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="peso_kg" class="form-label">Peso (kg)</label>
+                                <input type="number" step="0.001" class="form-control" id="peso_kg" name="peso_kg" value="{{ produto.peso_kg|stringformat:'.3f'|default:'' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="altura_cm" class="form-label">Altura (cm)</label>
+                                <input type="number" step="0.01" class="form-control" id="altura_cm" name="altura_cm" value="{{ produto.altura_cm|stringformat:'.2f'|default:'' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="largura_cm" class="form-label">Largura (cm)</label>
+                                <input type="number" step="0.01" class="form-control" id="largura_cm" name="largura_cm" value="{{ produto.largura_cm|stringformat:'.2f'|default:'' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="profundidade_cm" class="form-label">Profundidade (cm)</label>
+                                <input type="number" step="0.01" class="form-control" id="profundidade_cm" name="profundidade_cm" value="{{ produto.profundidade_cm|stringformat:'.2f'|default:'' }}">
+                            </div>
+                            <div class="col-md-12 mb-3">
+                                <label for="localizacao_estoque" class="form-label">Localização no Estoque</label>
+                                <input type="text" class="form-control" id="localizacao_estoque" name="localizacao_estoque" value="{{ produto.localizacao_estoque|default:'' }}" placeholder="Ex: Corredor A, Estante 2">
+                            </div>
+                        </div>
+
+                        <!-- Seção 5: Impostos -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-file-invoice-dollar me-2"></i>Impostos (Alíquotas %)</h5>
+                        <div class="row">
+                            <div class="col-md-3 mb-3">
+                                <label for="icms_aliquota" class="form-label">ICMS (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="icms_aliquota" name="icms_aliquota" value="{{ produto.icms_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="ipi_aliquota" class="form-label">IPI (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="ipi_aliquota" name="ipi_aliquota" value="{{ produto.ipi_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="pis_aliquota" class="form-label">PIS (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="pis_aliquota" name="pis_aliquota" value="{{ produto.pis_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                            </div>
+                            <div class="col-md-3 mb-3">
+                                <label for="cofins_aliquota" class="form-label">COFINS (%)</label>
+                                <input type="number" step="0.01" class="form-control" id="cofins_aliquota" name="cofins_aliquota" value="{{ produto.cofins_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                            </div>
+                        </div>
+
+                        <!-- Seção 6: Outros -->
+                        <h5 class="border-bottom pb-2 mb-3 text-primary mt-4"><i class="fas fa-cog me-2"></i>Outras Informações</h5>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="fornecedor" class="form-label">Fornecedor Principal</label>
+                                <select class="form-select" id="fornecedor" name="fornecedor">
+                                    <option value="">---------</option>
+                                    {% for f in fornecedores %}
+                                    <option value="{{ f.id }}" {% if produto.fornecedor.id == f.id %}selected{% endif %}>{{ f.nome }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="imagem" class="form-label">Imagem do Produto</label>
+                                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
+                                {% if produto.imagem %}
+                                <div class="mt-2">
+                                    <small>Imagem atual: <a href="{{ produto.imagem.url }}" target="_blank">{{ produto.imagem.name }}</a></small>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="visivel_catalogo" name="visivel_catalogo" {% if produto.visivel_catalogo|default:True %}checked{% endif %}>
+                                    <label class="form-check-label" for="visivel_catalogo">Visível no Catálogo</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if produto.ativo|default:True %}checked{% endif %}>
+                                    <label class="form-check-label" for="ativo">Produto Ativo</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4 pt-3 border-top">
+                            <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-secondary me-md-2">
+                                <i class="fas fa-times me-1"></i> Cancelar
+                            </a>
                             <button type="submit" class="btn {% if is_edit %}btn-warning{% else %}btn-primary{% endif %}">
-                                {% if is_edit %}Salvar Alterações{% else %}Salvar Produto{% endif %}
+                                <i class="fas fa-save me-1"></i> {% if is_edit %}Salvar Alterações{% else %}Salvar Produto{% endif %}
                             </button>
                         </div>
                     </form>

@@ -17,6 +17,7 @@ from django.http import JsonResponse
 from datetime import datetime, timedelta
 from .models import Produto, MovimentacaoEstoque
 from financeiro.models import CapitalGiro
+from fornecedores.models import Fornecedor
 
 
 @login_required
@@ -167,97 +168,103 @@ def detalhes_produto(request, produto_id):
     return render(request, 'estoque/detalhes_produto.html', context)
 
 
+def get_produto_data_from_post(request):
+    """Auxiliar para extrair dados do produto do POST."""
+    data = {
+        'nome': request.POST.get('nome'),
+        'descricao': request.POST.get('descricao', ''),
+        'marca': request.POST.get('marca', ''),
+        'categoria': request.POST.get('categoria', ''),
+        'subcategoria': request.POST.get('subcategoria', ''),
+        'sku': request.POST.get('sku', ''),
+        'ncm': request.POST.get('ncm', ''),
+        'cest': request.POST.get('cest', ''),
+        'ean_gtin': request.POST.get('ean_gtin', ''),
+        'preco_custo': request.POST.get('preco_custo'),
+        'preco_venda': request.POST.get('preco_venda'),
+        'estoque_minimo': request.POST.get('estoque_minimo', 10),
+        'estoque_maximo': request.POST.get('estoque_maximo', 100),
+        'peso_kg': request.POST.get('peso_kg') or None,
+        'altura_cm': request.POST.get('altura_cm') or None,
+        'largura_cm': request.POST.get('largura_cm') or None,
+        'profundidade_cm': request.POST.get('profundidade_cm') or None,
+        'localizacao_estoque': request.POST.get('localizacao_estoque', ''),
+        'icms_aliquota': request.POST.get('icms_aliquota', 0),
+        'ipi_aliquota': request.POST.get('ipi_aliquota', 0),
+        'pis_aliquota': request.POST.get('pis_aliquota', 0),
+        'cofins_aliquota': request.POST.get('cofins_aliquota', 0),
+        'visivel_catalogo': request.POST.get('visivel_catalogo') == 'on',
+        'ativo': request.POST.get('ativo') == 'on',
+    }
+    
+    # Tratar fornecedor
+    fornecedor_id = request.POST.get('fornecedor')
+    if fornecedor_id:
+        data['fornecedor'] = get_object_or_404(Fornecedor, pk=fornecedor_id)
+    else:
+        data['fornecedor'] = None
+        
+    # Tratar imagem se enviada
+    if request.FILES.get('imagem'):
+        data['imagem'] = request.FILES.get('imagem')
+        
+    return data
+
+
 @login_required
 @permission_required('estoque.add_produto', raise_exception=True)
 def cadastrar_produto(request):
     """
-    View para cadastrar um novo produto.
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        
-    Returns:
-        HttpResponse: Renderiza formulário ou redireciona após salvar
+    View para cadastrar um novo produto com todos os campos.
     """
     if request.method == 'POST':
         try:
-            # Criar novo produto com dados do formulário
-            produto = Produto(
-                nome=request.POST.get('nome'),
-                descricao=request.POST.get('descricao', ''),
-                preco_custo=request.POST.get('preco_custo'),
-                preco_venda=request.POST.get('preco_venda'),
-                estoque_atual=request.POST.get('estoque_inicial', 0),
-                estoque_minimo=request.POST.get('estoque_minimo', 10),
-                usuario_criacao=request.user
-            )
+            data = get_produto_data_from_post(request)
+            data['estoque_atual'] = request.POST.get('estoque_inicial', 0)
+            data['usuario_criacao'] = request.user
+            
+            produto = Produto(**data)
             produto.save()
             
-            # Mensagem de sucesso
-            messages.success(
-                request,
-                f'Produto "{produto.nome}" cadastrado com sucesso!'
-            )
-            
+            messages.success(request, f'Produto "{produto.nome}" cadastrado com sucesso!')
             return redirect('estoque:lista_produtos')
             
         except Exception as e:
-            # Mensagem de erro
-            messages.error(
-                request,
-                f'Erro ao cadastrar produto: {str(e)}'
-            )
+            messages.error(request, f'Erro ao cadastrar produto: {str(e)}')
     
-    return render(request, 'estoque/cadastrar_produto.html')
+    fornecedores = Fornecedor.objects.filter(ativo=True)
+    return render(request, 'estoque/cadastrar_produto.html', {'fornecedores': fornecedores})
 
 
 @login_required
 @permission_required('estoque.change_produto', raise_exception=True)
 def editar_produto(request, produto_id):
     """
-    View para editar um produto existente.
-    
-    Args:
-        request: Objeto HttpRequest do Django
-        produto_id (int): ID do produto a ser editado
-        
-    Returns:
-        HttpResponse: Renderiza formulário preenchido ou redireciona após salvar
+    View para editar um produto existente com todos os campos.
     """
     produto = get_object_or_404(Produto, pk=produto_id)
     
     if request.method == 'POST':
         try:
-            # Atualizar dados do produto
-            produto.nome = request.POST.get('nome')
-            produto.descricao = request.POST.get('descricao', '')
-            produto.preco_custo = request.POST.get('preco_custo')
-            produto.preco_venda = request.POST.get('preco_venda')
-            produto.estoque_minimo = request.POST.get('estoque_minimo', 10)
+            data = get_produto_data_from_post(request)
+            
+            for key, value in data.items():
+                setattr(produto, key, value)
+                
             produto.usuario_modificacao = request.user
-            
-            # O estoque_atual geralmente não deve ser editado diretamente aqui 
-            # para manter a integridade das movimentações, mas se o usuário 
-            # desejar, podemos permitir. Por enquanto, mantemos a lógica de segurança.
-            
             produto.save()
             
-            messages.success(
-                request,
-                f'Produto "{produto.nome}" atualizado com sucesso!'
-            )
-            
+            messages.success(request, f'Produto "{produto.nome}" atualizado com sucesso!')
             return redirect('estoque:lista_produtos')
             
         except Exception as e:
-            messages.error(
-                request,
-                f'Erro ao atualizar produto: {str(e)}'
-            )
+            messages.error(request, f'Erro ao atualizar produto: {str(e)}')
     
+    fornecedores = Fornecedor.objects.filter(ativo=True)
     context = {
         'produto': produto,
-        'is_edit': True
+        'is_edit': True,
+        'fornecedores': fornecedores
     }
     
     return render(request, 'estoque/cadastrar_produto.html', context)
