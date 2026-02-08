@@ -46,7 +46,7 @@ DEBUG = True
 
 # Hosts permitidos para acessar a aplicação
 # Em produção, especifique os domínios permitidos, ex: ['meusite.com', 'www.meusite.com']
-ALLOWED_HOSTS = ['8000-ikh9jzc4qsasnibcjje2b-89de021a.us1.manus.computer']
+ALLOWED_HOSTS = ['*']
 
 
 # =============================================================================
