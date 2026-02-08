@@ -470,3 +470,12 @@ class ItemNotaFiscal(models.Model):
         custo_adicional = (self.valor_frete + self.valor_icms + 
                           self.valor_ipi) / self.quantidade
         return self.valor_unitario + custo_adicional
+
+class ProdutoFiscal(Produto):
+    """
+    Proxy model para permitir a gestão de produtos dentro do módulo Fiscal.
+    """
+    class Meta:
+        proxy = True
+        verbose_name = "Produto (Fiscal)"
+        verbose_name_plural = "Produtos (Fiscal)"
