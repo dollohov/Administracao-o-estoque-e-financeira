@@ -62,6 +62,34 @@ class Cliente(models.Model):
     cep = models.CharField(max_length=10, blank=True)
     ativo = models.BooleanField(default=True, db_index=True)
     
+    # LGPD - Conformidade com Lei Geral de Proteção de Dados
+    consentimento_marketing = models.BooleanField(
+        default=False,
+        verbose_name="Consentimento para Marketing",
+        help_text="Cliente autorizou recebimento de comunicações comerciais"
+    )
+    consentimento_dados = models.BooleanField(
+        default=False,
+        verbose_name="Consentimento de Dados",
+        help_text="Cliente autorizou armazenamento e processamento de dados pessoais"
+    )
+    data_consentimento = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Data do Consentimento",
+        help_text="Data em que o cliente deu consentimento"
+    )
+    anonimizado = models.BooleanField(
+        default=False,
+        verbose_name="Dados Anonimizados",
+        help_text="Indica se os dados pessoais foram removidos conforme LGPD"
+    )
+    data_anonimizacao = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Data da Anonimização"
+    )
+    
     # Auditoria
     data_criacao = models.DateTimeField(auto_now_add=True)
     data_modificacao = models.DateTimeField(auto_now=True)
@@ -94,6 +122,22 @@ class Cliente(models.Model):
         """Retorna o endereço completo do cliente."""
         partes = [self.endereco, self.cidade, self.estado, self.cep]
         return ', '.join([p for p in partes if p])
+    
+    def anonimizar_dados(self, usuario):
+        """Anonimiza dados pessoais conforme LGPD."""
+        from datetime import datetime
+        self.nome = f"Cliente Anonimizado #{self.id}"
+        self.email = f"anonimizado_{self.id}@anonimizado.local"
+        self.telefone = ""
+        self.endereco = ""
+        self.cidade = ""
+        self.estado = ""
+        self.cep = ""
+        self.anonimizado = True
+        self.data_anonimizacao = datetime.now()
+        self.usuario_modificacao = usuario
+        self.save()
+        self.contatos.all().delete()
 
 
 class ContatoCliente(models.Model):

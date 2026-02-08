@@ -30,7 +30,7 @@ end
 # Unset irrelevant variables.
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/ubuntu/Administracao-o-estoque-e-financeira/venv"
+set -gx VIRTUAL_ENV "/home/ubuntu/projeto_erp_repo/venv"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH

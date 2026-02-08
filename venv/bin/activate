@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/ubuntu/Administracao-o-estoque-e-financeira/venv"
+VIRTUAL_ENV="/home/ubuntu/projeto_erp_repo/venv"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

@@ -74,15 +74,49 @@ class Produto(models.Model):
     estoque_minimo = models.IntegerField(
         default=10,
         validators=[MinValueValidator(0)],
-        verbose_name="Estoque Mínimo",
-        help_text="Quantidade mínima para alerta de reposição"
+        verbose_name="Estoque Minimo",
+        help_text="Quantidade minima para alerta de reposicao"
+    )
+    
+    sku = models.CharField(
+        max_length=100,
+        blank=True,
+        null=True,
+        unique=True,
+        verbose_name="SKU",
+        help_text="Codigo unico para identificacao do produto"
+    )
+    
+    ncm = models.CharField(
+        max_length=10,
+        blank=True,
+        null=True,
+        verbose_name="NCM",
+        help_text="Nomenclatura Comum do Mercosul"
+    )
+    
+    ean_gtin = models.CharField(
+        max_length=14,
+        blank=True,
+        null=True,
+        unique=True,
+        verbose_name="EAN/GTIN",
+        help_text="Codigo de barras EAN-13 ou EAN-14"
+    )
+    
+    localizacao_estoque = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        verbose_name="Localizacao no Estoque",
+        help_text="Ex: Corredor A, Estante 2, Prateleira 3"
     )
     
     # Status do produto
     ativo = models.BooleanField(
         default=True,
         verbose_name="Produto Ativo",
-        help_text="Indica se o produto está disponível para movimentação"
+        help_text="Indica se o produto esta disponivel para movimentacao"
     )
     
     # Rastreamento de usuários e datas
