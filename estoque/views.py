@@ -16,6 +16,7 @@ from django.db.models import Sum, Q
 from django.http import JsonResponse
 from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
+import os
 from .models import Produto, MovimentacaoEstoque
 from financeiro.models import CapitalGiro
 from fornecedores.models import Fornecedor
@@ -103,7 +104,7 @@ def lista_produtos(request):
         'usuario_criacao', 'usuario_modificacao'
     )
     
-    # Obter categorias e marcas únicas para os filtros (apenas de produtos ativos)
+    # Obter categorias e marcas únicas para os filtros
     categorias = Produto.objects.filter(categoria__isnull=False).exclude(categoria='').values_list('categoria', flat=True).distinct().order_by('categoria')
     marcas = Produto.objects.filter(marca__isnull=False).exclude(marca='').values_list('marca', flat=True).distinct().order_by('marca')
     
@@ -206,10 +207,6 @@ def get_produto_data_from_post(request):
     else:
         data['fornecedor'] = None
         
-    # Tratar imagem se enviada
-    if request.FILES.get('imagem'):
-        data['imagem'] = request.FILES.get('imagem')
-        
     return data
 
 
@@ -217,7 +214,7 @@ def get_produto_data_from_post(request):
 @permission_required('estoque.add_produto', raise_exception=True)
 def cadastrar_produto(request):
     """
-    View para cadastrar um novo produto com todos os campos.
+    View para cadastrar um novo produto com suporte a upload de imagem.
     """
     if request.method == 'POST':
         try:
@@ -226,6 +223,11 @@ def cadastrar_produto(request):
             data['usuario_criacao'] = request.user
             
             produto = Produto(**data)
+            
+            # Tratar imagem se enviada
+            if request.FILES.get('imagem'):
+                produto.imagem = request.FILES.get('imagem')
+                
             produto.save()
             
             messages.success(request, f'Produto "{produto.nome}" cadastrado com sucesso!')
@@ -242,16 +244,31 @@ def cadastrar_produto(request):
 @permission_required('estoque.change_produto', raise_exception=True)
 def editar_produto(request, produto_id):
     """
-    View para editar um produto existente com todos os campos.
+    View para editar um produto existente com suporte a alteração e exclusão de imagem.
     """
     produto = get_object_or_404(Produto, pk=produto_id)
     
     if request.method == 'POST':
         try:
+            # Verificar se o usuário solicitou a exclusão da imagem
+            if request.POST.get('remover_imagem') == 'true':
+                if produto.imagem:
+                    # Remover arquivo físico se existir
+                    if os.path.isfile(produto.imagem.path):
+                        os.remove(produto.imagem.path)
+                    produto.imagem = None
+            
             data = get_produto_data_from_post(request)
             
             for key, value in data.items():
                 setattr(produto, key, value)
+                
+            # Tratar nova imagem se enviada (sobrescreve a anterior)
+            if request.FILES.get('imagem'):
+                # Remover imagem antiga fisicamente se houver uma nova sendo enviada
+                if produto.imagem and os.path.isfile(produto.imagem.path):
+                    os.remove(produto.imagem.path)
+                produto.imagem = request.FILES.get('imagem')
                 
             produto.usuario_modificacao = request.user
             produto.save()
