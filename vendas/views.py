@@ -14,12 +14,8 @@ import os
 import urllib.parse
 
 # Para geração de PDF
-try:
-    from weasyprint import HTML
-    WEASYPRINT_DISPONIVEL = True
-except ImportError:
-    WEASYPRINT_DISPONIVEL = False
-    HTML = None
+# A importação do WeasyPrint é feita dentro da função para evitar erros de inicialização
+WEASYPRINT_DISPONIVEL = None  # Será definido na primeira tentativa
 
 
 @login_required
@@ -154,9 +150,24 @@ def editar_pedido(request, pk):
 @login_required
 @permission_required("vendas.view_pedido", raise_exception=True)
 def gerar_pedido_pdf(request, pk):
+    global WEASYPRINT_DISPONIVEL
+    
+    # Tentar importar WeasyPrint apenas quando necessario
+    if WEASYPRINT_DISPONIVEL is None:
+        try:
+            from weasyprint import HTML
+            WEASYPRINT_DISPONIVEL = True
+        except (ImportError, OSError) as e:
+            WEASYPRINT_DISPONIVEL = False
+            messages.error(request, f"WeasyPrint nao esta disponivel. Erro: {str(e)}")
+            return redirect("vendas:detalhe_pedido", pk=pk)
+    
     if not WEASYPRINT_DISPONIVEL:
-        messages.error(request, "WeasyPrint nao esta instalado. Execute: pip install WeasyPrint")
+        messages.error(request, "WeasyPrint nao esta disponivel. Verifique a instalacao das dependencias de sistema.")
         return redirect("vendas:detalhe_pedido", pk=pk)
+    
+    # Importar aqui para usar a variavel global
+    from weasyprint import HTML
     
     pedido = get_object_or_404(Pedido.objects.select_related("cliente", "vendedor"), pk=pk)
     itens = pedido.itens.select_related("produto").all()
