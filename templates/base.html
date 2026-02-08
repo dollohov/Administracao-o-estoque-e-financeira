@@ -37,12 +37,14 @@
     <!-- CSS customizado -->
     <style>
         :root {
-            /* Cores Base */
             --primary-color: #2563eb;
             --primary-hover: #1d4ed8;
             --sidebar-width: 260px;
             --border-radius: 12px;
             --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
             
             /* Tema Claro (Default) */
             --bg-body: #f3f4f6;
@@ -77,13 +79,22 @@
             background-color: var(--bg-card);
             border: 1px solid var(--border-color);
             border-radius: var(--border-radius);
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+            box-shadow: var(--shadow-sm);
             transition: var(--transition);
             overflow: hidden;
+            margin-bottom: 1.5rem;
         }
         
         .card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .card-header {
+            background-color: transparent !important;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 1.5rem;
+            font-weight: 600;
+            color: var(--text-main) !important;
         }
 
         .table {
@@ -98,14 +109,19 @@
             font-size: 0.75rem;
             letter-spacing: 0.05em;
             font-weight: 700;
-            border-bottom: 1px solid var(--border-color);
-            padding: 12px 16px;
+            border-bottom: 2px solid var(--border-color);
+            padding: 1rem 1.5rem;
         }
 
         .table tbody td {
-            padding: 16px;
+            padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-main) !important;
+            vertical-align: middle;
+        }
+        
+        .table-hover tbody tr:hover {
+            background-color: rgba(37, 99, 235, 0.04) !important;
         }
         
         /* Garantir cor de texto em títulos e parágrafos */
@@ -121,19 +137,59 @@
             color: var(--text-muted) !important;
         }
 
+        .btn {
+            border-radius: 8px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
         .btn-primary {
             background-color: var(--primary-color);
             border-color: var(--primary-color);
-            border-radius: 8px;
-            padding: 8px 16px;
-            font-weight: 500;
-            transition: var(--transition);
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
         }
 
         .btn-primary:hover {
             background-color: var(--primary-hover);
             border-color: var(--primary-hover);
             transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .badge {
+            padding: 0.5em 0.8em;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+        
+        /* Animação de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .main-content {
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        .badge {
+            padding: 0.5em 0.8em;
+            font-weight: 600;
+            border-radius: 6px;
+        }
+        
+        /* Animação de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .main-content {
+            animation: fadeIn 0.4s ease-out;
         }
 
         .form-control, .form-select {

@@ -8,7 +8,11 @@
     <!-- Barra de ferramentas e Filtros -->
     <div class="row mb-4">
         <div class="col-12">
-            <div class="card shadow-sm">
+            <div class="card">
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-filter-left me-2 text-primary"></i>
+                    Filtros de Busca
+                </div>
                 <div class="card-body">
                     <form method="get" id="filterForm">
                         <div class="row g-3 align-items-end">
@@ -85,12 +89,12 @@
     <!-- Tabela de produtos -->
     <div class="row">
         <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-white d-flex justify-content-between align-items-center py-3">
-                    <h5 class="mb-0"><i class="bi bi-box-seam me-2"></i>Produtos ({{ produtos|length }})</h5>
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 fw-bold"><i class="bi bi-box-seam-fill me-2 text-primary"></i>Produtos ({{ produtos|length }})</h5>
                     {% if perms.estoque.add_produto %}
-                    <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-success btn-sm">
-                        <i class="bi bi-plus-circle me-1"></i> Novo Produto
+                    <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-primary btn-sm">
+                        <i class="bi bi-plus-circle"></i> Novo Produto
                     </a>
                     {% endif %}
                 </div>
@@ -114,17 +118,19 @@
                                 <tr {% if not produto.ativo %}class="table-light text-muted"{% endif %}>
                                     <td class="text-center">
                                         {% if produto.imagem %}
-                                        <img src="{{ produto.imagem.url }}" 
-                                             alt="{{ produto.nome }}" 
-                                             class="img-thumbnail cursor-pointer" 
-                                             style="width: 45px; height: 45px; object-fit: cover;"
-                                             onclick="showPhotoModal('{{ produto.imagem.url }}', '{{ produto.nome }}')"
-                                             data-bs-toggle="modal" 
-                                             data-bs-target="#photoModal">
+                                        <div class="position-relative d-inline-block">
+                                            <img src="{{ produto.imagem.url }}" 
+                                                 alt="{{ produto.nome }}" 
+                                                 class="rounded shadow-sm cursor-pointer border" 
+                                                 style="width: 48px; height: 48px; object-fit: cover;"
+                                                 onclick="showPhotoModal('{{ produto.imagem.url }}', '{{ produto.nome }}')"
+                                                 data-bs-toggle="modal" 
+                                                 data-bs-target="#photoModal">
+                                        </div>
                                         {% else %}
-                                        <div class="bg-light text-muted d-flex align-items-center justify-content-center rounded" 
-                                             style="width: 45px; height: 45px;">
-                                            <i class="bi bi-image small"></i>
+                                        <div class="bg-light text-muted d-flex align-items-center justify-content-center rounded border" 
+                                             style="width: 48px; height: 48px;">
+                                            <i class="bi bi-image fs-5"></i>
                                         </div>
                                         {% endif %}
                                     </td>
@@ -149,21 +155,21 @@
                                     </td>
                                     <td class="text-center">
                                         {% if produto.ativo %}
-                                        <span class="badge rounded-pill bg-success-subtle text-success border border-success">Ativo</span>
+                                        <span class="badge bg-success-subtle text-success border border-success-subtle">Ativo</span>
                                         {% else %}
-                                        <span class="badge rounded-pill bg-secondary-subtle text-secondary border border-secondary">Inativo</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle">Inativo</span>
                                         {% endif %}
                                     </td>
-                                    <td class="text-center">
-                                        <div class="btn-group btn-group-sm shadow-sm">
+                                    <td class="text-end">
+                                        <div class="d-flex justify-content-end gap-2">
                                             <a href="{% url 'estoque:detalhes_produto' produto.id %}" 
-                                               class="btn btn-outline-info"
+                                               class="btn btn-sm btn-outline-primary"
                                                title="Ver detalhes">
                                                 <i class="bi bi-eye"></i>
                                             </a>
                                             {% if perms.estoque.change_produto %}
                                             <a href="{% url 'estoque:editar_produto' produto.id %}" 
-                                               class="btn btn-outline-warning"
+                                               class="btn btn-sm btn-outline-warning"
                                                title="Editar">
                                                 <i class="bi bi-pencil"></i>
                                             </a>

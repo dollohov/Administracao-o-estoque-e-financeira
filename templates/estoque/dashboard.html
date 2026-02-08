@@ -53,11 +53,11 @@
     <div class="row mb-4">
         <div class="col-12">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-lightning"></i> Ações Rápidas
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-lightning-fill me-2 text-warning"></i> Ações Rápidas
                 </div>
                 <div class="card-body">
-                    <div class="btn-group" role="group">
+                    <div class="d-flex flex-wrap gap-2">
                         {% if perms.estoque.add_movimentacaoestoque %}
                         <a href="{% url 'estoque:registrar_movimentacao' %}" class="btn btn-primary">
                             <i class="bi bi-plus-circle"></i> Nova Movimentação
@@ -65,17 +65,17 @@
                         {% endif %}
                         
                         {% if perms.estoque.add_produto %}
-                        <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-success">
+                        <a href="{% url 'estoque:cadastrar_produto' %}" class="btn btn-outline-primary">
                             <i class="bi bi-box-seam"></i> Cadastrar Produto
                         </a>
                         {% endif %}
                         
-                        <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-info">
+                        <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-outline-secondary">
                             <i class="bi bi-list-ul"></i> Ver Todos os Produtos
                         </a>
                         
                         {% if perms.estoque.view_produto %}
-                        <a href="{% url 'estoque:relatorio' %}" class="btn btn-secondary">
+                        <a href="{% url 'estoque:relatorio' %}" class="btn btn-outline-secondary">
                             <i class="bi bi-file-earmark-bar-graph"></i> Relatórios
                         </a>
                         {% endif %}
@@ -89,8 +89,8 @@
         <!-- Produtos com estoque baixo -->
         <div class="col-lg-6 mb-4">
             <div class="card">
-                <div class="card-header bg-warning text-white">
-                    <i class="bi bi-exclamation-triangle"></i> Alertas de Estoque
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill me-2 text-warning"></i> Alertas de Estoque
                 </div>
                 <div class="card-body">
                     {% if produtos_alerta %}
@@ -137,8 +137,8 @@
         <!-- Movimentações recentes -->
         <div class="col-lg-6 mb-4">
             <div class="card">
-                <div class="card-header">
-                    <i class="bi bi-clock-history"></i> Movimentações Recentes
+                <div class="card-header d-flex align-items-center">
+                    <i class="bi bi-clock-history me-2 text-primary"></i> Movimentações Recentes
                 </div>
                 <div class="card-body">
                     {% if movimentacoes_recentes %}
