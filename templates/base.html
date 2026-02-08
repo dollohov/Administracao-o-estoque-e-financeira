@@ -109,8 +109,12 @@
         }
         
         /* Garantir cor de texto em títulos e parágrafos */
-        h1, h2, h3, h4, h5, h6, p, span, label {
-            color: var(--text-main);
+        h1, h2, h3, h4, h5, h6, p, span, label, strong, b, i {
+            color: var(--text-main) !important;
+        }
+        
+        .card h1, .card h2, .card h3, .card h4, .card h5, .card h6, .card p, .card span, .card div {
+            color: var(--text-main) !important;
         }
         
         .text-muted {
@@ -156,6 +160,13 @@
             position: sticky;
             top: 0;
             z-index: 900;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-bar h4, .top-bar div, .top-bar span, .top-bar i, .top-bar small {
+            color: var(--text-main) !important;
         }
         
         .sidebar {
