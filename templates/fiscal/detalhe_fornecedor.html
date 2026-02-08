@@ -43,9 +43,9 @@
                             <hr>
                             <div class="mb-3">
                                 <label class="text-muted small d-block">Endereço</label>
-                                <span>{{ fornecedor.logradouro }}, {{ fornecedor.numero }}</span><br>
-                                <span>{{ fornecedor.bairro }} - {{ fornecedor.cidade }}/{{ fornecedor.estado }}</span><br>
-                                <span>CEP: {{ fornecedor.cep }}</span>
+                                <span>{{ fornecedor.endereco|default:"-" }}</span><br>
+                                <span>{{ fornecedor.cidade|default:"-" }}/{{ fornecedor.estado|default:"-" }}</span><br>
+                                <span>CEP: {{ fornecedor.cep|default:"-" }}</span>
                             </div>
                             <hr>
                             <div class="mb-3">

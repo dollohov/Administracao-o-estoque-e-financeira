@@ -161,12 +161,13 @@ def detalhes_produto(request, produto_id):
 
 def parse_decimal(value, default=Decimal('0.00')):
     """Auxiliar para converter string em Decimal com segurança."""
-    if not value or value.strip() == '':
+    if value is None or (isinstance(value, str) and value.strip() == ''):
         return default
     try:
-        # Substituir vírgula por ponto se necessário
-        value = value.replace(',', '.')
-        return Decimal(value)
+        if isinstance(value, str):
+            # Substituir vírgula por ponto se necessário
+            value = value.replace(',', '.')
+        return Decimal(str(value))
     except (InvalidOperation, ValueError):
         return default
 

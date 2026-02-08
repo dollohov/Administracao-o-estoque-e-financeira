@@ -406,6 +406,22 @@ class Produto(models.Model):
             volume = (self.altura_cm * self.largura_cm * self.profundidade_cm) / 1000000
             return round(volume, 6)
         return None
+
+    def get_imagem_url(self):
+        """Retorna a URL da imagem ou um placeholder se não houver imagem."""
+        if self.imagem:
+            return self.imagem.url
+        return None
+
+    def status_estoque(self):
+        """Retorna o status do estoque como string legível."""
+        if self.estoque_atual <= 0:
+            return "Sem Estoque"
+        if self.estoque_baixo():
+            return "Estoque Baixo"
+        if self.estoque_alto():
+            return "Estoque Alto"
+        return "Normal"
     
     def save(self, *args, **kwargs):
         """Sobrescreve save para calcular volume automaticamente."""

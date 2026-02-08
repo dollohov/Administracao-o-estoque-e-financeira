@@ -19,44 +19,39 @@
 
 Sistema de Planejamento de Recursos Empresariais (ERP) desenvolvido em Django com foco em **simplicidade**, **segurança** e **rastreabilidade**. Ideal para pequenas e médias empresas que precisam de controle eficiente de estoque e finanças.
 
-### ✨ Destaques da Versão 2.0
+### ✨ Destaques da Versão 3.5
 
-- ✅ **Sistema de Permissões** completo (Administradores, Gerentes, Funcionários)
-- ✅ **Rastreamento de Usuários** em todas as operações
-- ✅ **Controle de Capital de Giro** automático
-- ✅ **Cálculo de Lucros e Perdas** em tempo real
-- ✅ **Interface Visual Moderna** e responsiva
-- ✅ **Código 100% Comentado** e documentado
+- ✅ **Módulo Fiscal**: Importação automática de NF-e via XML.
+- ✅ **Catálogo de Vendedores**: Interface otimizada para consulta de vendas.
+- ✅ **Sistema de Permissões**: Grupos (Admin, Gerente, Funcionário, Vendedor).
+- ✅ **Gestão de Imagens**: Suporte a múltiplas fotos de produtos.
+- ✅ **Rastreamento de Usuários**: Auditoria completa em todas as operações.
+- ✅ **Controle de Capital de Giro**: Integrado com compras (NF-e) e vendas.
 
 ---
 
 ## 🚀 Funcionalidades
 
-### 📦 Módulo de Estoque
+### 📦 Módulo de Estoque e Catálogo
+- **Cadastro Completo**: Produtos com SKU, NCM, CEST, EAN/GTIN, dimensões e pesos.
+- **Catálogo de Vendedores**: Visualização em grade (cards) com fotos e preços.
+- **Gestão de Imagens**: Upload e gerenciamento de fotos de produtos.
+- **Alertas**: Notificações visuais para estoque baixo ou crítico.
 
-- Cadastro completo de produtos
-- Controle de entradas e saídas
-- Alertas de estoque baixo
-- Cálculo automático de margem de lucro
-- Histórico de movimentações
-- Relatórios de produtos mais vendidos
+### 📄 Módulo Fiscal
+- **Importação de NF-e**: Processamento automático de arquivos XML.
+- **Automação**: Criação de produtos e fornecedores a partir da nota fiscal.
+- **Gestão de Fornecedores**: Cadastro completo e histórico de compras.
 
 ### 💰 Módulo Financeiro
-
-- Registro de receitas e despesas
-- Gestão de capital de giro
-- Cálculo automático de lucro/prejuízo
-- Indicadores financeiros por período
-- Relatórios por categoria
-- Gráficos e visualizações
+- **Capital de Giro**: Controle em tempo real integrado ao estoque.
+- **Fluxo de Caixa**: Registro automático de despesas e receitas.
+- **Indicadores**: Margem de lucro, valor de estoque e giro de produtos.
 
 ### 🔒 Segurança e Controle
-
-- Sistema de autenticação robusto
-- Grupos de usuários com permissões específicas
-- Rastreamento completo de operações
-- Auditoria de todas as ações
-- Proteção CSRF e XSS
+- **Níveis de Acesso**: Admin, Gerente, Funcionário e Vendedor.
+- **Auditoria**: Registro de quem criou e modificou cada registro.
+- **Proteção**: Conformidade com boas práticas de segurança Django.
 
 ---
 
@@ -65,8 +60,9 @@ Sistema de Planejamento de Recursos Empresariais (ERP) desenvolvido em Django co
 | Grupo | Permissões | Ideal Para |
 |-------|-----------|------------|
 | **👑 Administradores** | Acesso total ao sistema | Proprietários, Diretores |
-| **📊 Gerentes** | Visualização + Edição limitada | Gerentes, Supervisores |
-| **👤 Funcionários** | Operações básicas de estoque | Vendedores, Operadores |
+| **📊 Gerentes** | Gestão de estoque e financeiro | Gerentes, Supervisores |
+| **👤 Funcionários** | Operações de movimentação | Operadores de Estoque |
+| **🛍️ Vendedores** | Acesso exclusivo ao Catálogo | Equipe de Vendas |
 
 ---
 
@@ -275,8 +271,8 @@ Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para ma
 ## 👨‍💻 Autor
 
 **Desenvolvido por:** Manus AI  
-**Data:** Dezembro de 2025  
-**Versão:** 2.0
+**Data:** Fevereiro de 2026  
+**Versão:** 3.5 (Estável)
 
 ---
 
