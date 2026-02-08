@@ -48,20 +48,20 @@
             --bg-body: #f3f4f6;
             --bg-card: #ffffff;
             --bg-sidebar: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
-            --text-main: #111827;
-            --text-muted: #6b7280;
-            --border-color: #e5e7eb;
-            --topbar-bg: rgba(255, 255, 255, 0.8);
+            --text-main: #000000; /* Preto Puro para máxima legibilidade */
+            --text-muted: #4b5563;
+            --border-color: #d1d5db;
+            --topbar-bg: rgba(255, 255, 255, 0.9);
         }
 
         [data-bs-theme="dark"] {
             --bg-body: #0f172a;
             --bg-card: #1e293b;
-            --bg-sidebar: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
+            --bg-sidebar: #111827;
+            --text-main: #ffffff; /* Branco Puro para máxima legibilidade */
+            --text-muted: #cbd5e1;
             --border-color: #334155;
-            --topbar-bg: rgba(30, 41, 59, 0.8);
+            --topbar-bg: rgba(15, 23, 42, 0.9);
             
             --primary-color: #3b82f6;
         }
@@ -93,7 +93,7 @@
 
         .table thead th {
             background-color: var(--bg-body);
-            color: var(--text-muted);
+            color: var(--text-muted) !important;
             text-transform: uppercase;
             font-size: 0.75rem;
             letter-spacing: 0.05em;
@@ -105,6 +105,16 @@
         .table tbody td {
             padding: 16px;
             border-bottom: 1px solid var(--border-color);
+            color: var(--text-main) !important;
+        }
+        
+        /* Garantir cor de texto em títulos e parágrafos */
+        h1, h2, h3, h4, h5, h6, p, span, label {
+            color: var(--text-main);
+        }
+        
+        .text-muted {
+            color: var(--text-muted) !important;
         }
 
         .btn-primary {
