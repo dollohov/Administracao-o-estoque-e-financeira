@@ -21,6 +21,7 @@ urlpatterns = [
     path('produtos/', views.lista_produtos, name='lista_produtos'),
     path('produtos/<int:produto_id>/', views.detalhes_produto, name='detalhes_produto'),
     path('produtos/cadastrar/', views.cadastrar_produto, name='cadastrar_produto'),
+    path('produtos/editar/<int:produto_id>/', views.editar_produto, name='editar_produto'),
     
     # Movimentações de estoque
     path('movimentacao/', views.registrar_movimentacao, name='registrar_movimentacao'),

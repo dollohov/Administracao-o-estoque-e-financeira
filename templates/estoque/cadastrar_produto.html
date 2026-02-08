@@ -1,49 +1,57 @@
 {% extends "base.html" %}
 
-{% block title %}Cadastrar Produto - Gestão ERP{% endblock %}
+{% block title %}{% if is_edit %}Editar Produto{% else %}Cadastrar Produto{% endif %} - Gestão ERP{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Cadastrar Novo Produto</h4>
+                <div class="card-header {% if is_edit %}bg-warning text-dark{% else %}bg-primary text-white{% endif %}">
+                    <h4 class="mb-0">
+                        <i class="fas {% if is_edit %}fa-edit{% else %}fa-plus-circle{% endif %} me-2"></i>
+                        {% if is_edit %}Modificar Produto: {{ produto.nome }}{% else %}Cadastrar Novo Produto{% endif %}
+                    </h4>
                 </div>
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="nome" class="form-label">Nome do Produto</label>
-                            <input type="text" class="form-control" id="nome" name="nome" required>
+                            <input type="text" class="form-control" id="nome" name="nome" value="{{ produto.nome|default:'' }}" required>
                         </div>
                         <div class="mb-3">
                             <label for="descricao" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="descricao" name="descricao" rows="3"></textarea>
+                            <textarea class="form-control" id="descricao" name="descricao" rows="3">{{ produto.descricao|default:'' }}</textarea>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label for="preco_custo" class="form-label">Preço de Custo (R$)</label>
-                                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" required>
+                                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="{{ produto.preco_custo|stringformat:'.2f'|default:'' }}" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="preco_venda" class="form-label">Preço de Venda (R$)</label>
-                                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" required>
+                                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" value="{{ produto.preco_venda|stringformat:'.2f'|default:'' }}" required>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label for="estoque_inicial" class="form-label">Estoque Inicial</label>
-                                <input type="number" class="form-control" id="estoque_inicial" name="estoque_inicial" value="0">
+                                <label for="estoque_inicial" class="form-label">{% if is_edit %}Estoque Atual{% else %}Estoque Inicial{% endif %}</label>
+                                <input type="number" class="form-control" id="estoque_inicial" name="estoque_inicial" value="{{ produto.estoque_atual|default:'0' }}" {% if is_edit %}readonly{% endif %}>
+                                {% if is_edit %}
+                                <small class="text-muted">Para alterar o estoque, utilize o módulo de Movimentações.</small>
+                                {% endif %}
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label for="estoque_minimo" class="form-label">Estoque Mínimo</label>
-                                <input type="number" class="form-control" id="estoque_minimo" name="estoque_minimo" value="10">
+                                <input type="number" class="form-control" id="estoque_minimo" name="estoque_minimo" value="{{ produto.estoque_minimo|default:'10' }}">
                             </div>
                         </div>
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
                             <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-secondary me-md-2">Cancelar</a>
-                            <button type="submit" class="btn btn-primary">Salvar Produto</button>
+                            <button type="submit" class="btn {% if is_edit %}btn-warning{% else %}btn-primary{% endif %}">
+                                {% if is_edit %}Salvar Alterações{% else %}Salvar Produto{% endif %}
+                            </button>
                         </div>
                     </form>
                 </div>

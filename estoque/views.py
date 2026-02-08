@@ -212,6 +212,58 @@ def cadastrar_produto(request):
 
 
 @login_required
+@permission_required('estoque.change_produto', raise_exception=True)
+def editar_produto(request, produto_id):
+    """
+    View para editar um produto existente.
+    
+    Args:
+        request: Objeto HttpRequest do Django
+        produto_id (int): ID do produto a ser editado
+        
+    Returns:
+        HttpResponse: Renderiza formulário preenchido ou redireciona após salvar
+    """
+    produto = get_object_or_404(Produto, pk=produto_id)
+    
+    if request.method == 'POST':
+        try:
+            # Atualizar dados do produto
+            produto.nome = request.POST.get('nome')
+            produto.descricao = request.POST.get('descricao', '')
+            produto.preco_custo = request.POST.get('preco_custo')
+            produto.preco_venda = request.POST.get('preco_venda')
+            produto.estoque_minimo = request.POST.get('estoque_minimo', 10)
+            produto.usuario_modificacao = request.user
+            
+            # O estoque_atual geralmente não deve ser editado diretamente aqui 
+            # para manter a integridade das movimentações, mas se o usuário 
+            # desejar, podemos permitir. Por enquanto, mantemos a lógica de segurança.
+            
+            produto.save()
+            
+            messages.success(
+                request,
+                f'Produto "{produto.nome}" atualizado com sucesso!'
+            )
+            
+            return redirect('estoque:lista_produtos')
+            
+        except Exception as e:
+            messages.error(
+                request,
+                f'Erro ao atualizar produto: {str(e)}'
+            )
+    
+    context = {
+        'produto': produto,
+        'is_edit': True
+    }
+    
+    return render(request, 'estoque/cadastrar_produto.html', context)
+
+
+@login_required
 @permission_required('estoque.add_movimentacaoestoque', raise_exception=True)
 def registrar_movimentacao(request):
     """
