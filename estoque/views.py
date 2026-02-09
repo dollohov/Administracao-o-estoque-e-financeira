@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 from decimal import Decimal, InvalidOperation
 import os
 from .models import Produto, MovimentacaoEstoque
+from .services import EstoqueService
 from financeiro.models import CapitalGiro
 from fornecedores.models import Fornecedor
 
@@ -303,40 +304,20 @@ def registrar_movimentacao(request):
             valor_unitario = float(request.POST.get('valor_unitario'))
             observacao = request.POST.get('observacao', '')
             
-            # Obter o produto
-            produto = get_object_or_404(Produto, pk=produto_id)
-            
-            # Criar a movimentação
-            movimentacao = MovimentacaoEstoque(
-                produto=produto,
+            # Chamar o serviço para registrar a movimentação (estoque + financeiro)
+            movimentacao = EstoqueService.registrar_movimentacao(
+                produto_id=produto_id,
                 tipo=tipo,
                 quantidade=quantidade,
                 valor_unitario=valor_unitario,
-                observacao=observacao,
-                usuario=request.user
+                usuario=request.user,
+                observacao=observacao
             )
-            movimentacao.save()
-            
-            # Atualizar capital de giro
-            valor_total = movimentacao.calcular_valor_total()
-            
-            if tipo == 'ENTRADA':
-                CapitalGiro.retirar_capital(
-                    valor=valor_total,
-                    descricao=f'Compra de {quantidade}x {produto.nome}',
-                    usuario=request.user
-                )
-            elif tipo == 'SAIDA':
-                CapitalGiro.adicionar_capital(
-                    valor=valor_total,
-                    descricao=f'Venda de {quantidade}x {produto.nome}',
-                    usuario=request.user
-                )
             
             messages.success(
                 request,
                 f'Movimentação registrada com sucesso! '
-                f'{tipo} de {quantidade}x {produto.nome}'
+                f'{tipo} de {quantidade}x {movimentacao.produto.nome}'
             )
             
             return redirect('estoque:dashboard')
