@@ -96,23 +96,23 @@
                                     Preço de Custo (R$)
                                     <i class="bi bi-question-circle text-muted ms-1" data-bs-toggle="tooltip" title="Quanto você pagou pelo produto. Usado para calcular seu lucro real."></i>
                                 </label>
-                                <input type="number" step="0.01" class="form-control" id="preco_custo" name="preco_custo" value="{{ produto.preco_custo|stringformat:'.2f'|default:'' }}" required>
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="preco_custo" name="preco_custo" value="{{ produto.preco_custo|stringformat:'.2f'|default:'' }}" required>
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="preco_venda" class="form-label">Preço de Venda (R$)</label>
-                                <input type="number" step="0.01" class="form-control" id="preco_venda" name="preco_venda" value="{{ produto.preco_venda|stringformat:'.2f'|default:'' }}" required>
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="preco_venda" name="preco_venda" value="{{ produto.preco_venda|stringformat:'.2f'|default:'' }}" required>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label for="estoque_inicial" class="form-label">{% if is_edit %}Estoque Atual{% else %}Estoque Inicial{% endif %}</label>
-                                <input type="number" class="form-control" id="estoque_inicial" name="estoque_inicial" value="{{ produto.estoque_atual|default:'0' }}" {% if is_edit %}readonly{% endif %}>
+                                <input type="number" inputmode="decimal" class="form-control" id="estoque_inicial" name="estoque_inicial" value="{{ produto.estoque_atual|default:'0' }}" {% if is_edit %}readonly{% endif %}>
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label for="estoque_minimo" class="form-label">Estoque Mínimo</label>
-                                <input type="number" class="form-control" id="estoque_minimo" name="estoque_minimo" value="{{ produto.estoque_minimo|default:'10' }}">
+                                <input type="number" inputmode="decimal" class="form-control" id="estoque_minimo" name="estoque_minimo" value="{{ produto.estoque_minimo|default:'10' }}">
                             </div>
                             <div class="col-md-2 mb-3">
                                 <label for="estoque_maximo" class="form-label">Estoque Máximo</label>
-                                <input type="number" class="form-control" id="estoque_maximo" name="estoque_maximo" value="{{ produto.estoque_maximo|default:'100' }}">
+                                <input type="number" inputmode="decimal" class="form-control" id="estoque_maximo" name="estoque_maximo" value="{{ produto.estoque_maximo|default:'100' }}">
                             </div>
                         </div>
 
@@ -126,19 +126,19 @@
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="peso_kg" class="form-label">Peso (kg)</label>
-                                <input type="number" step="0.001" class="form-control" id="peso_kg" name="peso_kg" value="{{ produto.peso_kg|stringformat:'.3f'|default:'' }}">
+                                <input type="number" step="0.001" inputmode="decimal" class="form-control" id="peso_kg" name="peso_kg" value="{{ produto.peso_kg|stringformat:'.3f'|default:'' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="altura_cm" class="form-label">Altura (cm)</label>
-                                <input type="number" step="0.01" class="form-control" id="altura_cm" name="altura_cm" value="{{ produto.altura_cm|stringformat:'.2f'|default:'' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="altura_cm" name="altura_cm" value="{{ produto.altura_cm|stringformat:'.2f'|default:'' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="largura_cm" class="form-label">Largura (cm)</label>
-                                <input type="number" step="0.01" class="form-control" id="largura_cm" name="largura_cm" value="{{ produto.largura_cm|stringformat:'.2f'|default:'' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="largura_cm" name="largura_cm" value="{{ produto.largura_cm|stringformat:'.2f'|default:'' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="profundidade_cm" class="form-label">Profundidade (cm)</label>
-                                <input type="number" step="0.01" class="form-control" id="profundidade_cm" name="profundidade_cm" value="{{ produto.profundidade_cm|stringformat:'.2f'|default:'' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="profundidade_cm" name="profundidade_cm" value="{{ produto.profundidade_cm|stringformat:'.2f'|default:'' }}">
                             </div>
                             <div class="col-md-12 mb-3">
                                 <label for="localizacao_estoque" class="form-label">Localização no Estoque</label>
@@ -156,85 +156,28 @@
                         <div class="row">
                             <div class="col-md-3 mb-3">
                                 <label for="icms_aliquota" class="form-label">ICMS (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="icms_aliquota" name="icms_aliquota" value="{{ produto.icms_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="icms_aliquota" name="icms_aliquota" value="{{ produto.icms_aliquota|stringformat:'.2f'|default:'0.00' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="ipi_aliquota" class="form-label">IPI (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="ipi_aliquota" name="ipi_aliquota" value="{{ produto.ipi_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="ipi_aliquota" name="ipi_aliquota" value="{{ produto.ipi_aliquota|stringformat:'.2f'|default:'0.00' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="pis_aliquota" class="form-label">PIS (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="pis_aliquota" name="pis_aliquota" value="{{ produto.pis_aliquota|stringformat:'.2f'|default:'0.00' }}">
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="pis_aliquota" name="pis_aliquota" value="{{ produto.pis_aliquota|stringformat:'.2f'|default:'0.00' }}">
                             </div>
                             <div class="col-md-3 mb-3">
                                 <label for="cofins_aliquota" class="form-label">COFINS (%)</label>
-                                <input type="number" step="0.01" class="form-control" id="cofins_aliquota" name="cofins_aliquota" value="{{ produto.cofins_aliquota|stringformat:'.2f'|default:'0.00' }}">
-                            </div>
-                        </div>
-
-                        <!-- Seção 6: Outros -->
-                        <div class="d-flex align-items-center mb-3 mt-4">
-                            <div class="bg-primary-subtle p-2 rounded-circle me-3">
-                                <i class="bi bi-gear-fill text-primary"></i>
-                            </div>
-                            <h5 class="mb-0 fw-bold">Outras Informações</h5>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label for="fornecedor" class="form-label">Fornecedor Principal</label>
-                                <select class="form-select" id="fornecedor" name="fornecedor">
-                                    <option value="">---------</option>
-                                    {% for f in fornecedores %}
-                                    <option value="{{ f.id }}" {% if produto.fornecedor.id == f.id %}selected{% endif %}>{{ f.nome }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label for="imagem" class="form-label">{% if produto.imagem %}Alterar Imagem{% else %}Imagem do Produto{% endif %}</label>
-                                <input type="file" class="form-control" id="imagem" name="imagem" accept="image/*">
-                                {% if produto.imagem %}
-                                <div class="mt-3 p-3 border rounded bg-light" id="currentImageContainer">
-                                    <p class="small fw-bold mb-2 text-muted">Imagem Atual:</p>
-                                    <div class="d-flex align-items-center gap-3">
-                                        <img src="{{ produto.imagem.url }}" alt="{{ produto.nome }}" class="img-thumbnail" style="max-height: 100px;">
-                                        <div>
-                                            <a href="{{ produto.imagem.url }}" target="_blank" class="btn btn-sm btn-outline-info mb-2 d-block">
-                                                <i class="fas fa-external-link-alt"></i> Ver em tamanho real
-                                            </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger d-block" onclick="removerFoto()">
-                                                <i class="fas fa-trash-alt"></i> Remover Foto
-                                            </button>
-                                        </div>
-                                    </div>
-                                    <div id="removerAviso" class="alert alert-warning mt-2 py-1 px-2 small d-none">
-                                        <i class="fas fa-exclamation-triangle"></i> A foto será removida ao salvar.
-                                    </div>
-                                </div>
-                                {% endif %}
-                            </div>
-                        </div>
-
-                        <div class="row mt-3">
-                            <div class="col-md-6">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="visivel_catalogo" name="visivel_catalogo" {% if produto.visivel_catalogo|default:True %}checked{% endif %}>
-                                    <label class="form-check-label" for="visivel_catalogo">Visível no Catálogo</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" id="ativo" name="ativo" {% if produto.ativo|default:True %}checked{% endif %}>
-                                    <label class="form-check-label" for="ativo">Produto Ativo</label>
-                                </div>
+                                <input type="number" step="0.01" inputmode="decimal" class="form-control" id="cofins_aliquota" name="cofins_aliquota" value="{{ produto.cofins_aliquota|stringformat:'.2f'|default:'0.00' }}">
                             </div>
                         </div>
 
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4 pt-3 border-top">
                             <a href="{% url 'estoque:lista_produtos' %}" class="btn btn-secondary me-md-2">
-                                <i class="fas fa-times me-1"></i> Cancelar
+                                <i class="bi bi-x-lg me-1"></i> Cancelar
                             </a>
                             <button type="submit" class="btn {% if is_edit %}btn-warning{% else %}btn-primary{% endif %}">
-                                <i class="fas fa-save me-1"></i> {% if is_edit %}Salvar Alterações{% else %}Salvar Produto{% endif %}
+                                <i class="bi bi-check-lg me-1"></i> {% if is_edit %}Salvar Alterações{% else %}Salvar Produto{% endif %}
                             </button>
                         </div>
                     </form>
@@ -243,14 +186,23 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/imask"></script>
 <script>
-function removerFoto() {
-    if (confirm('Tem certeza que deseja remover a foto deste produto?')) {
-        document.getElementById('remover_imagem').value = 'true';
-        document.getElementById('removerAviso').classList.remove('d-none');
-        document.getElementById('currentImageContainer').style.opacity = '0.5';
-    }
-}
+    document.addEventListener('DOMContentLoaded', function() {
+        // Máscara para NCM (0000.00.00)
+        const ncmEl = document.getElementById('ncm');
+        if (ncmEl) {
+            IMask(ncmEl, { mask: '0000.00.00' });
+        }
+
+        // Máscara para Código de Barras (EAN-13)
+        const eanEl = document.getElementById('ean_gtin');
+        if (eanEl) {
+            IMask(eanEl, { mask: '0000000000000' });
+        }
+    });
 </script>
 {% endblock %}

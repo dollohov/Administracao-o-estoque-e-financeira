@@ -8,9 +8,11 @@ Autor: Manus AI
 Data: 2025-12-02
 """
 
-from django.db import models
+from django.db import models, transaction
+from django.db.models import F
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from decimal import Decimal
 
 
@@ -342,10 +344,21 @@ class Produto(models.Model):
             models.Index(fields=['categoria']),
             models.Index(fields=['visivel_catalogo', 'ativo']),
         ]
-    
     def __str__(self):
-        """Retorna representação em string do produto."""
+        """Retorna o nome do produto como representação em string."""
         return f"{self.nome} (SKU: {self.sku})" if self.sku else self.nome
+
+    def clean(self):
+        """Validações customizadas para o modelo Produto."""
+        super().clean()
+        if self.ncm:
+            # Remover caracteres não numéricos
+            ncm_limpo = ''.join(filter(str.isdigit, self.ncm))
+            if len(ncm_limpo) != 8:
+                raise ValidationError({
+                    'ncm': 'O NCM deve possuir exatamente 8 dígitos numéricos.'
+                })
+            self.ncm = ncm_limpo
     
     def calcular_margem_lucro(self):
         """
@@ -533,32 +546,34 @@ class MovimentacaoEstoque(models.Model):
     def save(self, *args, **kwargs):
         """
         Sobrescreve o método save para atualizar o estoque automaticamente.
-        
-        Ao salvar uma movimentação:
-        - ENTRADA: adiciona ao estoque
-        - SAIDA: subtrai do estoque
+        Utiliza transações atômicas e F expressions para garantir consistência.
         """
-        # Verificar se é uma nova movimentação
         is_new = self.pk is None
         
         if is_new:
-            # Atualizar estoque do produto
-            if self.tipo == 'ENTRADA':
-                self.produto.estoque_atual += self.quantidade
-            elif self.tipo == 'SAIDA':
-                # Verificar se há estoque suficiente
-                if self.produto.estoque_atual < self.quantidade:
-                    raise ValueError(
-                        f"Estoque insuficiente! Disponível: {self.produto.estoque_atual}, "
-                        f"Solicitado: {self.quantidade}"
-                    )
-                self.produto.estoque_atual -= self.quantidade
-            
-            # Salvar o produto com o estoque atualizado
-            self.produto.save()
-        
-        # Salvar a movimentação
-        super().save(*args, **kwargs)
+            with transaction.atomic():
+                # Bloquear o registro do produto para atualização (select_for_update)
+                produto = Produto.objects.select_for_update().get(pk=self.produto.pk)
+                
+                if self.tipo == 'ENTRADA':
+                    produto.estoque_atual = F('estoque_atual') + self.quantidade
+                elif self.tipo == 'SAIDA':
+                    # Verificação de segurança antes da F expression
+                    if produto.estoque_atual < self.quantidade:
+                        raise ValueError(
+                            f"Estoque insuficiente! Disponível: {produto.estoque_atual}, "
+                            f"Solicitado: {self.quantidade}"
+                        )
+                    produto.estoque_atual = F('estoque_atual') - self.quantidade
+                
+                produto.save()
+                # Atualizar a instância local para refletir a mudança (opcional mas boa prática)
+                produto.refresh_from_db()
+                self.produto = produto
+                
+                super().save(*args, **kwargs)
+        else:
+            super().save(*args, **kwargs)
 
 
 # Importar modelos estendidos

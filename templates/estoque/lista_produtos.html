@@ -106,10 +106,10 @@
                                 <tr>
                                     <th style="width: 60px;">Foto</th>
                                     <th>Produto</th>
-                                    <th>Categoria/Marca</th>
+                                    <th class="d-none d-md-table-cell">Categoria/Marca</th>
                                     <th class="text-end">Preço Venda</th>
                                     <th class="text-center">Estoque</th>
-                                    <th class="text-center">Status</th>
+                                    <th class="text-center d-none d-md-table-cell">Status</th>
                                     <th class="text-center">Ações</th>
                                 </tr>
                             </thead>
@@ -136,9 +136,9 @@
                                     </td>
                                     <td>
                                         <div class="fw-bold">{{ produto.nome }}</div>
-                                        <div class="small text-muted">SKU: {{ produto.sku|default:"---" }}</div>
+                                        <div class="small text-muted d-none d-md-block">SKU: {{ produto.sku|default:"---" }}</div>
                                     </td>
-                                    <td>
+                                    <td class="d-none d-md-table-cell">
                                         <span class="badge bg-light text-dark border">{{ produto.categoria|default:"Sem Categoria" }}</span>
                                         <br>
                                         <small class="text-muted">{{ produto.marca|default:"Sem Marca" }}</small>
@@ -153,7 +153,7 @@
                                         <span class="badge bg-success">{{ produto.estoque_atual }}</span>
                                         {% endif %}
                                     </td>
-                                    <td class="text-center">
+                                    <td class="text-center d-none d-md-table-cell">
                                         {% if produto.ativo %}
                                         <span class="badge bg-success-subtle text-success border border-success-subtle">Ativo</span>
                                         {% else %}

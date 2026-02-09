@@ -241,7 +241,6 @@ def cadastrar_produto(request):
     return render(request, 'estoque/cadastrar_produto.html', {'fornecedores': fornecedores})
 
 
-@login_required
 @permission_required('estoque.change_produto', raise_exception=True)
 def editar_produto(request, produto_id):
     """
@@ -290,7 +289,6 @@ def editar_produto(request, produto_id):
     return render(request, 'estoque/cadastrar_produto.html', context)
 
 
-@login_required
 @permission_required('estoque.add_movimentacaoestoque', raise_exception=True)
 def registrar_movimentacao(request):
     """
@@ -344,7 +342,7 @@ def registrar_movimentacao(request):
             return redirect('estoque:dashboard')
             
         except ValueError as e:
-            messages.error(request, str(e))
+            messages.error(request, f"Falha na Transação: {str(e)}")
         except Exception as e:
             messages.error(
                 request,

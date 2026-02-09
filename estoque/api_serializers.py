@@ -54,8 +54,6 @@ class ProdutoListaSerializer(serializers.ModelSerializer):
 class ProdutoDetalheSerializer(serializers.ModelSerializer):
     """
     Serializer detalhado para consulta completa de um produto.
-    
-    Inclui todas as informações fiscais, logísticas e de estoque.
     """
     
     margem_lucro = serializers.SerializerMethodField()
@@ -63,44 +61,41 @@ class ProdutoDetalheSerializer(serializers.ModelSerializer):
     valor_total_estoque = serializers.SerializerMethodField()
     fornecedor_nome = serializers.CharField(source='fornecedor.nome', read_only=True)
     
+    # Campo para autorização explícita de venda abaixo do custo
+    autorizar_venda_abaixo_custo = serializers.BooleanField(write_only=True, default=False)
+    
     class Meta:
         model = Produto
         fields = [
-            'id',
-            'nome',
-            'descricao',
-            'sku',
-            'ncm',
-            'cest',
-            'ean_gtin',
-            'preco_custo',
-            'preco_venda',
-            'margem_lucro',
-            'lucro_unitario',
-            'estoque_atual',
-            'estoque_minimo',
-            'estoque_maximo',
-            'valor_total_estoque',
-            'categoria',
-            'subcategoria',
-            'marca',
-            'fornecedor_nome',
-            'peso_kg',
-            'altura_cm',
-            'largura_cm',
-            'profundidade_cm',
-            'volume_m3',
-            'localizacao_estoque',
-            'icms_aliquota',
-            'ipi_aliquota',
-            'pis_aliquota',
-            'cofins_aliquota',
-            'imagem',
-            'visivel_catalogo',
-            'ativo',
-            'data_criacao',
-            'data_modificacao'
+            'id', 'nome', 'descricao', 'sku', 'ncm', 'cest', 'ean_gtin',
+            'preco_custo', 'preco_venda', 'margem_lucro', 'lucro_unitario',
+            'estoque_atual', 'estoque_minimo', 'estoque_maximo',
+            'valor_total_estoque', 'categoria', 'subcategoria', 'marca',
+            'fornecedor_nome', 'peso_kg', 'altura_cm', 'largura_cm',
+            'profundidade_cm', 'volume_m3', 'localizacao_estoque',
+            'icms_aliquota', 'ipi_aliquota', 'pis_aliquota', 'cofins_aliquota',
+            'imagem', 'visivel_catalogo', 'ativo', 'data_criacao', 'data_modificacao',
+            'autorizar_venda_abaixo_custo'
         ]
+
+    def validate(self, data):
+        """Validação customizada para impedir preço de venda menor que custo."""
+        preco_venda = data.get('preco_venda')
+        preco_custo = data.get('preco_custo')
+        autorizado = data.get('autorizar_venda_abaixo_custo', False)
+
+        # Se for um update parcial, buscar valores existentes
+        if self.instance:
+            preco_venda = preco_venda if preco_venda is not None else self.instance.preco_venda
+            preco_custo = preco_custo if preco_custo is not None else self.instance.preco_custo
+
+        if preco_venda is not None and preco_custo is not None:
+            if preco_venda < preco_custo and not autorizado:
+                raise serializers.ValidationError({
+                    "preco_venda": "O preço de venda não pode ser menor que o preço de custo sem autorização explícita."
+                })
+        
+        return data
     
     def get_margem_lucro(self, obj):
         """Calcula a margem de lucro."""
