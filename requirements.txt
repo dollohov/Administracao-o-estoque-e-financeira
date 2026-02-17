@@ -1,1 +1,9 @@
-pip @ file:///build/pip-24.3.1-py3-none-any.whl
+Django>=4.2
+gunicorn
+dj-database-url
+python-decouple
+whitenoise
+djangorestframework
+django-filter
+django-cors-headers
+psycopg2-binary
