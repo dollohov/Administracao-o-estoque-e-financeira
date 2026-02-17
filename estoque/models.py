@@ -14,29 +14,31 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
+from companies.models import Company
 
 
 class Produto(models.Model):
     """
     Modelo que representa um produto no sistema de estoque.
     
-    Inclui informações fiscais, logísticas e de catálogo para integração
-    com o sistema de vendas e conformidade com legislação brasileira.
-    
-    Attributes:
-        nome (str): Nome do produto (máximo 200 caracteres)
-        descricao (str): Descrição detalhada do produto (opcional)
-        preco_custo (Decimal): Preço de custo do produto
-        preco_venda (Decimal): Preço de venda do produto
-        estoque_atual (int): Quantidade atual em estoque
-        estoque_minimo (int): Quantidade mínima de estoque (alerta)
-        sku (str): Código interno único
-        ncm (str): Nomenclatura Comum do Mercosul (8 dígitos)
-        cest (str): Código Especificador da Substituição Tributária (7 dígitos)
-        ean_gtin (str): Código de barras EAN-13 ou EAN-14
-        ativo (bool): Indica se o produto está ativo no sistema
+    Isolamento de dados (Multi-tenancy):
+    Todos os produtos pertencem a uma empresa específica.
     """
     
+    # =============================================================================
+    # ISOLAMENTO DE DADOS (Multi-tenancy)
+    # =============================================================================
+    
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='produtos',
+        verbose_name="Empresa",
+        help_text="Empresa proprietária deste produto",
+        null=True,
+        blank=True
+    )
+
     # =============================================================================
     # INFORMAÇÕES BÁSICAS DO PRODUTO
     # =============================================================================
@@ -107,7 +109,6 @@ class Produto(models.Model):
         max_length=100,
         blank=True,
         null=True,
-        unique=True,
         verbose_name="SKU (Código Interno)",
         help_text="Código único para identificação do produto na empresa"
     )
@@ -186,7 +187,7 @@ class Produto(models.Model):
         decimal_places=6,
         blank=True,
         null=True,
-        verbose_name="Volume (m³)",
+        verbose_name="Volume (m3)",
         help_text="Volume do produto em metros cúbicos (calculado automaticamente)"
     )
     
@@ -337,22 +338,21 @@ class Produto(models.Model):
         verbose_name = "Produto"
         verbose_name_plural = "Produtos"
         ordering = ['nome']
+        unique_together = [['company', 'sku']]
         indexes = [
-            models.Index(fields=['sku']),
+            models.Index(fields=['company', 'sku']),
             models.Index(fields=['ncm']),
             models.Index(fields=['ean_gtin']),
             models.Index(fields=['categoria']),
             models.Index(fields=['visivel_catalogo', 'ativo']),
         ]
+
     def __str__(self):
-        """Retorna o nome do produto como representação em string."""
         return f"{self.nome} (SKU: {self.sku})" if self.sku else self.nome
 
     def clean(self):
-        """Validações customizadas para o modelo Produto."""
         super().clean()
         if self.ncm:
-            # Remover caracteres não numéricos
             ncm_limpo = ''.join(filter(str.isdigit, self.ncm))
             if len(ncm_limpo) != 8:
                 raise ValidationError({
@@ -361,73 +361,35 @@ class Produto(models.Model):
             self.ncm = ncm_limpo
     
     def calcular_margem_lucro(self):
-        """
-        Calcula a margem de lucro do produto.
-        
-        Returns:
-            Decimal: Percentual de margem de lucro
-        """
         if self.preco_custo > 0:
             margem = ((self.preco_venda - self.preco_custo) / self.preco_custo) * 100
             return round(margem, 2)
         return Decimal('0.00')
     
     def calcular_lucro_unitario(self):
-        """
-        Calcula o lucro unitário do produto.
-        
-        Returns:
-            Decimal: Valor do lucro por unidade
-        """
         return self.preco_venda - self.preco_custo
     
     def estoque_baixo(self):
-        """
-        Verifica se o estoque está abaixo do mínimo.
-        
-        Returns:
-            bool: True se estoque atual < estoque mínimo
-        """
         return self.estoque_atual < self.estoque_minimo
     
     def estoque_alto(self):
-        """
-        Verifica se o estoque está acima do máximo.
-        
-        Returns:
-            bool: True se estoque atual > estoque máximo
-        """
         return self.estoque_atual > self.estoque_maximo
     
     def valor_total_estoque(self):
-        """
-        Calcula o valor total do estoque atual (custo).
-        
-        Returns:
-            Decimal: Valor total investido no estoque deste produto
-        """
         return self.preco_custo * self.estoque_atual
     
     def calcular_volume(self):
-        """
-        Calcula o volume do produto automaticamente.
-        
-        Returns:
-            Decimal: Volume em m³
-        """
         if self.altura_cm and self.largura_cm and self.profundidade_cm:
             volume = (self.altura_cm * self.largura_cm * self.profundidade_cm) / 1000000
             return round(volume, 6)
         return None
 
     def get_imagem_url(self):
-        """Retorna a URL da imagem ou um placeholder se não houver imagem."""
         if self.imagem:
             return self.imagem.url
         return None
 
     def status_estoque(self):
-        """Retorna o status do estoque como string legível."""
         if self.estoque_atual <= 0:
             return "Sem Estoque"
         if self.estoque_baixo():
@@ -437,7 +399,6 @@ class Produto(models.Model):
         return "Normal"
     
     def save(self, *args, **kwargs):
-        """Sobrescreve save para calcular volume automaticamente."""
         if self.altura_cm and self.largura_cm and self.profundidade_cm:
             self.volume_m3 = self.calcular_volume()
         super().save(*args, **kwargs)
@@ -446,49 +407,32 @@ class Produto(models.Model):
 class MovimentacaoEstoque(models.Model):
     """
     Modelo que registra as movimentações de estoque (entradas e saídas).
-    
-    Cada movimentação afeta o estoque atual do produto e pode gerar
-    impactos financeiros (receitas em vendas, custos em compras).
-    
-    Attributes:
-        produto (Produto): Produto relacionado à movimentação
-        tipo (str): Tipo de movimentação (ENTRADA ou SAIDA)
-        quantidade (int): Quantidade movimentada
-        valor_unitario (Decimal): Valor unitário da movimentação
-        observacao (str): Observações sobre a movimentação
-        usuario (User): Usuário responsável pela movimentação
-        data_movimentacao (datetime): Data e hora da movimentação
     """
     
-    # Tipos de movimentação possíveis
     TIPO_MOVIMENTACAO = (
-        ('ENTRADA', 'Entrada'),  # Compra, devolução de cliente, etc.
-        ('SAIDA', 'Saída'),      # Venda, perda, devolução ao fornecedor, etc.
+        ('ENTRADA', 'Entrada'),
+        ('SAIDA', 'Saída'),
     )
     
-    # Relacionamento com o produto
     produto = models.ForeignKey(
         Produto,
-        on_delete=models.PROTECT,  # Não permite deletar produto com movimentações
+        on_delete=models.PROTECT,
         related_name='movimentacoes',
         verbose_name="Produto"
     )
     
-    # Tipo de movimentação
     tipo = models.CharField(
         max_length=7,
         choices=TIPO_MOVIMENTACAO,
         verbose_name="Tipo de Movimentação"
     )
     
-    # Quantidade movimentada
     quantidade = models.IntegerField(
         validators=[MinValueValidator(1)],
         verbose_name="Quantidade",
         help_text="Quantidade de itens movimentados"
     )
     
-    # Valor unitário da movimentação
     valor_unitario = models.DecimalField(
         max_digits=10,
         decimal_places=2,
@@ -497,7 +441,6 @@ class MovimentacaoEstoque(models.Model):
         help_text="Valor unitário do produto nesta movimentação"
     )
     
-    # Observações
     observacao = models.TextField(
         blank=True,
         null=True,
@@ -505,7 +448,6 @@ class MovimentacaoEstoque(models.Model):
         help_text="Informações adicionais sobre a movimentação"
     )
     
-    # Rastreamento de usuário
     usuario = models.ForeignKey(
         User,
         on_delete=models.PROTECT,
@@ -515,7 +457,6 @@ class MovimentacaoEstoque(models.Model):
         help_text="Usuário que realizou a movimentação"
     )
     
-    # Data da movimentação
     data_movimentacao = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Data da Movimentação"
@@ -524,41 +465,28 @@ class MovimentacaoEstoque(models.Model):
     class Meta:
         verbose_name = "Movimentação de Estoque"
         verbose_name_plural = "Movimentações de Estoque"
-        ordering = ['-data_movimentacao']  # Mais recentes primeiro
+        ordering = ['-data_movimentacao']
         indexes = [
             models.Index(fields=['produto', '-data_movimentacao']),
             models.Index(fields=['tipo', '-data_movimentacao']),
         ]
     
     def __str__(self):
-        """Retorna representação em string da movimentação."""
         return f"{self.tipo} de {self.quantidade}x {self.produto.nome}"
     
     def calcular_valor_total(self):
-        """
-        Calcula o valor total da movimentação.
-        
-        Returns:
-            Decimal: Quantidade × Valor Unitário
-        """
         return self.quantidade * self.valor_unitario
     
     def save(self, *args, **kwargs):
-        """
-        Sobrescreve o método save para atualizar o estoque automaticamente.
-        Utiliza transações atômicas e F expressions para garantir consistência.
-        """
         is_new = self.pk is None
         
         if is_new:
             with transaction.atomic():
-                # Bloquear o registro do produto para atualização (select_for_update)
                 produto = Produto.objects.select_for_update().get(pk=self.produto.pk)
                 
                 if self.tipo == 'ENTRADA':
                     produto.estoque_atual = F('estoque_atual') + self.quantidade
                 elif self.tipo == 'SAIDA':
-                    # Verificação de segurança antes da F expression
                     if produto.estoque_atual < self.quantidade:
                         raise ValueError(
                             f"Estoque insuficiente! Disponível: {produto.estoque_atual}, "
@@ -567,7 +495,6 @@ class MovimentacaoEstoque(models.Model):
                     produto.estoque_atual = F('estoque_atual') - self.quantidade
                 
                 produto.save()
-                # Atualizar a instância local para refletir a mudança (opcional mas boa prática)
                 produto.refresh_from_db()
                 self.produto = produto
                 
@@ -576,5 +503,8 @@ class MovimentacaoEstoque(models.Model):
             super().save(*args, **kwargs)
 
 
-# Importar modelos estendidos
-from .models_extended import CategoriaProduto, ProdutoAtributo, ImagemProduto
+# Importar modelos estendidos se existirem
+try:
+    from .models_extended import CategoriaProduto, ProdutoAtributo, ImagemProduto
+except ImportError:
+    pass

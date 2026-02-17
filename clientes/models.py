@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from companies.models import Company
 from django.core.validators import RegexValidator
 
 class Cliente(models.Model):
@@ -52,10 +53,18 @@ class Cliente(models.Model):
         ('TO', 'Tocantins'),
     ]
     
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='clientes',
+        verbose_name="Empresa",
+        null=True,
+        blank=True
+    )
     nome = models.CharField(max_length=255, db_index=True)
-    email = models.EmailField(unique=True, db_index=True)
+    email = models.EmailField(db_index=True)
     telefone = models.CharField(max_length=20, blank=True)
-    cpf_cnpj = models.CharField(max_length=20, unique=True, db_index=True)
+    cpf_cnpj = models.CharField(max_length=20, db_index=True)
     endereco = models.CharField(max_length=255, blank=True)
     cidade = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES, blank=True)
@@ -109,10 +118,11 @@ class Cliente(models.Model):
         verbose_name = 'Cliente'
         verbose_name_plural = 'Clientes'
         ordering = ['nome']
+        unique_together = [['company', 'cpf_cnpj'], ['company', 'email']]
         indexes = [
-            models.Index(fields=['nome', 'ativo']),
-            models.Index(fields=['email']),
-            models.Index(fields=['cpf_cnpj']),
+            models.Index(fields=['company', 'nome', 'ativo']),
+            models.Index(fields=['company', 'email']),
+            models.Index(fields=['company', 'cpf_cnpj']),
         ]
     
     def __str__(self):

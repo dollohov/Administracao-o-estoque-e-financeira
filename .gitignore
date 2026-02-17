@@ -1,5 +1,32 @@
+# Ambientes Virtuais
 venv/
+env/
+.env
+
+# Cache do Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Banco de Dados
 *.sqlite3
+
+# Arquivos de Sistema
 .DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+
+# Mídia e Estáticos (Produção)
+media/
+staticfiles/
+static_cdn/
+
+# Outros
+cookies.txt
+csrf_token.txt
+logged_in_page.html
+login_page.html

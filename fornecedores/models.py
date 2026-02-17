@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from companies.models import Company
 
 class Fornecedor(models.Model):
     """
@@ -51,10 +52,18 @@ class Fornecedor(models.Model):
         ('TO', 'Tocantins'),
     ]
     
+    company = models.ForeignKey(
+        Company,
+        on_delete=models.CASCADE,
+        related_name='fornecedores_app',
+        verbose_name="Empresa",
+        null=True,
+        blank=True
+    )
     nome = models.CharField(max_length=255, db_index=True)
-    email = models.EmailField(unique=True, db_index=True)
+    email = models.EmailField(db_index=True)
     telefone = models.CharField(max_length=20, blank=True)
-    cnpj = models.CharField(max_length=20, unique=True, db_index=True)
+    cnpj = models.CharField(max_length=20, db_index=True)
     endereco = models.CharField(max_length=255, blank=True)
     cidade = models.CharField(max_length=100, blank=True)
     estado = models.CharField(max_length=2, choices=ESTADO_CHOICES, blank=True)
@@ -80,10 +89,11 @@ class Fornecedor(models.Model):
         verbose_name = 'Fornecedor'
         verbose_name_plural = 'Fornecedores'
         ordering = ['nome']
+        unique_together = [['company', 'cnpj'], ['company', 'email']]
         indexes = [
-            models.Index(fields=['nome', 'ativo']),
-            models.Index(fields=['email']),
-            models.Index(fields=['cnpj']),
+            models.Index(fields=['company', 'nome', 'ativo']),
+            models.Index(fields=['company', 'email']),
+            models.Index(fields=['company', 'cnpj']),
         ]
     
     def __str__(self):

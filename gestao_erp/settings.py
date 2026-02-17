@@ -1,52 +1,36 @@
 """
 Configurações do Django para o projeto Gestão ERP.
 
-Este arquivo contém todas as configurações do projeto, incluindo:
-- Configurações de segurança
-- Aplicativos instalados
-- Middleware
-- Banco de dados
-- Internacionalização
-- Arquivos estáticos
-
-Gerado por 'django-admin startproject' usando Django 5.2.9.
-
-Para mais informações sobre este arquivo, consulte:
-https://docs.djangoproject.com/en/5.2/topics/settings/
-
-Para a lista completa de configurações e seus valores, consulte:
-https://docs.djangoproject.com/en/5.2/ref/settings/
+Este arquivo foi refatorado para usar variáveis de ambiente (python-decouple)
+e suportar configurações seguras para produção.
 
 Autor: Manus AI
-Data: 2025-12-02
+Data da Refatoração: 2026-02-17
 """
 
 import os
 from pathlib import Path
+from decouple import config, Csv
 
 # =============================================================================
 # CAMINHOS DO PROJETO
 # =============================================================================
 
-# Diretório base do projeto: /caminho/para/gestao_erp/
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
 # =============================================================================
-# CONFIGURAÇÕES DE SEGURANÇA
+# CONFIGURAÇÕES DE SEGURANÇA (Via Variáveis de Ambiente)
 # =============================================================================
 
-# ATENÇÃO: Mantenha a chave secreta em produção!
-# Em produção, use variáveis de ambiente para armazenar a SECRET_KEY
-SECRET_KEY = 'django-insecure-r_e%n-0@n8fit$xx3c+p-%g(%p$36+#@zr%7%p#+jx0j#abta%'
+# Nunca execute com DEBUG=True em produção!
+DEBUG = config('DEBUG', default=False, cast=bool)
 
-# ATENÇÃO: Nunca execute com DEBUG=True em produção!
-# Em produção, defina DEBUG=False
-DEBUG = True
+# Chave secreta carregada do .env (Nunca suba para o GitHub!)
+SECRET_KEY = config('SECRET_KEY', default='django-insecure-mudar-em-producao')
 
-# Hosts permitidos para acessar a aplicação
-# Em produção, especifique os domínios permitidos, ex: ['meusite.com', 'www.meusite.com']
-ALLOWED_HOSTS = ['*']
+# Hosts permitidos
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='127.0.0.1,localhost', cast=Csv())
 
 
 # =============================================================================
@@ -55,29 +39,30 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     # Aplicações padrão do Django
-    'django.contrib.admin',          # Painel de administração
-    'django.contrib.auth',           # Sistema de autenticação
-    'django.contrib.contenttypes',   # Framework de tipos de conteúdo
-    'django.contrib.sessions',       # Framework de sessões
-    'django.contrib.messages',       # Framework de mensagens
-    'django.contrib.staticfiles',    # Gerenciamento de arquivos estáticos
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
     
-    # Aplicacoes do projeto
-    'estoque',        # Modulo de controle de estoque
-    'financeiro',     # Modulo de controle financeiro
-    'fiscal',         # Modulo de importacao de NF-e e gestao fiscal
-    'fornecedores',   # Modulo de gestao de fornecedores
-    'clientes',       # Modulo de gestao de clientes
-    'pdv',            # Modulo de Ponto de Venda
-    'auditoria',      # Modulo de auditoria e LGPD
-    'vendas',         # Modulo de vendas e orçamentos
-    'relatorios',     # Modulo de relatórios e dashboards
-    'notificacoes',   # Modulo de notificações e alertas
+    # Aplicações do projeto
+    'estoque',
+    'financeiro',
+    'fiscal',
+    'fornecedores',
+    'clientes',
+    'pdv',
+    'auditoria',
+    'vendas',
+    'relatorios',
+    'notificacoes',
+    'companies',
     
     # Bibliotecas de terceiros
-    'rest_framework',      # Django REST Framework para APIs
-    'django_filters',      # Filtros avançados
-    'corsheaders',         # CORS headers para APIs
+    'rest_framework',
+    'django_filters',
+    'corsheaders',
 ]
 
 
@@ -85,16 +70,15 @@ INSTALLED_APPS = [
 # MIDDLEWARE
 # =============================================================================
 
-# Middleware são componentes que processam requisições/respostas
-# A ordem é importante!
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',           # Segurança
-    'django.contrib.sessions.middleware.SessionMiddleware',    # Sessões
-    'django.middleware.common.CommonMiddleware',               # Funcionalidades comuns
-    'django.middleware.csrf.CsrfViewMiddleware',              # Proteção CSRF
-    'django.contrib.auth.middleware.AuthenticationMiddleware', # Autenticação
-    'django.contrib.messages.middleware.MessageMiddleware',    # Mensagens
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',  # Proteção clickjacking
+    'django.middleware.security.SecurityMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'companies.middleware.TenantMiddleware',
 ]
 
 
@@ -102,10 +86,7 @@ MIDDLEWARE = [
 # CONFIGURAÇÕES DE URL E WSGI
 # =============================================================================
 
-# Arquivo principal de configuração de URLs
 ROOT_URLCONF = 'gestao_erp.urls'
-
-# Aplicação WSGI para deploy em produção
 WSGI_APPLICATION = 'gestao_erp.wsgi.application'
 
 
@@ -116,20 +97,14 @@ WSGI_APPLICATION = 'gestao_erp.wsgi.application'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        
-        # Diretórios onde o Django procura por templates
         'DIRS': [BASE_DIR / 'templates'],
-        
-        # Permite que cada app tenha seu próprio diretório de templates
         'APP_DIRS': True,
-        
-        # Processadores de contexto (variáveis disponíveis em todos os templates)
         'OPTIONS': {
             'context_processors': [
-                'django.template.context_processors.debug',      # Variáveis de debug
-                'django.template.context_processors.request',    # Objeto request
-                'django.contrib.auth.context_processors.auth',   # Usuário autenticado
-                'django.contrib.messages.context_processors.messages',  # Mensagens
+                'django.template.context_processors.debug',
+                'django.template.context_processors.request',
+                'django.contrib.auth.context_processors.auth',
+                'django.contrib.messages.context_processors.messages',
             ],
         },
     },
@@ -137,53 +112,30 @@ TEMPLATES = [
 
 
 # =============================================================================
-# CONFIGURAÇÕES DE BANCO DE DADOS
+# CONFIGURAÇÕES DE BANCO DE DADOS (Suporte a Múltiplos Motores)
 # =============================================================================
 
-# Por padrão, usa SQLite (ideal para desenvolvimento)
-# Em produção, considere usar PostgreSQL ou MySQL
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': config('DB_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': BASE_DIR / config('DB_NAME', default='db.sqlite3') if config('DB_ENGINE', default='django.db.backends.sqlite3') == 'django.db.backends.sqlite3' else config('DB_NAME'),
+        'USER': config('DB_USER', default=''),
+        'PASSWORD': config('DB_PASSWORD', default=''),
+        'HOST': config('DB_HOST', default=''),
+        'PORT': config('DB_PORT', default=''),
     }
 }
-
-# Exemplo de configuração para PostgreSQL (comentado):
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'gestao_erp',
-#         'USER': 'seu_usuario',
-#         'PASSWORD': 'sua_senha',
-#         'HOST': 'localhost',
-#         'PORT': '5432',
-#     }
-# }
 
 
 # =============================================================================
 # VALIDAÇÃO DE SENHAS
 # =============================================================================
 
-# Validadores que garantem senhas seguras
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        # Verifica similaridade com atributos do usuário
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        # Exige comprimento mínimo de 8 caracteres
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        # Verifica se a senha não é muito comum
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        # Verifica se a senha não é totalmente numérica
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
 
@@ -191,44 +143,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # INTERNACIONALIZAÇÃO
 # =============================================================================
 
-# Idioma padrão da aplicação
-LANGUAGE_CODE = 'pt-br'  # Português do Brasil
-
-# Fuso horário
-TIME_ZONE = 'America/Sao_Paulo'  # Horário de Brasília
-
-# Habilita internacionalização (i18n)
+LANGUAGE_CODE = 'pt-br'
+TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
-
-# Usa timezone-aware datetimes
 USE_TZ = True
 
 
 # =============================================================================
-# ARQUIVOS ESTÁTICOS (CSS, JavaScript, Imagens)
+# ARQUIVOS ESTÁTICOS E MÍDIA
 # =============================================================================
 
-# URL para acessar arquivos estáticos
 STATIC_URL = 'static/'
-
-# Diretório onde os arquivos estáticos serão coletados em produção
-# Execute 'python manage.py collectstatic' antes do deploy
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = []
 
-# Diretórios adicionais para arquivos estáticos
-STATICFILES_DIRS = [
-    # BASE_DIR / 'static',
-]
-
-
-# =============================================================================
-# ARQUIVOS DE MÍDIA (Uploads de usuários)
-# =============================================================================
-
-# URL para acessar arquivos de mídia
 MEDIA_URL = 'media/'
-
-# Diretório onde os arquivos de mídia serão armazenados
 MEDIA_ROOT = BASE_DIR / 'media'
 
 
@@ -236,78 +165,29 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # CONFIGURAÇÕES DE AUTENTICAÇÃO
 # =============================================================================
 
-# URL de redirecionamento após login
 LOGIN_REDIRECT_URL = '/'
-
-# URL de redirecionamento após logout
 LOGOUT_REDIRECT_URL = '/login/'
-
-# URL da página de login
 LOGIN_URL = '/login/'
 
-
-# =============================================================================
-# CONFIGURAÇÕES GERAIS
-# =============================================================================
-
-# Tipo de campo de chave primária padrão
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # =============================================================================
-# CONFIGURAÇÕES DE SEGURANÇA PARA PRODUÇÃO
+# CONFIGURAÇÕES DE SEGURANÇA PARA PRODUÇÃO (Via Variáveis de Ambiente)
 # =============================================================================
 
-# Descomente as linhas abaixo ao fazer deploy em produção:
-
-# Força o uso de HTTPS
-# SECURE_SSL_REDIRECT = True
-
-# Cookies de sessão apenas via HTTPS
-# SESSION_COOKIE_SECURE = True
-
-# Cookies CSRF apenas via HTTPS
-# CSRF_COOKIE_SECURE = True
-
-# Previne que o navegador detecte o content-type
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Proteção XSS no navegador
-# SECURE_BROWSER_XSS_FILTER = True
-
-# Força HTTPS por 1 ano
-# SECURE_HSTS_SECONDS = 31536000
-
-# Inclui subdomínios no HSTS
-# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-
-# Pré-carrega HSTS
-# SECURE_HSTS_PRELOAD = True
-
-# Proteção contra clickjacking
-# X_FRAME_OPTIONS = 'DENY'
+SECURE_SSL_REDIRECT = config('SECURE_SSL_REDIRECT', default=False, cast=bool)
+SESSION_COOKIE_SECURE = config('SESSION_COOKIE_SECURE', default=False, cast=bool)
+CSRF_COOKIE_SECURE = config('CSRF_COOKIE_SECURE', default=False, cast=bool)
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+X_FRAME_OPTIONS = 'DENY'
 
 
 # =============================================================================
-# CONFIGURAÇÕES DE EMAIL (para notificações)
+# LOGGING
 # =============================================================================
 
-# Exemplo de configuração de email (comentado):
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'seu_email@gmail.com'
-# EMAIL_HOST_PASSWORD = 'sua_senha_de_app'
-# DEFAULT_FROM_EMAIL = 'seu_email@gmail.com'
-
-
-# =============================================================================
-# CONFIGURAÇÕES DE LOGGING (para debug e monitoramento)
-# =============================================================================
-
-# Configuração básica de logging
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -331,6 +211,4 @@ LOGGING = {
     },
 }
 
-# Criar diretório de logs se não existir
-import os
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)

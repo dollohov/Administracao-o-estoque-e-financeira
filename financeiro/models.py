@@ -10,7 +10,8 @@ Data: 2025-12-02
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinValueValidator
+from companies.models import Company
+from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.db.models import Sum
 
@@ -18,695 +19,163 @@ from django.db.models import Sum
 class Receita(models.Model):
     """
     Modelo que representa uma receita (entrada de dinheiro).
-    
-    Receitas podem ser provenientes de vendas, serviços prestados,
-    ou outras fontes de entrada de capital.
-    
-    Attributes:
-        descricao (str): Descrição da receita
-        valor (Decimal): Valor da receita
-        data (date): Data em que a receita foi recebida
-        categoria (str): Categoria da receita
-        usuario (User): Usuário que registrou a receita
-        data_criacao (datetime): Data de criação do registro
     """
-    
-    # Categorias de receita
-    CATEGORIAS = (
-        ('VENDA', 'Venda de Produtos'),
-        ('SERVICO', 'Prestação de Serviços'),
-        ('INVESTIMENTO', 'Retorno de Investimento'),
-        ('OUTROS', 'Outros'),
-    )
-    
-    # Descrição da receita
-    descricao = models.CharField(
-        max_length=200,
-        verbose_name="Descrição",
-        help_text="Ex: Venda de 10 camisetas, Pagamento serviço X, etc."
-    )
-    
-    # Valor da receita
-    valor = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-        verbose_name="Valor",
-        help_text="Valor da receita em R$"
-    )
-    
-    # Data da receita
-    data = models.DateField(
-        verbose_name="Data da Receita",
-        help_text="Data em que a receita foi recebida"
-    )
-    
-    # Categoria da receita
-    categoria = models.CharField(
-        max_length=20,
-        choices=CATEGORIAS,
-        default='VENDA',
-        verbose_name="Categoria",
-        help_text="Classificação para relatórios financeiros e gráficos."
-    )
-    
-    # Rastreamento de usuário
-    usuario = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='receitas_registradas',
-        default=1,
-        verbose_name="Registrado por",
-        help_text="Usuário que registrou a receita"
-    )
-    
-    # Data de criação do registro
-    data_criacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Criação"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='receitas', verbose_name="Empresa", null=True, blank=True)
+    CATEGORIAS = (('VENDA', 'Venda de Produtos'), ('SERVICO', 'Prestação de Serviços'), ('INVESTIMENTO', 'Retorno de Investimento'), ('OUTROS', 'Outros'))
+    descricao = models.CharField(max_length=200, verbose_name="Descrição")
+    valor = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], verbose_name="Valor")
+    data = models.DateField(verbose_name="Data do Recebimento")
+    categoria = models.CharField(max_length=20, choices=CATEGORIAS, default='VENDA', verbose_name="Categoria")
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='receitas_registradas', verbose_name="Registrado por")
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Data de Registro")
+
     class Meta:
         verbose_name = "Receita"
         verbose_name_plural = "Receitas"
-        ordering = ['-data']  # Mais recentes primeiro
-    
+        ordering = ['-data']
+
     def __str__(self):
-        """Retorna representação em string da receita."""
         return f"Receita: {self.descricao} (R$ {self.valor})"
 
 
 class Despesa(models.Model):
     """
     Modelo que representa uma despesa (saída de dinheiro).
-    
-    Despesas incluem custos operacionais, compras, salários,
-    e outras saídas de capital.
-    
-    Attributes:
-        descricao (str): Descrição da despesa
-        valor (Decimal): Valor da despesa
-        data (date): Data em que a despesa foi realizada
-        categoria (str): Categoria da despesa
-        usuario (User): Usuário que registrou a despesa
-        data_criacao (datetime): Data de criação do registro
     """
-    
-    # Categorias de despesa
-    CATEGORIAS = (
-        ('COMPRA', 'Compra de Produtos'),
-        ('SALARIO', 'Salários e Encargos'),
-        ('ALUGUEL', 'Aluguel e Condomínio'),
-        ('SERVICO', 'Serviços Contratados'),
-        ('IMPOSTO', 'Impostos e Taxas'),
-        ('OUTROS', 'Outros'),
-    )
-    
-    # Descrição da despesa
-    descricao = models.CharField(
-        max_length=200,
-        verbose_name="Descrição",
-        help_text="Ex: Pagamento Aluguel Jan/2026, Compra de insumos, etc."
-    )
-    
-    # Valor da despesa
-    valor = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-        verbose_name="Valor",
-        help_text="Valor da despesa em R$"
-    )
-    
-    # Data da despesa
-    data = models.DateField(
-        verbose_name="Data da Despesa",
-        help_text="Data em que a despesa foi realizada"
-    )
-    
-    # Categoria da despesa
-    categoria = models.CharField(
-        max_length=20,
-        choices=CATEGORIAS,
-        default='OUTROS',
-        verbose_name="Categoria",
-        help_text="Categoria da despesa"
-    )
-    
-    # Rastreamento de usuário
-    usuario = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='despesas_registradas',
-        default=1,
-        verbose_name="Registrado por",
-        help_text="Usuário que registrou a despesa"
-    )
-    
-    # Data de criação do registro
-    data_criacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Criação"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='despesas', verbose_name="Empresa", null=True, blank=True)
+    CATEGORIAS = (('COMPRA', 'Compra de Mercadorias'), ('OPERACIONAL', 'Custos Operacionais'), ('SALARIO', 'Salários e Encargos'), ('IMPOSTO', 'Impostos e Taxas'), ('OUTROS', 'Outros'))
+    descricao = models.CharField(max_length=200, verbose_name="Descrição")
+    valor = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], verbose_name="Valor")
+    data = models.DateField(verbose_name="Data do Pagamento")
+    categoria = models.CharField(max_length=20, choices=CATEGORIAS, default='COMPRA', verbose_name="Categoria")
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT, related_name='despesas_registradas', verbose_name="Registrado por")
+    data_criacao = models.DateTimeField(auto_now_add=True, verbose_name="Data de Registro")
+
     class Meta:
         verbose_name = "Despesa"
         verbose_name_plural = "Despesas"
-        ordering = ['-data']  # Mais recentes primeiro
-    
+        ordering = ['-data']
+
     def __str__(self):
-        """Retorna representação em string da despesa."""
         return f"Despesa: {self.descricao} (R$ {self.valor})"
 
 
 class CapitalGiro(models.Model):
     """
-    Modelo que representa o capital de giro da empresa.
-    
-    O capital de giro é o valor disponível para operações diárias.
-    Este modelo mantém um histórico de todas as alterações no capital.
-    
-    Attributes:
-        valor_anterior (Decimal): Valor antes da movimentação
-        valor_novo (Decimal): Valor após a movimentação
-        tipo_movimentacao (str): Tipo de movimentação (ENTRADA ou SAIDA)
-        descricao (str): Descrição da movimentação
-        usuario (User): Usuário responsável pela movimentação
-        data_movimentacao (datetime): Data e hora da movimentação
+    Modelo que representa o histórico de capital de giro da empresa.
     """
-    
-    # Tipos de movimentação
-    TIPO_MOVIMENTACAO = (
-        ('ENTRADA', 'Entrada de Capital'),
-        ('SAIDA', 'Saída de Capital'),
-        ('AJUSTE', 'Ajuste Manual'),
-    )
-    
-    # Valores
-    valor_anterior = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        verbose_name="Valor Anterior",
-        help_text="Valor do capital antes da movimentação"
-    )
-    
-    valor_novo = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        verbose_name="Valor Novo",
-        help_text="Valor do capital após a movimentação"
-    )
-    
-    # Tipo de movimentação
-    tipo_movimentacao = models.CharField(
-        max_length=10,
-        choices=TIPO_MOVIMENTACAO,
-        verbose_name="Tipo de Movimentação"
-    )
-    
-    # Descrição
-    descricao = models.TextField(
-        verbose_name="Descrição",
-        help_text="Descrição detalhada da movimentação"
-    )
-    
-    # Rastreamento de usuário
-    usuario = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='movimentacoes_capital',
-        default=1,
-        verbose_name="Responsável",
-        help_text="Usuário que realizou a movimentação"
-    )
-    
-    # Data da movimentação
-    data_movimentacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data da Movimentação"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='historico_capital', verbose_name="Empresa", null=True, blank=True)
+    data_movimentacao = models.DateTimeField(auto_now_add=True)
+    tipo_movimentacao = models.CharField(max_length=20)
+    valor_anterior = models.DecimalField(max_digits=12, decimal_places=2)
+    valor_novo = models.DecimalField(max_digits=12, decimal_places=2)
+    descricao = models.CharField(max_length=255)
+    usuario = models.ForeignKey(User, on_delete=models.PROTECT)
+
     class Meta:
-        verbose_name = "Capital de Giro"
-        verbose_name_plural = "Histórico de Capital de Giro"
-        ordering = ['-data_movimentacao']
-    
-    def __str__(self):
-        """Retorna representação em string da movimentação."""
-        return f"{self.tipo_movimentacao}: R$ {self.valor_anterior} → R$ {self.valor_novo}"
-    
-    def calcular_diferenca(self):
-        """
-        Calcula a diferença entre o valor novo e o anterior.
-        
-        Returns:
-            Decimal: Diferença (positiva para entrada, negativa para saída)
-        """
-        return self.valor_novo - self.valor_anterior
-    
-    @classmethod
-    def obter_capital_atual(cls):
-        """
-        Obtém o valor atual do capital de giro.
-        
-        Returns:
-            Decimal: Valor atual do capital de giro
-        """
-        ultima_movimentacao = cls.objects.first()  # Mais recente
-        if ultima_movimentacao:
-            return ultima_movimentacao.valor_novo
-        return Decimal('0.00')
-    
-    @classmethod
-    def adicionar_capital(cls, valor, descricao, usuario):
-        """
-        Adiciona capital de giro.
-        
-        Args:
-            valor (Decimal): Valor a ser adicionado
-            descricao (str): Descrição da entrada
-            usuario (User): Usuário responsável
-            
-        Returns:
-            CapitalGiro: Instância da movimentação criada
-        """
-        capital_atual = cls.obter_capital_atual()
-        novo_capital = capital_atual + valor
-        
-        return cls.objects.create(
-            valor_anterior=capital_atual,
-            valor_novo=novo_capital,
-            tipo_movimentacao='ENTRADA',
-            descricao=descricao,
-            usuario=usuario
-        )
-    
-    @classmethod
-    def retirar_capital(cls, valor, descricao, usuario):
-        """
-        Retira capital de giro.
-        
-        Args:
-            valor (Decimal): Valor a ser retirado
-            descricao (str): Descrição da saída
-            usuario (User): Usuário responsável
-            
-        Returns:
-            CapitalGiro: Instância da movimentação criada
-            
-        Raises:
-            ValueError: Se não houver capital suficiente
-        """
-        capital_atual = cls.obter_capital_atual()
-        
-        if capital_atual < valor:
-            raise ValueError(
-                f"Capital insuficiente! Disponível: R$ {capital_atual}, "
-                f"Solicitado: R$ {valor}"
-            )
-        
-        novo_capital = capital_atual - valor
-        
-        return cls.objects.create(
-            valor_anterior=capital_atual,
-            valor_novo=novo_capital,
-            tipo_movimentacao='SAIDA',
-            descricao=descricao,
-            usuario=usuario
-        )
+        verbose_name = "Movimentação de Capital"
+        verbose_name_plural = "Movimentações de Capital"
 
 
 class IndicadorFinanceiro(models.Model):
     """
-    Modelo que armazena indicadores financeiros calculados.
-    
-    Este modelo é atualizado automaticamente com base nas movimentações
-    de estoque e transações financeiras.
-    
-    Attributes:
-        periodo (date): Período de referência (mês/ano)
-        total_receitas (Decimal): Total de receitas no período
-        total_despesas (Decimal): Total de despesas no período
-        lucro_bruto (Decimal): Receitas - Despesas
-        margem_lucro (Decimal): Percentual de margem de lucro
-        data_atualizacao (datetime): Data da última atualização
+    Modelo que representa os indicadores financeiros calculados por período.
     """
-    
-    # Período de referência
-    periodo = models.DateField(
-        unique=True,
-        verbose_name="Período",
-        help_text="Primeiro dia do mês de referência"
-    )
-    
-    # Totalizadores
-    total_receitas = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Total de Receitas"
-    )
-    
-    total_despesas = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Total de Despesas"
-    )
-    
-    lucro_bruto = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Lucro Bruto"
-    )
-    
-    margem_lucro = models.DecimalField(
-        max_digits=5,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Margem de Lucro (%)"
-    )
-    
-    # Data de atualização
-    data_atualizacao = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Última Atualização"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='indicadores', verbose_name="Empresa", null=True, blank=True)
+    periodo = models.DateField()
+    total_receitas = models.DecimalField(max_digits=12, decimal_places=2)
+    total_despesas = models.DecimalField(max_digits=12, decimal_places=2)
+    lucro_bruto = models.DecimalField(max_digits=12, decimal_places=2)
+    margem_lucro = models.DecimalField(max_digits=5, decimal_places=2)
+    data_atualizacao = models.DateTimeField(auto_now=True)
+
     class Meta:
         verbose_name = "Indicador Financeiro"
         verbose_name_plural = "Indicadores Financeiros"
-        ordering = ['-periodo']
-    
-    def __str__(self):
-        """Retorna representação em string do indicador."""
-        return f"Indicadores de {self.periodo.strftime('%m/%Y')}"
-    
-    def calcular_indicadores(self):
-        """
-        Calcula os indicadores financeiros do período.
-        
-        Atualiza os valores de receitas, despesas, lucro e margem.
-        """
-        # Filtrar receitas e despesas do período
-        ano = self.periodo.year
-        mes = self.periodo.month
-        
-        # Total de receitas
-        receitas = Receita.objects.filter(
-            data__year=ano,
-            data__month=mes
-        ).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
-        
-        # Total de despesas
-        despesas = Despesa.objects.filter(
-            data__year=ano,
-            data__month=mes
-        ).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
-        
-        # Atualizar valores
-        self.total_receitas = receitas
-        self.total_despesas = despesas
-        self.lucro_bruto = receitas - despesas
-        
-        # Calcular margem de lucro
-        if receitas > 0:
-            self.margem_lucro = (self.lucro_bruto / receitas) * 100
-        else:
-            self.margem_lucro = Decimal('0.00')
-        
-        self.save()
 
 
 class ContaPagar(models.Model):
     """
-    Modelo que representa uma conta a pagar (obrigação financeira).
-    
-    Attributes:
-        fornecedor: Fornecedor a quem se deve pagar
-        descricao: Descrição da conta
-        valor: Valor a pagar
-        data_vencimento: Data de vencimento da conta
-        data_pagamento: Data em que foi pago (se aplicável)
-        status: Status do pagamento
-        usuario_criacao: Usuário que criou o registro
-        data_criacao: Data de criação
+    Modelo que representa uma conta a pagar.
     """
-    
-    STATUS_CHOICES = (
-        ('PENDENTE', 'Pendente'),
-        ('PAGO', 'Pago'),
-        ('ATRASADO', 'Atrasado'),
-        ('CANCELADO', 'Cancelado'),
-    )
-    
-    fornecedor = models.ForeignKey(
-        'fiscal.Fornecedor',
-        on_delete=models.PROTECT,
-        related_name='contas_pagar',
-        verbose_name="Fornecedor"
-    )
-    
-    descricao = models.CharField(
-        max_length=200,
-        verbose_name="Descrição"
-    )
-    
-    valor = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-        verbose_name="Valor"
-    )
-    
-    data_vencimento = models.DateField(
-        verbose_name="Data de Vencimento"
-    )
-    
-    data_pagamento = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name="Data de Pagamento"
-    )
-    
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='PENDENTE',
-        verbose_name="Status"
-    )
-    
-    usuario_criacao = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='contas_pagar_criadas',
-        default=1,
-        verbose_name="Criado por"
-    )
-    
-    data_criacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Criação"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contas_pagar', verbose_name="Empresa", null=True, blank=True)
+    fornecedor = models.ForeignKey('fornecedores.Fornecedor', on_delete=models.PROTECT)
+    descricao = models.CharField(max_length=200)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    data_vencimento = models.DateField()
+    data_pagamento = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=(('PENDENTE', 'Pendente'), ('PAGO', 'Pago'), ('ATRASADO', 'Atrasado')), default='PENDENTE')
+    usuario_criacao = models.ForeignKey(User, on_delete=models.PROTECT)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def dias_para_vencer(self):
+        from datetime import date
+        if self.status == 'PAGO': return 0
+        delta = self.data_vencimento - date.today()
+        return delta.days
+
     class Meta:
         verbose_name = "Conta a Pagar"
         verbose_name_plural = "Contas a Pagar"
-        ordering = ['data_vencimento']
-    
-    def __str__(self):
-        return f"{self.fornecedor} - R$ {self.valor}"
-    
-    @property
-    def dias_para_vencer(self):
-        """Retorna o número de dias até o vencimento."""
-        from datetime import date
-        delta = self.data_vencimento - date.today()
-        return delta.days
-    
-    @property
-    def esta_atrasada(self):
-        """Verifica se a conta está atrasada."""
-        from datetime import date
-        return self.status == 'PENDENTE' and self.data_vencimento < date.today()
 
 
 class ContaReceber(models.Model):
     """
-    Modelo que representa uma conta a receber (direito financeiro).
-    
-    Attributes:
-        cliente: Cliente que deve pagar
-        descricao: Descrição da conta
-        valor: Valor a receber
-        data_vencimento: Data de vencimento
-        data_recebimento: Data em que foi recebido
-        status: Status do recebimento
-        usuario_criacao: Usuário que criou o registro
-        data_criacao: Data de criação
+    Modelo que representa uma conta a receber.
     """
-    
-    STATUS_CHOICES = (
-        ('PENDENTE', 'Pendente'),
-        ('RECEBIDO', 'Recebido'),
-        ('ATRASADO', 'Atrasado'),
-        ('CANCELADO', 'Cancelado'),
-    )
-    
-    cliente = models.ForeignKey(
-        'clientes.Cliente',
-        on_delete=models.PROTECT,
-        related_name='contas_receber',
-        verbose_name="Cliente"
-    )
-    
-    descricao = models.CharField(
-        max_length=200,
-        verbose_name="Descrição"
-    )
-    
-    valor = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        validators=[MinValueValidator(Decimal('0.01'))],
-        verbose_name="Valor"
-    )
-    
-    data_vencimento = models.DateField(
-        verbose_name="Data de Vencimento"
-    )
-    
-    data_recebimento = models.DateField(
-        blank=True,
-        null=True,
-        verbose_name="Data de Recebimento"
-    )
-    
-    status = models.CharField(
-        max_length=20,
-        choices=STATUS_CHOICES,
-        default='PENDENTE',
-        verbose_name="Status"
-    )
-    
-    usuario_criacao = models.ForeignKey(
-        User,
-        on_delete=models.PROTECT,
-        related_name='contas_receber_criadas',
-        default=1,
-        verbose_name="Criado por"
-    )
-    
-    data_criacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Criação"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contas_receber', verbose_name="Empresa", null=True, blank=True)
+    cliente = models.ForeignKey('clientes.Cliente', on_delete=models.PROTECT)
+    descricao = models.CharField(max_length=200)
+    valor = models.DecimalField(max_digits=10, decimal_places=2)
+    data_vencimento = models.DateField()
+    data_recebimento = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=20, choices=(('PENDENTE', 'Pendente'), ('RECEBIDO', 'Recebido'), ('ATRASADO', 'Atrasado')), default='PENDENTE')
+    usuario_criacao = models.ForeignKey(User, on_delete=models.PROTECT)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def dias_para_vencer(self):
+        from datetime import date
+        if self.status == 'RECEBIDO': return 0
+        delta = self.data_vencimento - date.today()
+        return delta.days
+
     class Meta:
         verbose_name = "Conta a Receber"
         verbose_name_plural = "Contas a Receber"
-        ordering = ['data_vencimento']
-    
-    def __str__(self):
-        return f"{self.cliente} - R$ {self.valor}"
-    
-    @property
-    def dias_para_vencer(self):
-        """Retorna o número de dias até o vencimento."""
-        from datetime import date
-        delta = self.data_vencimento - date.today()
-        return delta.days
-    
-    @property
-    def esta_atrasada(self):
-        """Verifica se a conta está atrasada."""
-        from datetime import date
-        return self.status == 'PENDENTE' and self.data_vencimento < date.today()
 
 
 class FluxoCaixaProjetado(models.Model):
     """
-    Modelo que representa uma projeção de fluxo de caixa.
-    
-    Attributes:
-        mes: Mês da projeção
-        ano: Ano da projeção
-        receitas_projetadas: Total de receitas esperadas
-        despesas_projetadas: Total de despesas esperadas
-        saldo_projetado: Saldo esperado (receitas - despesas)
-        receitas_reais: Receitas reais no período
-        despesas_reais: Despesas reais no período
-        saldo_real: Saldo real (receitas - despesas)
+    Modelo que representa o fluxo de caixa projetado por mês/ano.
     """
-    
-    mes = models.IntegerField(
-        choices=[(i, f"Mês {i}") for i in range(1, 13)],
-        verbose_name="Mês"
-    )
-    
-    ano = models.IntegerField(
-        verbose_name="Ano"
-    )
-    
-    receitas_projetadas = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Receitas Projetadas"
-    )
-    
-    despesas_projetadas = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Despesas Projetadas"
-    )
-    
-    receitas_reais = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Receitas Reais"
-    )
-    
-    despesas_reais = models.DecimalField(
-        max_digits=12,
-        decimal_places=2,
-        default=Decimal('0.00'),
-        verbose_name="Despesas Reais"
-    )
-    
-    data_criacao = models.DateTimeField(
-        auto_now_add=True,
-        verbose_name="Data de Criação"
-    )
-    
-    data_atualizacao = models.DateTimeField(
-        auto_now=True,
-        verbose_name="Data de Atualização"
-    )
-    
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='fluxo_caixa', verbose_name="Empresa", null=True, blank=True)
+    mes = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+    ano = models.IntegerField()
+    receitas_projetadas = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    despesas_projetadas = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    receitas_reais = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    despesas_reais = models.DecimalField(max_digits=12, decimal_places=2, default=0)
+    data_criacao = models.DateTimeField(auto_now_add=True)
+    data_atualizacao = models.DateTimeField(auto_now=True)
+
+    @property
+    def saldo_projetado(self):
+        return self.receitas_projetadas - self.despesas_projetadas
+
+    @property
+    def saldo_real(self):
+        return self.receitas_reais - self.despesas_reais
+
+    @property
+    def variacao(self):
+        return self.saldo_real - self.saldo_projetado
+
+    def __str__(self):
+        return f"Fluxo de Caixa {self.mes:02d}/{self.ano}"
+
     class Meta:
         verbose_name = "Fluxo de Caixa Projetado"
         verbose_name_plural = "Fluxos de Caixa Projetados"
-        ordering = ['-ano', '-mes']
-        unique_together = ('mes', 'ano')
-    
-    def __str__(self):
-        return f"Fluxo de Caixa - {self.mes}/{self.ano}"
-    
-    @property
-    def saldo_projetado(self):
-        """Calcula o saldo projetado."""
-        return self.receitas_projetadas - self.despesas_projetadas
-    
-    @property
-    def saldo_real(self):
-        """Calcula o saldo real."""
-        return self.receitas_reais - self.despesas_reais
-    
-    @property
-    def variacao(self):
-        """Calcula a variação entre projetado e real."""
-        return self.saldo_real - self.saldo_projetado
+        unique_together = [['company', 'mes', 'ano']]
