@@ -2,7 +2,10 @@ services:
   - type: web
     name: gestao-erp
     env: python
+    # Forçando a versão estável do Python
+    plan: free
     buildCommand: ./build.sh
+    # Comando de inicialização correto para o projeto gestao_erp
     startCommand: gunicorn gestao_erp.wsgi:application --bind 0.0.0.0:$PORT
     healthCheckPath: /admin/
     envVars:
@@ -13,11 +16,16 @@ services:
       - key: SECRET_KEY
         generateValue: true
       - key: WEB_CONCURRENCY
-        value: 4
+        value: 2
       - key: ALLOWED_HOSTS
         value: .onrender.com,localhost,127.0.0.1
       - key: DEBUG
         value: "False"
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: DJANGO_SETTINGS_MODULE
+        value: gestao_erp.settings
+
   - type: postgres
     name: gestao-erp-db
     plan: free
