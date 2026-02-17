@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: gestao-erp
+    env: python
+    buildCommand: ./build.sh
+    startCommand: gunicorn gestao_erp.wsgi:application
+    healthCheckPath: /admin/
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase: 
+          name: gestao-erp-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
+  - type: postgres
+    name: gestao-erp-db
+    plan: free
+    databaseName: gestao_erp_db
+    user: gestao_erp_user
