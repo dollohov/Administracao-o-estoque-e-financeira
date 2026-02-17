@@ -361,7 +361,16 @@ class Produto(TenantModel):
         return self.estoque_atual > self.estoque_maximo
     
     def valor_total_estoque(self):
+        """Calcula o valor total do produto em estoque."""
         return self.preco_custo * self.estoque_atual
+    
+    def margem_lucro(self):
+        """Calcula a margem de lucro percentual do produto."""
+        if self.preco_venda and self.preco_custo:
+            lucro = self.preco_venda - self.preco_custo
+            margem = (lucro / self.preco_venda) * 100
+            return round(margem, 2)
+        return Decimal('0.00')
     
     def calcular_volume(self):
         if self.altura_cm and self.largura_cm and self.profundidade_cm:
