@@ -32,6 +32,7 @@ class EstoqueService:
             if tipo == 'ENTRADA':
                 # Entrada no estoque = Saída de capital (compra)
                 CapitalGiro.retirar_capital(
+                    company=produto.company,
                     valor=valor_total,
                     descricao=f'Compra de {quantidade}x {produto.nome}',
                     usuario=usuario
@@ -39,6 +40,7 @@ class EstoqueService:
             elif tipo == 'SAIDA':
                 # Saída do estoque = Entrada de capital (venda)
                 CapitalGiro.adicionar_capital(
+                    company=produto.company,
                     valor=valor_total,
                     descricao=f'Venda de {quantidade}x {produto.nome}',
                     usuario=usuario
