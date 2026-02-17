@@ -1,25 +1,21 @@
+"""
+Modelos do módulo de Fornecedores.
+
+Este arquivo define os modelos de dados relacionados aos fornecedores do sistema.
+
+Autor: Manus AI
+Data: 2026-02-17
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
-from companies.models import Company
+from base.models import TenantModel
 
-class Fornecedor(models.Model):
+class Fornecedor(TenantModel):
     """
     Modelo para armazenar informações de fornecedores.
     
-    Atributos:
-        nome: Nome do fornecedor
-        email: Email do fornecedor
-        telefone: Telefone do fornecedor
-        cnpj: CNPJ do fornecedor
-        endereco: Endereço do fornecedor
-        cidade: Cidade do fornecedor
-        estado: Estado do fornecedor
-        cep: CEP do fornecedor
-        ativo: Se o fornecedor está ativo
-        data_criacao: Data de criação do registro
-        data_modificacao: Data da última modificação
-        usuario_criacao: Usuário que criou o registro
-        usuario_modificacao: Usuário que modificou o registro
+    Agora o Fornecedor "percebe" a empresa herdando de TenantModel.
     """
     
     ESTADO_CHOICES = [
@@ -52,14 +48,6 @@ class Fornecedor(models.Model):
         ('TO', 'Tocantins'),
     ]
     
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name='fornecedores_app',
-        verbose_name="Empresa",
-        null=True,
-        blank=True
-    )
     nome = models.CharField(max_length=255, db_index=True)
     email = models.EmailField(db_index=True)
     telefone = models.CharField(max_length=20, blank=True)
@@ -97,7 +85,7 @@ class Fornecedor(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.nome} ({self.cnpj})"
+        return f"{self.nome} ({self.company.name})" if self.company else self.nome
     
     def get_endereco_completo(self):
         """Retorna o endereço completo do fornecedor."""

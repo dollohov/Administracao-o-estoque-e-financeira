@@ -1,26 +1,22 @@
+"""
+Modelos do módulo de Clientes.
+
+Este arquivo define os modelos de dados relacionados aos clientes do sistema.
+
+Autor: Manus AI
+Data: 2026-02-17
+"""
+
 from django.db import models
 from django.contrib.auth.models import User
-from companies.models import Company
+from base.models import TenantModel
 from django.core.validators import RegexValidator
 
-class Cliente(models.Model):
+class Cliente(TenantModel):
     """
     Modelo para armazenar informações de clientes.
     
-    Atributos:
-        nome: Nome do cliente
-        email: Email do cliente
-        telefone: Telefone do cliente
-        cpf_cnpj: CPF ou CNPJ do cliente
-        endereco: Endereço do cliente
-        cidade: Cidade do cliente
-        estado: Estado do cliente
-        cep: CEP do cliente
-        ativo: Se o cliente está ativo
-        data_criacao: Data de criação do registro
-        data_modificacao: Data da última modificação
-        usuario_criacao: Usuário que criou o registro
-        usuario_modificacao: Usuário que modificou o registro
+    Agora o Cliente "percebe" a empresa herdando de TenantModel.
     """
     
     ESTADO_CHOICES = [
@@ -53,14 +49,6 @@ class Cliente(models.Model):
         ('TO', 'Tocantins'),
     ]
     
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name='clientes',
-        verbose_name="Empresa",
-        null=True,
-        blank=True
-    )
     nome = models.CharField(max_length=255, db_index=True)
     email = models.EmailField(db_index=True)
     telefone = models.CharField(max_length=20, blank=True)
@@ -126,7 +114,7 @@ class Cliente(models.Model):
         ]
     
     def __str__(self):
-        return f"{self.nome} ({self.cpf_cnpj})"
+        return f"{self.nome} ({self.company.name})" if self.company else self.nome
     
     def get_endereco_completo(self):
         """Retorna o endereço completo do cliente."""

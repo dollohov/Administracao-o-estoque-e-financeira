@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'relatorios',
     'notificacoes',
     'companies',
+    'base',
     
     # Bibliotecas de terceiros
     'rest_framework',

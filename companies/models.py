@@ -4,7 +4,7 @@ Modelos do módulo de Empresas (Multi-tenancy).
 Este arquivo define a entidade principal de Empresa (Tenant) que servirá
 como base para o isolamento de dados no sistema SaaS.
 
-Autor: Manus AI
+Autor: Manus AI (seguindo instruções do usuário)
 Data: 2026-02-17
 """
 
@@ -25,8 +25,8 @@ class Company(models.Model):
         ('ENTERPRISE', 'Plano Empresarial'),
     )
     
-    nome = models.CharField(
-        max_length=200,
+    name = models.CharField(
+        max_length=255,
         verbose_name="Nome da Empresa"
     )
     
@@ -49,12 +49,12 @@ class Company(models.Model):
         verbose_name="Plano Atual"
     )
     
-    ativo = models.BooleanField(
+    active = models.BooleanField(
         default=True,
         verbose_name="Empresa Ativa"
     )
     
-    data_criacao = models.DateTimeField(
+    created_at = models.DateTimeField(
         auto_now_add=True,
         verbose_name="Data de Cadastro"
     )
@@ -64,16 +64,18 @@ class Company(models.Model):
         User,
         on_delete=models.PROTECT,
         related_name='empresas_administradas',
-        verbose_name="Administrador Principal"
+        verbose_name="Administrador Principal",
+        null=True,
+        blank=True
     )
 
     class Meta:
         verbose_name = "Empresa"
         verbose_name_plural = "Empresas"
-        ordering = ['nome']
+        ordering = ['name']
 
     def __str__(self):
-        return f"{self.nome} ({self.cnpj})"
+        return self.name
 
 class UserCompany(models.Model):
     """

@@ -13,6 +13,7 @@ from django.core.management import call_command
 def run():
     print("Gerando migrações para os novos apps e alterações...")
     call_command('makemigrations', 'companies')
+    call_command('makemigrations', 'base')
     call_command('makemigrations', 'estoque')
     call_command('makemigrations', 'clientes')
     call_command('makemigrations', 'fornecedores')

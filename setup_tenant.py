@@ -28,16 +28,16 @@ def run():
     company, created = Company.objects.get_or_create(
         cnpj='00.000.000/0001-91',
         defaults={
-            'nome': 'Empresa Matriz ERP',
+            'name': 'Empresa Matriz ERP',
             'plano': 'ENTERPRISE',
             'admin_principal': admin
         }
     )
     
     if created:
-        print(f"Empresa '{company.nome}' criada.")
+        print(f"Empresa '{company.name}' criada.")
     else:
-        print(f"Empresa '{company.nome}' já existe.")
+        print(f"Empresa '{company.name}' já existe.")
         
     # Associar admin à empresa
     user_company, created = UserCompany.objects.get_or_create(
@@ -47,7 +47,7 @@ def run():
     )
     
     if created:
-        print(f"Usuário 'admin' associado à empresa '{company.nome}' como ADMIN.")
+        print(f"Usuário 'admin' associado à empresa '{company.name}' como ADMIN.")
     
     # Associar produtos órfãos à empresa matriz
     orphans = Produto.objects.filter(company__isnull=True)

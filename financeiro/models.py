@@ -10,17 +10,16 @@ Data: 2025-12-02
 
 from django.db import models
 from django.contrib.auth.models import User
-from companies.models import Company
+from base.models import TenantModel
 from django.core.validators import MinValueValidator, MaxValueValidator
 from decimal import Decimal
 from django.db.models import Sum
 
 
-class Receita(models.Model):
+class Receita(TenantModel):
     """
     Modelo que representa uma receita (entrada de dinheiro).
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='receitas', verbose_name="Empresa", null=True, blank=True)
     CATEGORIAS = (('VENDA', 'Venda de Produtos'), ('SERVICO', 'Prestação de Serviços'), ('INVESTIMENTO', 'Retorno de Investimento'), ('OUTROS', 'Outros'))
     descricao = models.CharField(max_length=200, verbose_name="Descrição")
     valor = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], verbose_name="Valor")
@@ -38,11 +37,10 @@ class Receita(models.Model):
         return f"Receita: {self.descricao} (R$ {self.valor})"
 
 
-class Despesa(models.Model):
+class Despesa(TenantModel):
     """
     Modelo que representa uma despesa (saída de dinheiro).
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='despesas', verbose_name="Empresa", null=True, blank=True)
     CATEGORIAS = (('COMPRA', 'Compra de Mercadorias'), ('OPERACIONAL', 'Custos Operacionais'), ('SALARIO', 'Salários e Encargos'), ('IMPOSTO', 'Impostos e Taxas'), ('OUTROS', 'Outros'))
     descricao = models.CharField(max_length=200, verbose_name="Descrição")
     valor = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(Decimal('0.01'))], verbose_name="Valor")
@@ -60,11 +58,10 @@ class Despesa(models.Model):
         return f"Despesa: {self.descricao} (R$ {self.valor})"
 
 
-class CapitalGiro(models.Model):
+class CapitalGiro(TenantModel):
     """
     Modelo que representa o histórico de capital de giro da empresa.
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='historico_capital', verbose_name="Empresa", null=True, blank=True)
     data_movimentacao = models.DateTimeField(auto_now_add=True)
     tipo_movimentacao = models.CharField(max_length=20)
     valor_anterior = models.DecimalField(max_digits=12, decimal_places=2)
@@ -77,11 +74,10 @@ class CapitalGiro(models.Model):
         verbose_name_plural = "Movimentações de Capital"
 
 
-class IndicadorFinanceiro(models.Model):
+class IndicadorFinanceiro(TenantModel):
     """
     Modelo que representa os indicadores financeiros calculados por período.
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='indicadores', verbose_name="Empresa", null=True, blank=True)
     periodo = models.DateField()
     total_receitas = models.DecimalField(max_digits=12, decimal_places=2)
     total_despesas = models.DecimalField(max_digits=12, decimal_places=2)
@@ -94,11 +90,10 @@ class IndicadorFinanceiro(models.Model):
         verbose_name_plural = "Indicadores Financeiros"
 
 
-class ContaPagar(models.Model):
+class ContaPagar(TenantModel):
     """
     Modelo que representa uma conta a pagar.
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contas_pagar', verbose_name="Empresa", null=True, blank=True)
     fornecedor = models.ForeignKey('fornecedores.Fornecedor', on_delete=models.PROTECT)
     descricao = models.CharField(max_length=200)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -120,11 +115,10 @@ class ContaPagar(models.Model):
         verbose_name_plural = "Contas a Pagar"
 
 
-class ContaReceber(models.Model):
+class ContaReceber(TenantModel):
     """
     Modelo que representa uma conta a receber.
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='contas_receber', verbose_name="Empresa", null=True, blank=True)
     cliente = models.ForeignKey('clientes.Cliente', on_delete=models.PROTECT)
     descricao = models.CharField(max_length=200)
     valor = models.DecimalField(max_digits=10, decimal_places=2)
@@ -146,11 +140,10 @@ class ContaReceber(models.Model):
         verbose_name_plural = "Contas a Receber"
 
 
-class FluxoCaixaProjetado(models.Model):
+class FluxoCaixaProjetado(TenantModel):
     """
     Modelo que representa o fluxo de caixa projetado por mês/ano.
     """
-    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='fluxo_caixa', verbose_name="Empresa", null=True, blank=True)
     mes = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
     ano = models.IntegerField()
     receitas_projetadas = models.DecimalField(max_digits=12, decimal_places=2, default=0)

@@ -14,31 +14,16 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.core.exceptions import ValidationError
 from decimal import Decimal
-from companies.models import Company
+from base.models import TenantModel
 
 
-class Produto(models.Model):
+class Produto(TenantModel):
     """
     Modelo que representa um produto no sistema de estoque.
     
-    Isolamento de dados (Multi-tenancy):
-    Todos os produtos pertencem a uma empresa específica.
+    Agora o Produto "percebe" a empresa herdando de TenantModel.
     """
     
-    # =============================================================================
-    # ISOLAMENTO DE DADOS (Multi-tenancy)
-    # =============================================================================
-    
-    company = models.ForeignKey(
-        Company,
-        on_delete=models.CASCADE,
-        related_name='produtos',
-        verbose_name="Empresa",
-        help_text="Empresa proprietária deste produto",
-        null=True,
-        blank=True
-    )
-
     # =============================================================================
     # INFORMAÇÕES BÁSICAS DO PRODUTO
     # =============================================================================
@@ -348,7 +333,7 @@ class Produto(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.nome} (SKU: {self.sku})" if self.sku else self.nome
+        return f"{self.nome} ({self.company.name})" if self.company else self.nome
 
     def clean(self):
         super().clean()
