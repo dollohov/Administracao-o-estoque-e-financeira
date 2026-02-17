@@ -1,3 +1,9 @@
+import django
+import os
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "gestao_erp.settings")
+django.setup()
+
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 from estoque.models import Produto, MovimentacaoEstoque
@@ -103,3 +109,4 @@ def setup_permissions():
     vendedor_group.permissions.set(vendedor_permissions)
 
     print("Permissões e grupos configurados com sucesso!")
+setup_permissions()

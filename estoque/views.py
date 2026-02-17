@@ -28,8 +28,8 @@ def dashboard_estoque(request):
     """
     View principal do dashboard de estoque.
     """
-    # Obter todos os produtos ativos
-    produtos = Produto.objects.filter(ativo=True)
+    # Obter todos os produtos ativos da empresa atual
+    produtos = Produto.objects.filter(company=request.company, ativo=True)
     
     # Calcular estatísticas
     total_produtos = produtos.count()
@@ -76,8 +76,8 @@ def lista_produtos(request):
     categoria_filtro = request.GET.get('categoria', '')
     marca_filtro = request.GET.get('marca', '')
     
-    # Iniciar query com todos os produtos
-    produtos = Produto.objects.all()
+    # Iniciar query com todos os produtos da empresa atual
+    produtos = Produto.objects.filter(company=request.company)
     
     # Aplicar filtro de busca por nome, SKU ou descrição
     if busca:
@@ -223,6 +223,7 @@ def cadastrar_produto(request):
             data = get_produto_data_from_post(request)
             data['estoque_atual'] = int(request.POST.get('estoque_inicial') or 0)
             data['usuario_criacao'] = request.user
+            data['company'] = request.company
             
             produto = Produto(**data)
             
@@ -349,8 +350,8 @@ def relatorio_estoque(request):
         messages.error(request, 'Você não tem permissão para acessar relatórios.')
         return redirect('estoque:dashboard')
     
-    # Obter todos os produtos ativos
-    produtos = Produto.objects.filter(ativo=True)
+    # Obter todos os produtos ativos da empresa atual
+    produtos = Produto.objects.filter(company=request.company, ativo=True)
     
     # Calcular produtos mais vendidos (últimos 30 dias)
     data_limite = datetime.now() - timedelta(days=30)

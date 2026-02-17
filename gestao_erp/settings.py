@@ -218,3 +218,6 @@ LOGGING = {
 }
 
 os.makedirs(BASE_DIR / 'logs', exist_ok=True)
+
+# Configuração para permitir o domínio exposto pelo Manus
+CSRF_TRUSTED_ORIGINS = ['https://8000-icfr5lxj5zpx7rniy8g0h-7b384c41.us1.manus.computer']

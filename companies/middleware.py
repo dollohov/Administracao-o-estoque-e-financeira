@@ -26,7 +26,7 @@ class TenantMiddleware:
         
         # Tenta obter a empresa ativa da sessão (se o usuário puder estar em várias)
         # Por padrão, pega a primeira empresa associada ao usuário
-        user_company = UserCompany.objects.filter(user=request.user, company__ativo=True).first()
+        user_company = UserCompany.objects.filter(user=request.user, company__active=True).first()
         
         if user_company:
             request.company = user_company.company

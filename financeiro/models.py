@@ -72,6 +72,45 @@ class CapitalGiro(TenantModel):
     class Meta:
         verbose_name = "Movimentação de Capital"
         verbose_name_plural = "Movimentações de Capital"
+        ordering = ['-data_movimentacao']
+
+    @classmethod
+    def obter_capital_atual(cls, company):
+        """Retorna o saldo atual do capital de giro da empresa."""
+        ultima = cls.objects.filter(company=company).first()
+        return ultima.valor_novo if ultima else Decimal('0.00')
+
+    @classmethod
+    def adicionar_capital(cls, company, valor, descricao, usuario):
+        """Registra uma entrada no capital de giro."""
+        valor = Decimal(str(valor))
+        valor_anterior = cls.obter_capital_atual(company)
+        valor_novo = valor_anterior + valor
+        
+        return cls.objects.create(
+            company=company,
+            tipo_movimentacao='ENTRADA',
+            valor_anterior=valor_anterior,
+            valor_novo=valor_novo,
+            descricao=descricao,
+            usuario=usuario
+        )
+
+    @classmethod
+    def retirar_capital(cls, company, valor, descricao, usuario):
+        """Registra uma saída no capital de giro."""
+        valor = Decimal(str(valor))
+        valor_anterior = cls.obter_capital_atual(company)
+        valor_novo = valor_anterior - valor
+        
+        return cls.objects.create(
+            company=company,
+            tipo_movimentacao='SAIDA',
+            valor_anterior=valor_anterior,
+            valor_novo=valor_novo,
+            descricao=descricao,
+            usuario=usuario
+        )
 
 
 class IndicadorFinanceiro(TenantModel):

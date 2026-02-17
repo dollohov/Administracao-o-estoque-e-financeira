@@ -36,7 +36,7 @@ def dashboard_financeiro(request):
         HttpResponse: Renderiza o template do dashboard
     """
     # Obter capital de giro atual
-    capital_atual = CapitalGiro.obter_capital_atual()
+    capital_atual = CapitalGiro.obter_capital_atual(request.company)
     
     # Obter período atual (mês corrente)
     hoje = datetime.now().date()
@@ -44,11 +44,13 @@ def dashboard_financeiro(request):
     
     # Calcular totais do mês
     receitas_mes = Receita.objects.filter(
+        company=request.company,
         data__year=hoje.year,
         data__month=hoje.month
     ).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
     
     despesas_mes = Despesa.objects.filter(
+        company=request.company,
         data__year=hoje.year,
         data__month=hoje.month
     ).aggregate(total=Sum('valor'))['total'] or Decimal('0.00')
@@ -57,11 +59,11 @@ def dashboard_financeiro(request):
     resultado_mes = receitas_mes - despesas_mes
     
     # Obter transações recentes
-    receitas_recentes = Receita.objects.all().select_related('usuario')[:5]
-    despesas_recentes = Despesa.objects.all().select_related('usuario')[:5]
+    receitas_recentes = Receita.objects.filter(company=request.company).select_related('usuario')[:5]
+    despesas_recentes = Despesa.objects.filter(company=request.company).select_related('usuario')[:5]
     
     # Obter movimentações de capital recentes
-    movimentacoes_capital = CapitalGiro.objects.all().select_related('usuario')[:5]
+    movimentacoes_capital = CapitalGiro.objects.filter(company=request.company).select_related('usuario')[:5]
     
     # Calcular indicadores
     if receitas_mes > 0:
@@ -104,7 +106,7 @@ def lista_receitas(request):
     categoria = request.GET.get('categoria')
     
     # Iniciar query
-    receitas = Receita.objects.all().select_related('usuario')
+    receitas = Receita.objects.filter(company=request.company).select_related('usuario')
     
     # Aplicar filtros
     if data_inicio:
@@ -151,7 +153,7 @@ def lista_despesas(request):
     categoria = request.GET.get('categoria')
     
     # Iniciar query
-    despesas = Despesa.objects.all().select_related('usuario')
+    despesas = Despesa.objects.filter(company=request.company).select_related('usuario')
     
     # Aplicar filtros
     if data_inicio:
@@ -195,6 +197,7 @@ def cadastrar_receita(request):
         try:
             # Criar nova receita
             receita = Receita(
+                company=request.company,
                 descricao=request.POST.get('descricao'),
                 valor=request.POST.get('valor'),
                 data=request.POST.get('data'),
@@ -205,6 +208,7 @@ def cadastrar_receita(request):
             
             # Adicionar ao capital de giro
             CapitalGiro.adicionar_capital(
+                company=request.company,
                 valor=receita.valor,
                 descricao=f'Receita: {receita.descricao}',
                 usuario=request.user
@@ -246,6 +250,7 @@ def cadastrar_despesa(request):
         try:
             # Criar nova despesa
             despesa = Despesa(
+                company=request.company,
                 descricao=request.POST.get('descricao'),
                 valor=request.POST.get('valor'),
                 data=request.POST.get('data'),
@@ -256,6 +261,7 @@ def cadastrar_despesa(request):
             
             # Retirar do capital de giro
             CapitalGiro.retirar_capital(
+                company=request.company,
                 valor=despesa.valor,
                 descricao=f'Despesa: {despesa.descricao}',
                 usuario=request.user
@@ -279,7 +285,7 @@ def cadastrar_despesa(request):
     context = {
         'categorias': Despesa.CATEGORIAS,
         'data_hoje': datetime.now().date(),
-        'capital_atual': CapitalGiro.obter_capital_atual(),
+        'capital_atual': CapitalGiro.obter_capital_atual(request.company),
     }
     
     return render(request, 'financeiro/cadastrar_despesa.html', context)
@@ -301,10 +307,10 @@ def gerenciar_capital_giro(request):
         HttpResponse: Renderiza o template de gerenciamento
     """
     # Obter capital atual
-    capital_atual = CapitalGiro.obter_capital_atual()
+    capital_atual = CapitalGiro.obter_capital_atual(request.company)
     
     # Obter histórico de movimentações
-    historico = CapitalGiro.objects.all().select_related('usuario')[:50]
+    historico = CapitalGiro.objects.filter(company=request.company).select_related('usuario')[:50]
     
     # Processar formulário de ajuste
     if request.method == 'POST' and request.user.has_perm('financeiro.add_capitalgiro'):
@@ -315,6 +321,7 @@ def gerenciar_capital_giro(request):
             
             if tipo == 'ENTRADA':
                 CapitalGiro.adicionar_capital(
+                    company=request.company,
                     valor=valor,
                     descricao=descricao,
                     usuario=request.user
@@ -322,6 +329,7 @@ def gerenciar_capital_giro(request):
                 messages.success(request, f'Capital adicionado: R$ {valor}')
             elif tipo == 'SAIDA':
                 CapitalGiro.retirar_capital(
+                    company=request.company,
                     valor=valor,
                     descricao=descricao,
                     usuario=request.user
