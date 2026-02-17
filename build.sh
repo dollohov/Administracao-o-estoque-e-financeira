@@ -17,3 +17,6 @@ python manage.py migrate
 
 # Collect all static files into a single directory.
 python manage.py collectstatic --noinput
+
+# Inicializar Superusuário e Empresa Padrão
+python auto_init_admin.py
