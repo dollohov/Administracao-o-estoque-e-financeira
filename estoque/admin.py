@@ -11,10 +11,11 @@ Data: 2025-12-02
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Produto, MovimentacaoEstoque
+from base.admin import TenantAdmin
 
 
 @admin.register(Produto)
-class ProdutoAdmin(admin.ModelAdmin):
+class ProdutoAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo Produto.
     
@@ -207,7 +208,7 @@ class ProdutoAdmin(admin.ModelAdmin):
 
 
 @admin.register(MovimentacaoEstoque)
-class MovimentacaoEstoqueAdmin(admin.ModelAdmin):
+class MovimentacaoEstoqueAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo MovimentacaoEstoque.
     

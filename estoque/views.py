@@ -199,7 +199,7 @@ def get_produto_data_from_post(request):
         'pis_aliquota': parse_decimal(request.POST.get('pis_aliquota')),
         'cofins_aliquota': parse_decimal(request.POST.get('cofins_aliquota')),
         'visivel_catalogo': request.POST.get('visivel_catalogo') == 'on',
-        'ativo': request.POST.get('ativo') == 'on',
+        'ativo': request.POST.get('ativo') == 'on' if 'ativo' in request.POST else True,
     }
     
     # Tratar fornecedor

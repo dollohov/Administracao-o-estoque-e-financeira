@@ -10,10 +10,11 @@ Data: 2025-12-02
 
 from django.contrib import admin
 from .models import Receita, Despesa, CapitalGiro, IndicadorFinanceiro, ContaPagar, ContaReceber, FluxoCaixaProjetado
+from base.admin import TenantAdmin
 
 
 @admin.register(Receita)
-class ReceitaAdmin(admin.ModelAdmin):
+class ReceitaAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo Receita.
     
@@ -86,7 +87,7 @@ class ReceitaAdmin(admin.ModelAdmin):
 
 
 @admin.register(Despesa)
-class DespesaAdmin(admin.ModelAdmin):
+class DespesaAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo Despesa.
     
@@ -159,7 +160,7 @@ class DespesaAdmin(admin.ModelAdmin):
 
 
 @admin.register(CapitalGiro)
-class CapitalGiroAdmin(admin.ModelAdmin):
+class CapitalGiroAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo CapitalGiro.
     
@@ -238,7 +239,7 @@ class CapitalGiroAdmin(admin.ModelAdmin):
 
 
 @admin.register(IndicadorFinanceiro)
-class IndicadorFinanceiroAdmin(admin.ModelAdmin):
+class IndicadorFinanceiroAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo IndicadorFinanceiro.
     
@@ -310,7 +311,7 @@ class IndicadorFinanceiroAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContaPagar)
-class ContaPagarAdmin(admin.ModelAdmin):
+class ContaPagarAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo ContaPagar.
     """
@@ -343,7 +344,7 @@ class ContaPagarAdmin(admin.ModelAdmin):
 
 
 @admin.register(ContaReceber)
-class ContaReceberAdmin(admin.ModelAdmin):
+class ContaReceberAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo ContaReceber.
     """
@@ -376,7 +377,7 @@ class ContaReceberAdmin(admin.ModelAdmin):
 
 
 @admin.register(FluxoCaixaProjetado)
-class FluxoCaixaProjetadoAdmin(admin.ModelAdmin):
+class FluxoCaixaProjetadoAdmin(TenantAdmin):
     """
     Configuração administrativa para o modelo FluxoCaixaProjetado.
     """
