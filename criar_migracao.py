@@ -4,7 +4,7 @@ Script para criar as migrações necessárias após as atualizações dos modelo
 Este script deve ser executado após atualizar os modelos para gerar
 as migrações do banco de dados.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

@@ -167,5 +167,5 @@ Verifique se:
 
 ---
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Data:** 07 de Fevereiro de 2026

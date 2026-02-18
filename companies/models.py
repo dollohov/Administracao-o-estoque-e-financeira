@@ -4,7 +4,7 @@ Modelos do módulo de Empresas (Multi-tenancy).
 Este arquivo define a entidade principal de Empresa (Tenant) que servirá
 como base para o isolamento de dados no sistema SaaS.
 
-Autor: Manus AI (seguindo instruções do usuário)
+Autor: Denis Barbosa (Todos os direitos reservados) 
 Data: 2026-02-17
 """
 

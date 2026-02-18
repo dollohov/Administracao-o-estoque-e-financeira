@@ -4,7 +4,7 @@ Configuração do painel de administração do Django para o módulo de Estoque.
 Este arquivo personaliza a interface administrativa para os modelos
 Produto e MovimentacaoEstoque, facilitando o gerenciamento via painel admin.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

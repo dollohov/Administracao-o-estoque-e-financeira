@@ -416,5 +416,5 @@ CSRF_COOKIE_SECURE=True
 
 ---
 
-**Relatório gerado automaticamente por Manus AI**  
+**Relatório gerado automaticamente por Denis Barbosa**  
 **Data:** 17 de Fevereiro de 2026

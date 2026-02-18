@@ -243,5 +243,5 @@ O sistema está pronto para ser implantado em produção e pode ser facilmente e
 ---
 
 **Data de Conclusão:** 06 de Fevereiro de 2026  
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Status:** ✅ PRONTO PARA PRODUÇÃO

@@ -4,7 +4,7 @@ Modelos estendidos do módulo Financeiro.
 Este arquivo define modelos adicionais para Contas a Pagar, Contas a Receber
 e Fluxo de Caixa Projetado.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-08
 """
 

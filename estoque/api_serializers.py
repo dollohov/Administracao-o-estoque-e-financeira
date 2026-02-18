@@ -4,7 +4,7 @@ Serializers para API REST do módulo de Estoque.
 Utilizados para serializar dados de Produtos para a API de catálogo
 de vendedores e consultas rápidas.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-07
 """
 

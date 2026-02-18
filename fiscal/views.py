@@ -3,7 +3,7 @@ Views do módulo Fiscal.
 
 Este arquivo contém as views para importação de NF-e e gestão de fornecedores.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-05
 """
 

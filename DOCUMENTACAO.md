@@ -509,7 +509,7 @@ Este projeto é de código aberto e está disponível sob a licença MIT.
 
 ## Créditos
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Data:** Dezembro de 2025  
 **Versão:** 2.0  
 

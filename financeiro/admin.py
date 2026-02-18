@@ -4,7 +4,7 @@ Configuração do painel de administração do Django para o módulo Financeiro.
 Este arquivo personaliza a interface administrativa para os modelos
 de Receita, Despesa, Capital de Giro e Indicadores Financeiros.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

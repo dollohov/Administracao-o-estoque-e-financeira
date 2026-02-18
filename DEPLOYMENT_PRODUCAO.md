@@ -447,5 +447,5 @@ sudo journalctl -u gunicorn -n 50
 
 ---
 
-**Desenvolvido por**: Manus AI  
+**Desenvolvido por**: Denis Barbosa  
 **Data**: 07 de Fevereiro de 2026

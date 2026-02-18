@@ -106,5 +106,5 @@ Para suporte e dúvidas, entre em contato através do sistema de help.
 
 ---
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Última Atualização:** 06 de Fevereiro de 2026

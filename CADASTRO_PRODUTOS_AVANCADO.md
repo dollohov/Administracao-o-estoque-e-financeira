@@ -392,5 +392,5 @@ Mantenha a localização atualizada:
 
 ---
 
-**Desenvolvido por**: Manus AI  
+**Desenvolvido por**: Denis Barbosa  
 **Data**: 07 de Dezembro de 2025

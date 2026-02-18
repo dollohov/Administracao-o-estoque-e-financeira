@@ -3,7 +3,7 @@ Modelos estendidos para o módulo de Estoque.
 
 Adiciona funcionalidades de categorias, imagens, códigos de barras e atributos avançados.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-05
 """
 

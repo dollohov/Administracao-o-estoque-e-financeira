@@ -4,7 +4,7 @@ Middleware para identificação e isolamento de empresa (Tenant).
 Este middleware identifica a empresa atual do usuário logado e a armazena
 no objeto request para uso global nas views e modelos.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-17
 """
 

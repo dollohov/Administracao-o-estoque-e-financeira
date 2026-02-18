@@ -4,7 +4,7 @@ Mixins para facilitar o isolamento de dados por empresa (Multi-tenancy).
 Estes mixins automatizam a filtragem de dados e a associação de novos
 registros à empresa correta.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-17
 """
 

@@ -4,7 +4,7 @@ Views do módulo de Estoque.
 Este arquivo contém as views (controladores) para o módulo de estoque,
 incluindo listagem de produtos, registro de movimentações e dashboards.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

@@ -4,7 +4,7 @@ Views do módulo Financeiro.
 Este arquivo contém as views (controladores) para o módulo financeiro,
 incluindo controle de receitas, despesas, capital de giro e indicadores.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

@@ -318,7 +318,7 @@ Para dúvidas sobre as melhorias implementadas:
 
 ---
 
-**Relatório gerado por:** Manus AI  
+**Relatório gerado por:** Denis Barbosa  
 **Data:** 17 de Fevereiro de 2026  
 **Versão:** 3.6  
 **Status:** ✅ **CONCLUÍDO COM SUCESSO**

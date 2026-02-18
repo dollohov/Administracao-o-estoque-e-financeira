@@ -1,7 +1,7 @@
 # Análise Completa do Repositório: Gestão ERP
 
 **Data:** 08 de Fevereiro de 2026  
-**Autor:** Manus AI
+**Autor:** Denis Barbosa
 
 ## 1. Introdução
 

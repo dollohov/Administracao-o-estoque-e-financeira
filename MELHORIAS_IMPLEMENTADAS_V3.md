@@ -232,6 +232,6 @@ response = buscar_produto(request)
 
 Para dúvidas ou sugestões sobre as melhorias implementadas, entre em contato com a equipe de desenvolvimento.
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Data:** 07 de Fevereiro de 2026  
 **Versão:** 3.0

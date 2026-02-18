@@ -4,7 +4,7 @@ Modelos do módulo Fiscal.
 Este arquivo define os modelos de dados relacionados à gestão fiscal,
 incluindo importação de NF-e (Nota Fiscal Eletrônica) e seus itens.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-05
 """
 

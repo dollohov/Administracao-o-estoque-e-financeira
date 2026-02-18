@@ -1,7 +1,7 @@
 # Melhorias Implementadas - Fevereiro 2026
 
 **Data:** 17 de Fevereiro de 2026  
-**Responsável:** Manus AI  
+**Responsável:** Denis Barbosa  
 **Versão:** 3.6
 
 ---
@@ -353,6 +353,6 @@ O sistema foi completamente analisado e validado. Não foram encontrados erros c
 
 ---
 
-**Documento gerado por:** Manus AI  
+**Documento gerado por:** Denis Barbosa  
 **Data:** 17 de Fevereiro de 2026  
 **Versão do Sistema:** 3.6

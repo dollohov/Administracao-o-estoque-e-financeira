@@ -4,7 +4,7 @@ Modelos do módulo de Estoque.
 Este arquivo define os modelos de dados relacionados ao controle de estoque,
 incluindo produtos e suas movimentações (entradas e saídas).
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

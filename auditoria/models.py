@@ -7,7 +7,7 @@ Este modulo implementa um sistema de auditoria que registra:
 - Quando foram feitas as alteracoes
 - Qual foi o valor anterior e o novo valor
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-07
 """
 

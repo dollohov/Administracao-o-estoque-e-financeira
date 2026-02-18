@@ -4,7 +4,7 @@ Processador de XML de NF-e (Nota Fiscal Eletrônica).
 Este módulo contém funções para processar arquivos XML de NF-e,
 extrair dados e criar registros no banco de dados.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-05
 """
 

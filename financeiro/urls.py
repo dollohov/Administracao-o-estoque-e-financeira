@@ -3,7 +3,7 @@ URLs do módulo Financeiro.
 
 Define as rotas (URLs) para as views do módulo financeiro.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

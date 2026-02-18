@@ -4,7 +4,7 @@ Modelos do módulo Financeiro.
 Este arquivo define os modelos de dados relacionados ao controle financeiro,
 incluindo receitas, despesas, capital de giro e indicadores financeiros.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

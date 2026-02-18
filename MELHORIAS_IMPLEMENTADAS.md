@@ -402,6 +402,6 @@
 
 ---
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Data:** 02/12/2025  
 **Versão:** 2.0

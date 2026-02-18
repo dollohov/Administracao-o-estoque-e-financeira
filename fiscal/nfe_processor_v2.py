@@ -4,7 +4,7 @@ Processador melhorado de XML de NF-e (Nota Fiscal Eletronica) - Versao 2.
 Este modulo contem funcoes para processar arquivos XML de NF-e com suporte
 a busca inteligente de produtos por EAN/SKU/NCM e conferencia de estoque.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-07
 """
 

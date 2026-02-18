@@ -3,7 +3,7 @@ Modelos do módulo de Fornecedores.
 
 Este arquivo define os modelos de dados relacionados aos fornecedores do sistema.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-17
 """
 

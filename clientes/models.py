@@ -3,7 +3,7 @@ Modelos do módulo de Clientes.
 
 Este arquivo define os modelos de dados relacionados aos clientes do sistema.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-17
 """
 

@@ -980,3 +980,5 @@ Watching for file changes with StatReloader
 "GET /static/admin/img/icon-viewlink.svg HTTP/1.1" 304 0
 "GET /static/admin/img/icon-addlink.svg HTTP/1.1" 304 0
 "GET /static/admin/img/icon-changelink.svg HTTP/1.1" 304 0
+/home/ubuntu/projeto-estoque/vendas/admin.py changed, reloading.
+Watching for file changes with StatReloader

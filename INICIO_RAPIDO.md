@@ -159,4 +159,4 @@ Para mais detalhes, consulte: **[DOCUMENTACAO.md](DOCUMENTACAO.md)**
 
 ---
 
-**Desenvolvido com ❤️ por Manus AI**
+**Desenvolvido com ❤️ por Denis Barbosa**

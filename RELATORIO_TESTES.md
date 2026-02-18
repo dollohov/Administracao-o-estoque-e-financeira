@@ -1,7 +1,7 @@
 # Relatório de Testes e Correções do Sistema ERP
 
 **Data:** 17 de Fevereiro de 2026
-**Autor:** Manus AI
+**Autor:** Denis Barbosa
 
 ## 1. Introdução
 

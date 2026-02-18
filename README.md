@@ -5,7 +5,7 @@
 ![Django](https://img.shields.io/badge/Django-5.2.9-green)
 ![Python](https://img.shields.io/badge/Python-3.8+-blue)
 ![Bootstrap](https://img.shields.io/badge/Bootstrap-5.3.3-purple)
-![License](https://img.shields.io/badge/License-MIT-yellow)
+![License](https://img.shields.io/badge/License-Proprietário-red)
 
 **Sistema ERP completo para gestão de estoque e controle financeiro**
 
@@ -268,13 +268,13 @@ Nenhum problema conhecido no momento. Reporte bugs através das [Issues](https:/
 
 ## 📜 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+Este software é de autoria de **Denis Barbosa**. Todos os direitos são reservados. O uso, cópia ou distribuição não autorizada é estritamente proibida.
 
 ---
 
 ## 👨‍💻 Autor
 
-**Desenvolvido por:** Manus AI  
+**Desenvolvido por:** Denis Barbosa  
 **Data:** Fevereiro de 2026  
 **Versão:** 3.5 (Estável)
 

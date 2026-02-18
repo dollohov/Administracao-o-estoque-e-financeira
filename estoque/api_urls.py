@@ -1,7 +1,7 @@
 """
 URLs para a API REST do módulo de Estoque.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-07
 """
 

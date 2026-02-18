@@ -1,7 +1,7 @@
 """
 URLs do módulo Fiscal.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-05
 """
 

@@ -3,7 +3,7 @@ URLs principais do projeto Gestão ERP.
 
 Define as rotas principais e inclui as URLs dos módulos.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-02
 """
 

@@ -427,6 +427,6 @@ As próximas implementações (e-commerce, integrações de pagamento, relatóri
 
 ---
 
-**Desenvolvido por**: Manus AI  
+**Desenvolvido por**: Denis Barbosa  
 **Data**: 05 de Fevereiro de 2026  
 **Versão**: 3.0 (com módulo fiscal)

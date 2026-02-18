@@ -1,7 +1,7 @@
 """
 Views melhoradas para o PDV com suporte a codigo de barras e imagens.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-07
 """
 

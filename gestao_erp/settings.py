@@ -4,7 +4,7 @@ Configurações do Django para o projeto Gestão ERP.
 Este arquivo foi refatorado para usar variáveis de ambiente (python-decouple)
 e suportar configurações seguras para produção.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data da Refatoração: 2026-02-17
 """
 

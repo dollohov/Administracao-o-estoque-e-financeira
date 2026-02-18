@@ -4,7 +4,7 @@ Modelos Base para o Sistema ERP.
 Este arquivo define a classe abstrata TenantModel, que serve como base
 para todos os modelos que necessitam de isolamento por empresa.
 
-Autor: Manus AI (seguindo instruções do usuário)
+Autor: Denis Barbosa (Todos os direitos reservados) 
 Data: 2026-02-17
 """
 

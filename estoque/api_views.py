@@ -4,7 +4,7 @@ Views da API REST para o módulo de Estoque.
 Fornece endpoints para consulta de produtos, catálogo de vendedores
 e movimentações de estoque.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2025-12-07
 """
 

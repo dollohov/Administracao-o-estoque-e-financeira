@@ -4,7 +4,7 @@ Testes automatizados para o módulo de Estoque.
 Este arquivo contém testes unitários e de integração para o módulo de estoque,
 incluindo testes de models, views e lógica de negócio.
 
-Autor: Manus AI
+Autor: Denis Barbosa (Todos os direitos reservados)
 Data: 2026-02-17
 """
 
