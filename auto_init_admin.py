@@ -9,10 +9,6 @@ from django.contrib.auth.models import User
 from companies.models import Company, UserCompany
 
 def auto_init():
-    username = 'admin'
-    password = 'admin123'
-    email = 'admin@exemplo.com.br'
-    
     # 1. Criar Empresa Padrão se não existir
     company, created = Company.objects.get_or_create(
         name="Minha Empresa ERP",
@@ -21,29 +17,32 @@ def auto_init():
     if created:
         print(f"✅ Empresa '{company.name}' criada.")
     
-    # 2. Criar ou atualizar Superusuário
-    user, created = User.objects.get_or_create(
-        username=username,
-        defaults={'email': email, 'is_superuser': True, 'is_staff': True}
-    )
+    # 2. Lista de Superusuários para garantir acesso
+    superusers = [
+        {'username': 'denisbarbosa', 'password': 'denis123', 'email': 'denis@exemplo.com.br'},
+        {'username': 'admin', 'password': 'admin123', 'email': 'admin@exemplo.com.br'}
+    ]
     
-    if created:
-        user.set_password(password)
-        user.save()
-        print(f"✅ Superusuário '{username}' criado com sucesso.")
-    else:
-        # Garante que a senha seja admin123 para o primeiro acesso se o usuário já existia
-        user.set_password(password)
-        user.save()
-        print(f"✅ Senha do superusuário '{username}' atualizada para 'admin123'.")
+    for su in superusers:
+        user, created = User.objects.get_or_create(
+            username=su['username'],
+            defaults={'email': su['email'], 'is_superuser': True, 'is_staff': True}
+        )
         
-    # 3. Garantir vínculo do Usuário com a Empresa
-    UserCompany.objects.get_or_create(
-        user=user, 
-        company=company, 
-        defaults={'role': 'ADMIN'}
-    )
-    print("✅ Vínculo usuário-empresa garantido.")
+        # Garante a senha em ambos os casos (novo ou existente)
+        user.set_password(su['password'])
+        user.save()
+        
+        status = "criado" if created else "atualizado"
+        print(f"✅ Superusuário '{su['username']}' {status} com sucesso.")
+        
+        # 3. Garantir vínculo do Usuário com a Empresa
+        UserCompany.objects.get_or_create(
+            user=user, 
+            company=company, 
+            defaults={'role': 'ADMIN'}
+        )
+        print(f"✅ Vínculo do usuário '{su['username']}' com a empresa garantido.")
 
 if __name__ == "__main__":
     try:

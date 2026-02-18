@@ -56,7 +56,8 @@ urlpatterns = [
     ), name='login'),
     
     path('logout/', auth_views.LogoutView.as_view(
-        next_page='login'
+        next_page='login',
+        http_method_names=['get', 'post']
     ), name='logout'),
     
     # API REST
