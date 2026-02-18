@@ -256,8 +256,11 @@ def editar_produto(request, produto_id):
             if request.POST.get('remover_imagem') == 'true':
                 if produto.imagem:
                     # Remover arquivo físico se existir
-                    if os.path.isfile(produto.imagem.path):
-                        os.remove(produto.imagem.path)
+                    try:
+                        if os.path.isfile(produto.imagem.path):
+                            os.remove(produto.imagem.path)
+                    except Exception:
+                        pass
                     produto.imagem = None
             
             data = get_produto_data_from_post(request)
@@ -268,8 +271,12 @@ def editar_produto(request, produto_id):
             # Tratar nova imagem se enviada (sobrescreve a anterior)
             if request.FILES.get('imagem'):
                 # Remover imagem antiga fisicamente se houver uma nova sendo enviada
-                if produto.imagem and os.path.isfile(produto.imagem.path):
-                    os.remove(produto.imagem.path)
+                if produto.imagem:
+                    try:
+                        if os.path.isfile(produto.imagem.path):
+                            os.remove(produto.imagem.path)
+                    except Exception:
+                        pass
                 produto.imagem = request.FILES.get('imagem')
                 
             produto.usuario_modificacao = request.user
