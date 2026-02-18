@@ -125,13 +125,17 @@ python manage.py runserver
 
 Acesse: **http://127.0.0.1:8000/**
 
-### Usuários de Teste
+### 🔐 Acesso ao Sistema
 
-| Usuário | Senha | Grupo |
-|---------|-------|-------|
-| admin | admin123 | Administrador |
-| gerente | gerente123 | Gerente |
-| funcionario | func123 | Funcionário |
+O sistema já vem com um usuário administrador padrão criado automaticamente durante a migração do banco de dados.
+
+| Usuário | Senha | Grupo | Observação |
+|---------|-------|-------|------------|
+| **admin** | **admin123** | Administrador | Criado automaticamente |
+| gerente | gerente123 | Gerente | Criar via painel admin |
+| funcionario | func123 | Funcionário | Criar via painel admin |
+
+> **Dica:** Toda vez que você clonar o repositório e rodar `python manage.py migrate`, o usuário **admin** será garantido com a senha **admin123**.
 
 ---
 
