@@ -1213,3 +1213,7 @@ Watching for file changes with StatReloader
 "GET /login/ HTTP/1.1" 200 6010
 "POST /login/ HTTP/1.1" 302 0
 "GET / HTTP/1.1" 200 30067
+/home/ubuntu/projeto-estoque/gestao_erp/settings.py changed, reloading.
+Watching for file changes with StatReloader
+/home/ubuntu/projeto-estoque/gestao_erp/settings.py changed, reloading.
+Watching for file changes with StatReloader

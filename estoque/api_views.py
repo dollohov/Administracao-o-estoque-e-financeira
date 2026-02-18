@@ -21,9 +21,10 @@ from .api_serializers import (
     ProdutoCatalogoSerializer,
     MovimentacaoEstoqueSerializer
 )
+from base.api_mixins import TenantViewSetMixin
 
 
-class ProdutoViewSet(viewsets.ModelViewSet):
+class ProdutoViewSet(TenantViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gerenciamento de produtos.
     
@@ -200,7 +201,7 @@ class ProdutoViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
 
-class MovimentacaoEstoqueViewSet(viewsets.ModelViewSet):
+class MovimentacaoEstoqueViewSet(TenantViewSetMixin, viewsets.ModelViewSet):
     """
     ViewSet para gerenciamento de movimentações de estoque.
     
