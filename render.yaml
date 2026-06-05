@@ -1,33 +1,39 @@
 services:
   - type: web
-    name: gestao-erp
-    env: python
-    # Forçando a versão estável do Python
-    plan: free
-    buildCommand: ./build.sh
-    # Comando de inicialização correto para o projeto gestao_erp
-    startCommand: gunicorn gestao_erp.wsgi:application --bind 0.0.0.0:$PORT
-    healthCheckPath: /admin/
+    name: erp-telegram-secure
+    env: node
+    region: us-east-1
+    plan: starter
+    
+    buildCommand: pnpm install && pnpm build
+    startCommand: pnpm start
+    
     envVars:
-      - key: DATABASE_URL
-        fromDatabase: 
-          name: gestao-erp-db
-          property: connectionString
-      - key: SECRET_KEY
-        generateValue: true
-      - key: WEB_CONCURRENCY
-        value: 2
-      - key: ALLOWED_HOSTS
-        value: .onrender.com,localhost,127.0.0.1
-      - key: DEBUG
-        value: "False"
-      - key: PYTHON_VERSION
-        value: 3.11.0
-      - key: DJANGO_SETTINGS_MODULE
-        value: gestao_erp.settings
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: "3000"
+      - key: VITE_APP_TITLE
+        value: "Gestão ERP + Telegram Seguro"
+      - key: VITE_APP_LOGO
+        value: ""
+    
+    # Database connection (configure no dashboard do Render)
+    # - key: DATABASE_URL
+    #   fromDatabase:
+    #     name: erp-db
+    #     property: connectionString
+    
+    autoDeploy: true
+    
+    # Health check
+    healthCheckPath: /
+    healthCheckInterval: 30
+    healthCheckTimeout: 10
 
-  - type: postgres
-    name: gestao-erp-db
-    plan: free
-    databaseName: gestao_erp_db
-    user: gestao_erp_user
+# Opcional: Adicionar banco de dados PostgreSQL
+# databases:
+#   - name: erp-db
+#     engine: postgres
+#     version: 15
+#     plan: free
